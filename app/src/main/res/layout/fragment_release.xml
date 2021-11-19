@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+        <variable
+            name="info"
+            type="com.example.myplayer.data.db.InfoEntity" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <ImageView
+            android:layout_marginBottom="5dp"
+            android:id="@+id/imageView2"
+            android:layout_width="300dp"
+            android:layout_height="200dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageView2"
+            android:background="#FF909090" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintTop_toBottomOf="@+id/line"
+            app:layout_constraintStart_toStartOf="parent"
+            >
+            <TextView
+                android:id="@+id/head_title"
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/head_city"
+                android:text="标题: " />
+
+            <EditText
+                android:id="@+id/content_title"
+                android:layout_marginLeft="20dp"
+                android:textSize="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="请添加您的标题"
+                app:layout_constraintTop_toTopOf="@id/head_title"
+                app:layout_constraintStart_toEndOf="@id/head_title"
+                app:layout_constraintBottom_toBottomOf="@+id/head_title" />
+            <TextView
+                android:id="@+id/head_city"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/head_title"
+                android:text="城市: " />
+
+            <EditText
+                android:textSize="15dp"
+                android:id="@+id/content_city"
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="请输入城市，如：北京"
+                app:layout_constraintTop_toTopOf="@id/head_city"
+                app:layout_constraintStart_toEndOf="@id/head_city"
+                app:layout_constraintBottom_toBottomOf="@+id/head_city" />
+
+            <TextView
+                android:id="@+id/head_street"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="街道: "
+                app:layout_constraintTop_toBottomOf="@id/head_city"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:textSize="15dp"
+                android:id="@+id/content_street"
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="请在此处输入详细地址"
+                app:layout_constraintTop_toTopOf="@id/head_street"
+                app:layout_constraintStart_toEndOf="@id/head_street"
+                app:layout_constraintBottom_toBottomOf="@+id/head_street" />
+
+            <TextView
+                android:id="@+id/head_price"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="消费: "
+                app:layout_constraintTop_toBottomOf="@id/head_street"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:textSize="15dp"
+                android:id="@+id/content_price"
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="如：500-1000"
+                app:layout_constraintTop_toTopOf="@id/head_price"
+                app:layout_constraintStart_toEndOf="@id/head_price"
+                app:layout_constraintBottom_toBottomOf="@+id/head_price" />
+
+            <TextView
+                android:id="@+id/head_phone_deatil"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="微信: "
+                app:layout_constraintTop_toBottomOf="@id/head_price"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:textSize="15dp"
+                android:id="@+id/content_phone_deatil"
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/head_phone_deatil"
+                app:layout_constraintStart_toEndOf="@id/head_phone_deatil"
+                app:layout_constraintBottom_toBottomOf="@+id/head_phone_deatil" />
+
+            <TextView
+                android:id="@+id/head_desc"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Desc: "
+                app:layout_constraintTop_toBottomOf="@id/head_phone_deatil"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:textSize="15dp"
+                android:id="@+id/content_desc"
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/head_desc"
+                app:layout_constraintStart_toEndOf="@id/head_desc"
+                app:layout_constraintBottom_toBottomOf="@+id/head_desc" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:id="@+id/release"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="60dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/release_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="发布"
+                android:textSize="20dp"/>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

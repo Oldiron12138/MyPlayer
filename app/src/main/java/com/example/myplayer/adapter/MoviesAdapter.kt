@@ -1,15 +1,19 @@
 package com.example.myplayer.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myplayer.R
+import com.example.myplayer.data.db.MoviesDatabase
 import com.example.myplayer.data.db.MoviesEntity
 import com.example.myplayer.data.reponse.MoviesResponse
 import com.example.myplayer.databinding.ListItemMoviesBinding
@@ -21,7 +25,7 @@ class MoviesAdapter(
 
     //
     private val assets: MutableList<MoviesEntity> = mutableListOf()
-
+    private var itemClickListener: OnItemClickListener? = null
     //
     fun updateListItem(datas: List<MoviesEntity>) {
         val diffCallback = SeriesDetailAssetDiffCallback(assets, datas)
@@ -50,11 +54,31 @@ class MoviesAdapter(
         return assets.size
     }
 
+    private fun navigateToBuy(
+        view: View, asset: MoviesEntity
+    ) {
+        val bundle = Bundle().apply { putString("url", asset.video)
+        putString("num", asset.num)
+        putString("video" , asset.video)
+            //asset.lock?.let { putBoolean("lock", it) }
+        }
+        view.findNavController().navigate(R.id.action_movies_fragment_to_buy_fragment, bundle)
+    }
+
     private fun navigateToPlayer(
         view: View, asset: MoviesEntity
     ) {
-        val bundle = Bundle().apply { putString("url", asset.video) }
+        val bundle = Bundle().apply { putString("url", asset.video)
+        putString("fromWhere" ,"Movies")}
         view.findNavController().navigate(R.id.action_movies_fragment_to_player_fragment, bundle)
+    }
+
+    fun setItemClickListener(listener: OnItemClickListener) {
+        itemClickListener = listener
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(asset: MoviesEntity)
     }
 
     inner class MoivesViewHolder(
@@ -63,9 +87,14 @@ class MoviesAdapter(
         init {
             binding.setClickListener {
                 binding.asset?.let {
-
                         asset ->
-                    navigateToPlayer(it, asset)
+                    if (asset.lock) {
+                        navigateToBuy(it, asset)
+                    } else {
+                        navigateToPlayer(it, asset)
+                    }
+
+                    itemClickListener?.onItemClick(asset)
                 }
             }
         }
@@ -73,6 +102,7 @@ class MoviesAdapter(
         fun bind(item: MoviesEntity, position: Int) {
             binding.apply {
                 asset = item
+                android.util.Log.d("zwj" ,"lock is ${item.lock}")
                 executePendingBindings()
             }
         }
@@ -92,7 +122,8 @@ private class SeriesDetailAssetDiffCallback(
     }
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldList[oldItemPosition].num == newList[newItemPosition].num
+        return oldList[oldItemPosition].num == newList[newItemPosition].num &&
+                oldList[oldItemPosition].lock == newList[newItemPosition].lock
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {

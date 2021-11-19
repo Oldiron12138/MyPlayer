@@ -6,6 +6,10 @@
         <variable
             name="clickListener"
             type="android.view.View.OnClickListener" />
+
+        <variable
+            name="num_error"
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,7 +17,10 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:background="@drawable/account_background"
             android:layout_marginTop="50dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:id="@+id/num"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,10 +32,11 @@
             <TextView
                 android:id="@+id/textView3"
                 android:paddingTop="20dp"
-                android:paddingBottom="10dp"
+                android:paddingBottom="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="10dp"
+                android:gravity="center_vertical"
+                android:textSize="20dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginLeft="20dp"
                 android:layout_gravity="center_vertical"
@@ -37,19 +45,37 @@
             <EditText
                 android:id="@+id/textView4"
                 android:paddingTop="20dp"
-                android:paddingBottom="10dp"
+                android:paddingBottom="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="10dp"
+                android:textSize="15dp"
                 android:layout_marginRight="20dp"
                 android:inputType="phone"
                 android:layout_gravity="center_vertical"
-                android:hint="请输入账号" />
+                android:hint="请输入您的手机号码" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/error1"
+            app:layout_constraintStart_toStartOf="@+id/num"
+            app:layout_constraintTop_toBottomOf="@+id/num"
+            android:textSize="10dp"
+            android:visibility="gone"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:textColor="#FF0000"
+            android:text="@{num_error}"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+
         <LinearLayout
             android:id="@+id/pwd"
+            android:background="@drawable/account_background"
             android:layout_marginTop="50dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -60,10 +86,10 @@
             <TextView
                 android:id="@+id/textView5"
                 android:paddingTop="20dp"
-                android:paddingBottom="10dp"
+                android:paddingBottom="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="10dp"
+                android:textSize="20dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginLeft="20dp"
                 android:layout_gravity="center_vertical"
@@ -75,17 +101,20 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:hint="请输入密码"
+                android:hint="请输入至少6位的密码"
                 android:inputType="numberPassword"
                 android:paddingTop="20dp"
-                android:paddingBottom="10dp"
+                android:paddingBottom="20dp"
                 android:layout_marginRight="20dp"
-                android:textSize="10dp" />
+                android:textSize="15dp" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/pwd_c"
+            android:background="@drawable/account_background"
             android:layout_marginTop="50dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -96,10 +125,10 @@
             <TextView
                 android:id="@+id/textView8"
                 android:paddingTop="20dp"
-                android:paddingBottom="10dp"
+                android:paddingBottom="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="10dp"
+                android:textSize="20dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="20dp"
                 android:layout_gravity="center_vertical"
@@ -111,12 +140,12 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:hint="请输入密码"
+                android:hint="请再次输入密码"
                 android:inputType="numberPassword"
                 android:paddingTop="20dp"
-                android:paddingBottom="10dp"
+                android:paddingBottom="20dp"
                 android:layout_marginRight="20dp"
-                android:textSize="10dp" />
+                android:textSize="15dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -136,7 +165,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="10dp"
+                android:textSize="20dp"
                 android:layout_marginRight="40dp"
                 android:layout_marginLeft="40dp"
                 android:visibility="gone"
@@ -156,7 +185,7 @@
                 android:paddingBottom="10dp"
                 android:layout_marginRight="100dp"
                 android:layout_marginLeft="100dp"
-                android:textSize="10dp" />
+                android:textSize="20dp" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

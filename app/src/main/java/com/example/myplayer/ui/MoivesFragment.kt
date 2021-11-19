@@ -1,9 +1,12 @@
 package com.example.myplayer.ui
 
+import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -11,6 +14,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myplayer.adapter.MoviesAdapter
 import com.example.myplayer.data.MoivesReceiveData
+import com.example.myplayer.data.db.MoviesDatabase
+import com.example.myplayer.data.db.MoviesEntity
 import com.example.myplayer.databinding.FragmentMoviesBinding
 import com.example.myplayer.viewmodels.MoviesViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -57,16 +62,21 @@ class MoivesFragment: Fragment() {
         moviesBinding.moivesList.layoutManager = assetLayoutManager
         moviesBinding.moivesList.adapter = assetAdapter
         moviesBinding.moivesList.itemAnimator = null
-
+        assetAdapter.setItemClickListener(object : MoviesAdapter.OnItemClickListener {
+            override fun onItemClick(asset: MoviesEntity) {
+            }
+        })
         //
         getSeriesDetailData()
     }
 
     private fun getSeriesDetailData() {
+        android.util.Log.d("zwj " ,"getSeriesDetailData")
         moviesJob?.cancel()
         moviesJob = lifecycleScope.launch {
             seriesDetailViewModel.seriesDetail
                 ?.observe(viewLifecycleOwner) { seriesDetailData ->
+                    android.util.Log.d("zwj " ,"getSeriesDetailData ${seriesDetailData.size}")
                     assetAdapter.updateListItem(seriesDetailData)
                 }
             //seriesDetailViewModel.devices()

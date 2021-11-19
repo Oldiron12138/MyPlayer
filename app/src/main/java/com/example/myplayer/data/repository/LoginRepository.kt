@@ -47,4 +47,21 @@ class LoginRepository @Inject constructor(
             seriesDetailResponse
         }
     }
+    suspend fun buy(id: Int, num: String, pwd: String, coin: Int): LiveData<LoginResponse>? {
+        val seriesDetailResponse = MutableLiveData<LoginResponse>()
+        return try {
+            val response =
+                androidTvMdsService.buy(id, num, pwd, coin)
+
+            // Post value to LiveData.
+            seriesDetailResponse.postValue(response)
+
+            // Return LiveData.
+            seriesDetailResponse
+        } catch (e: Exception) {
+            // Return LiveData.
+            seriesDetailResponse
+        }
+    }
+
 }

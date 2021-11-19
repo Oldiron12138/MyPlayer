@@ -78,11 +78,12 @@ class SplashRepository @Inject constructor(
         return try {
             val response =
                 androidTvMdsService.seriesDetail()
+            android.util.Log.d("zwj" ,"size ${response.size}" )
 
             val infos: MutableList<MoviesEntity> = mutableListOf()
 
             repeat(response.size) { i ->
-                infos.add(MoviesEntity(response[i].num, response[i].url, response[i].video))
+                infos.add(MoviesEntity(response[i].num, response[i].url, response[i].video, true))
             }
 
             // Init DB.

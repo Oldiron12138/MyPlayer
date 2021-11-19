@@ -98,6 +98,7 @@ class LoginFragment: Fragment() {
                         sharedPref.edit().putString("USERNAME", num).apply()
                         sharedPref.edit().putString("PASSWORD", pwd).apply()
                         sharedPref.edit().putInt("COIN", it.coin).apply()
+                        sharedPref.edit().putInt("ID", it.id).apply()
 //                        intent.setClass(requireContext(), MainActivity::class.java)
 //                        startActivity(intent)
 //                        requireActivity().finish();

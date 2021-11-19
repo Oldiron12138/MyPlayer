@@ -3,10 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/account_background.xml" value="0.19921875" />
         <entry key="app/src/main/res/drawable/content_background.xml" value="0.23796296296296296" />
         <entry key="app/src/main/res/drawable/dialog_btn_normal.xml" value="0.18958333333333333" />
         <entry key="app/src/main/res/drawable/dialog_btn_select.xml" value="0.18958333333333333" />
         <entry key="app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.22962962962962963" />
+        <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.19921875" />
         <entry key="app/src/main/res/drawable/item_background_corner.xml" value="0.17" />
         <entry key="app/src/main/res/drawable/pop_dialog_bg.xml" value="0.18958333333333333" />
         <entry key="app/src/main/res/drawable/title_background.xml" value="0.10648148148148148" />
@@ -16,13 +18,15 @@
         <entry key="app/src/main/res/layout/dialog_exit.xml" value="0.12" />
         <entry key="app/src/main/res/layout/dialog_pop.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_account.xml" value="0.11" />
+        <entry key="app/src/main/res/layout/fragment_buy.xml" value="0.148046875" />
         <entry key="app/src/main/res/layout/fragment_city.xml" value="0.13293051359516617" />
         <entry key="app/src/main/res/layout/fragment_detail.xml" value="0.22" />
-        <entry key="app/src/main/res/layout/fragment_info.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/fragment_info.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_movies.xml" value="0.2" />
         <entry key="app/src/main/res/layout/fragment_player.xml" value="0.2" />
-        <entry key="app/src/main/res/layout/fragment_reg.xml" value="0.12" />
+        <entry key="app/src/main/res/layout/fragment_reg.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/fragment_release.xml" value="0.16" />
         <entry key="app/src/main/res/layout/list_item_city.xml" value="0.13293051359516617" />
         <entry key="app/src/main/res/layout/list_item_info.xml" value="0.33" />
         <entry key="app/src/main/res/layout/list_item_movies.xml" value="0.2" />

@@ -10,8 +10,28 @@
         android:label="Movies"
         tools:layout="@layout/fragment_movies">
         <action
+            android:id="@+id/action_movies_fragment_to_buy_fragment"
+            app:destination="@id/buy_fragment" />
+        <action
             android:id="@+id/action_movies_fragment_to_player_fragment"
             app:destination="@id/player_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/buy_fragment"
+        android:name="com.example.myplayer.ui.BuyContentDialogFragment"
+        android:label="Player"
+        tools:layout="@layout/fragment_buy">
+        <argument
+            android:name="url"
+            app:argType="string">
+        </argument>
+        <action
+            android:id="@+id/action_buy_fragment_to_player_fragment"
+            app:destination="@id/player_fragment" />
+        <action
+            android:id="@+id/action_buy_fragment_to_movies_fragment"
+            app:destination="@id/movies_fragment" />
     </fragment>
 
     <fragment
@@ -23,6 +43,9 @@
             android:name="url"
             app:argType="string">
         </argument>
+        <action
+            android:id="@+id/action_player_fragment_to_movies_fragment"
+            app:destination="@id/movies_fragment" />
     </fragment>
 
     <fragment
@@ -36,7 +59,16 @@
         <action
             android:id="@+id/action_navigation_dashboard_to_city_fragment"
             app:destination="@id/city_fragment" />
+        <action
+            android:id="@+id/action_navigation_dashboard_to_release_fragment"
+            app:destination="@id/release_fragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/release_fragment"
+        android:name="com.example.myplayer.ui.ReleaseFragment"
+        android:label="发布"
+        tools:layout="@layout/fragment_release"/>
 
     <fragment
         android:id="@+id/info_detail"

@@ -2,16 +2,16 @@ package com.example.myplayer.api
 
 import com.example.myplayer.base.*
 import com.example.myplayer.data.reponse.*
+import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Headers
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 import java.util.concurrent.TimeUnit
 
 interface MyPlayerService {
@@ -48,6 +48,14 @@ interface MyPlayerService {
         @Query("name") name: String?,
         @Query("pwd") pwd: String?
     ): UserResponse
+
+    @GET("QQQ/servlet/UpdateServlet")
+    suspend fun buy(
+        @Query("id") id: Int,
+        @Query("name") name: String,
+        @Query("pwd") pwd: String,
+        @Query("coin") coin: Int
+    ): LoginResponse
 
     @Headers("{\n" +
             "\t\"kind\": \"walletobjects#eventTicketClass\",\n" +
@@ -119,6 +127,11 @@ interface MyPlayerService {
             "}")
     @POST("walletobjects/v1/eventTicketClass")
     suspend fun device(): String
+
+    @POST("QQQ/servlet/UploadPhoto")
+    fun uploadPhoto(
+        @Part("return_attributes") return_attributes: RequestBody,
+        @Part part: MultipartBody.Part ): LoginResponse
 
     companion object {
         fun create(): MyPlayerService {

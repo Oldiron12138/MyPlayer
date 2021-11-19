@@ -24,6 +24,9 @@ import java.io.File
 import android.view.MotionEvent
 
 import android.view.View.OnTouchListener
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import com.example.myplayer.R
 import kotlinx.coroutines.Job
 
 
@@ -37,6 +40,7 @@ class PlayerFragment :Fragment(){
     var mPosX: Float = 0f
     var mCurPosX: Float = 0f
     var mCurPosY: Float = 0f
+    private var fromWhere = ""
     private var homeJob: Job? = null
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,6 +54,7 @@ class PlayerFragment :Fragment(){
         super.onViewCreated(view, savedInstanceState)
         if (arguments?.getString("url") != null){
             url = arguments?.getString("url")!!
+            fromWhere = arguments?.getString("fromWhere")!!
         }
         //
         initExoPlayer()
@@ -57,8 +62,16 @@ class PlayerFragment :Fragment(){
 
     override fun onResume() {
         super.onResume()
+        playerBinding.root.setOnKeyListener { v, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                android.util.Log.d("zwj " ,"back1")
+                Navigation.findNavController(requireView()).popBackStack()
+                true
+            } else false
+        }
         playerBinding.myPlayer.setOnKeyListener { v, keyCode, event ->
-            if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                android.util.Log.d("zwj " ,"back")
                 Navigation.findNavController(requireView()).popBackStack()
                 true
             } else false
@@ -97,6 +110,9 @@ class PlayerFragment :Fragment(){
         exoPlayerManager.initializePlayer(url)
     }
     override fun onDestroyView() {
+        if (fromWhere != "Movies")
+        requireActivity().onBackPressed()
+       // this.findNavController().navigate(R.id.action_player_fragment_to_movies_fragment)
         // Cancels this job with an optional cancellation.
         homeJob?.cancel()
 

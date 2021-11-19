@@ -11,23 +11,33 @@ class PopDialog(private val activity: FragmentActivity) :
     AlertDialog(activity, R.style.Theme_AppCompat_Dialog) {
 
     private lateinit var cancelText: TextView
+    private lateinit var contentText: TextView
     private lateinit var exitText: TextView
+    private var content: String = ""
 
     private var currentPosition = 0
+
+    constructor(activity: FragmentActivity, string: String) : this(activity) {
+        content = string
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_pop)
 
         //
-        setCanceledOnTouchOutside(false)
+        setCanceledOnTouchOutside(true)
 
         //
         initView()
     }
 
     private fun initView() {
+        contentText = findViewById(R.id.content)!!
         cancelText = findViewById(R.id.exit_dialog_cancel)!!
+        if(content != "") {
+            contentText.text = content
+        }
         cancelText.setOnClickListener {
             this.dismiss()
         }

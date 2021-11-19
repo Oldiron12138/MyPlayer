@@ -1,9 +1,6 @@
 package com.example.myplayer.data.db
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -17,4 +14,11 @@ interface MoviesDao {
 
     @Query("DELETE FROM movies")
     suspend fun deleteMovies()
+
+    @Update
+    suspend fun update(moviesEntity: MoviesEntity)
+
+
+    @Query("UPDATE movies SET lock = :mLock WHERE num = :mNum")
+    suspend fun updateTour(mNum: String, mLock: Boolean): Int
 }

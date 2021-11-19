@@ -79,6 +79,9 @@ class InfoFragment: Fragment() {
         moviesBinding.setClickListener {
             it.findNavController().navigate(R.id.action_navigation_dashboard_to_city_fragment)
         }
+        moviesBinding.releaseBtn.setOnClickListener {
+            it.findNavController().navigate(R.id.action_navigation_dashboard_to_release_fragment)
+        }
         infoAdapter = InfoAdapter(requireContext())
         assetLayoutManager = LinearLayoutManager(requireContext())
         assetLayoutManager.orientation = LinearLayoutManager.VERTICAL

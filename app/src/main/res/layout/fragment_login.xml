@@ -17,7 +17,10 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:background="@drawable/account_background"
             android:layout_marginTop="50dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:id="@+id/num"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,10 +32,10 @@
             <TextView
                 android:id="@+id/textView3"
                 android:paddingTop="20dp"
-                android:paddingBottom="10dp"
+                android:paddingBottom="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="10dp"
+                android:textSize="20dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="20dp"
                 android:layout_gravity="center_vertical"
@@ -41,11 +44,11 @@
             <EditText
                 android:id="@+id/textView4"
                 android:paddingTop="20dp"
-                android:paddingBottom="10dp"
+                android:paddingBottom="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="10dp"
+                android:textSize="15dp"
                 android:layout_marginRight="20dp"
                 android:inputType="phone"
                 android:layout_gravity="center_vertical"
@@ -53,7 +56,10 @@
         </LinearLayout>
         <LinearLayout
             android:id="@+id/pwd"
+            android:background="@drawable/account_background"
             android:layout_marginTop="50dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -64,10 +70,10 @@
             <TextView
                 android:id="@+id/textView5"
                 android:paddingTop="20dp"
-                android:paddingBottom="10dp"
+                android:paddingBottom="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="10dp"
+                android:textSize="20dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="20dp"
                 android:layout_gravity="center_vertical"
@@ -82,9 +88,9 @@
                 android:hint="请输入密码"
                 android:inputType="numberPassword"
                 android:paddingTop="20dp"
-                android:paddingBottom="10dp"
+                android:paddingBottom="20dp"
                 android:layout_marginRight="20dp"
-                android:textSize="10dp" />
+                android:textSize="15dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -105,7 +111,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="10dp"
+                android:textSize="20dp"
                 android:layout_marginRight="40dp"
                 android:layout_marginLeft="40dp"
                 android:layout_gravity="center_vertical"
@@ -123,7 +129,7 @@
                 android:paddingBottom="10dp"
                 android:layout_marginRight="40dp"
                 android:layout_marginLeft="40dp"
-                android:textSize="10dp" />
+                android:textSize="20dp" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
