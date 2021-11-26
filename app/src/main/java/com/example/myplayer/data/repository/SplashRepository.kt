@@ -58,7 +58,7 @@ class SplashRepository @Inject constructor(
 
 
             repeat(response.size) { i ->
-                infos.add(InfoEntity(response[i].title, response[i].city, response[i].desc, response[i].street, response[i].phone, response[i].price,response[i].url))
+                infos.add(InfoEntity(response[i].title, response[i].city, response[i].desc, response[i].street, response[i].phone, response[i].price,response[i].url, true))
             }
 
             val database = InfoDatabase.getInstance(context)

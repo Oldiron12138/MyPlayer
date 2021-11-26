@@ -15,6 +15,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
         android:layout_height="match_parent">
 
 
@@ -22,7 +23,7 @@
             android:layout_marginBottom="5dp"
             android:id="@+id/imageView2"
             android:layout_width="400dp"
-            android:layout_height="300dp"
+            android:layout_height="200dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -143,10 +144,27 @@
                 android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{info.phone}"
+                app:showContent="@{info.lock}"
+                app:phoneDetail="@{info.phone}"
                 app:layout_constraintTop_toTopOf="@id/head_phone_deatil"
                 app:layout_constraintStart_toEndOf="@id/head_phone_deatil"
                 app:layout_constraintBottom_toBottomOf="@+id/head_phone_deatil" />
+
+            <TextView
+                android:onClick="@{clickListener}"
+                android:padding="2dp"
+                android:layout_marginLeft="20dp"
+                android:id="@+id/button_phone_deatil"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="解锁联系方式"
+                android:textSize="10dp"
+                android:background="@drawable/button_cornor_background"
+                app:layout_constraintTop_toTopOf="@id/head_phone_deatil"
+                app:layout_constraintStart_toEndOf="@id/content_phone_deatil"
+                app:layout_constraintBottom_toBottomOf="@+id/head_phone_deatil"
+                app:lockContent="@{info.lock}"
+                />
 
             <TextView
                 android:id="@+id/head_desc"
@@ -155,18 +173,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Desc: "
-                app:layout_constraintTop_toBottomOf="@id/content_phone_deatil"
+                app:layout_constraintBottom_toTopOf="@id/content_desc"
+                app:layout_constraintTop_toBottomOf="@id/head_phone_deatil"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/content_desc"
                 android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{info.desc}"
-                app:layout_constraintTop_toTopOf="@id/head_desc"
-                app:layout_constraintStart_toEndOf="@id/head_desc"
-                app:layout_constraintBottom_toBottomOf="@+id/head_desc" />
+                android:textSize="15dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/head_desc" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

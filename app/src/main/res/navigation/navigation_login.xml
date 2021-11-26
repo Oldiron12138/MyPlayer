@@ -11,9 +11,13 @@
         tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_login_fragment_to_reg_fragment"
+            app:enterAnim="@anim/in_from_right"
+            app:exitAnim="@anim/out_to_left"
             app:destination="@id/reg_fragment" />
         <action
             android:id="@+id/action_login_fragment_to_splash_fragment2"
+            app:enterAnim="@anim/in_from_right"
+            app:exitAnim="@anim/out_to_left"
             app:destination="@id/splash_fragment" />
     </fragment>
 
@@ -24,6 +28,8 @@
         tools:layout="@layout/fragment_reg">
         <action
             android:id="@+id/action_reg_fragment_to_login_fragment"
+            app:enterAnim="@anim/in_from_right"
+            app:exitAnim="@anim/out_to_left"
             app:destination="@id/login_fragment" />
     </fragment>
 
@@ -34,6 +40,8 @@
         tools:layout="@layout/activity_splash">
         <action
             android:id="@+id/action_splash_fragment_to_login_fragment"
+            app:enterAnim="@anim/in_from_right"
+            app:exitAnim="@anim/out_to_left"
             app:destination="@id/login_fragment" />
     </fragment>
 </navigation>

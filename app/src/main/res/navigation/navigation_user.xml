@@ -11,10 +11,19 @@
         tools:layout="@layout/fragment_movies">
         <action
             android:id="@+id/action_movies_fragment_to_buy_fragment"
+            app:enterAnim="@anim/in_from_right"
+            app:exitAnim="@anim/out_to_left"
             app:destination="@id/buy_fragment" />
         <action
             android:id="@+id/action_movies_fragment_to_player_fragment"
+            app:enterAnim="@anim/in_from_right"
+            app:exitAnim="@anim/out_to_left"
             app:destination="@id/player_fragment" />
+        <action
+            android:id="@+id/action_movies_fragment_to_navigation_dashboard"
+            app:enterAnim="@anim/in_from_right"
+            app:exitAnim="@anim/out_to_left"
+            app:destination="@id/navigation_dashboard" />
     </fragment>
 
     <fragment
@@ -28,9 +37,13 @@
         </argument>
         <action
             android:id="@+id/action_buy_fragment_to_player_fragment"
+            app:enterAnim="@anim/in_from_right"
+            app:exitAnim="@anim/out_to_left"
             app:destination="@id/player_fragment" />
         <action
             android:id="@+id/action_buy_fragment_to_movies_fragment"
+            app:enterAnim="@anim/in_from_right"
+            app:exitAnim="@anim/out_to_left"
             app:destination="@id/movies_fragment" />
     </fragment>
 
@@ -45,23 +58,34 @@
         </argument>
         <action
             android:id="@+id/action_player_fragment_to_movies_fragment"
+            app:enterAnim="@anim/in_from_right"
+            app:exitAnim="@anim/out_to_left"
             app:destination="@id/movies_fragment" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.example.myplayer.ui.InfoFragment"
-        android:label="@string/title_dashboard"
+        android:label="Infos"
         tools:layout="@layout/fragment_info" >
         <action
             android:id="@+id/action_navigation_dashboard_to_info_detail"
+            app:enterAnim="@anim/in_from_right"
+            app:exitAnim="@anim/out_to_left"
             app:destination="@id/info_detail" />
         <action
             android:id="@+id/action_navigation_dashboard_to_city_fragment"
+            app:enterAnim="@anim/in_from_right"
+            app:exitAnim="@anim/out_to_left"
             app:destination="@id/city_fragment" />
         <action
             android:id="@+id/action_navigation_dashboard_to_release_fragment"
+            app:enterAnim="@anim/in_from_right"
+            app:exitAnim="@anim/out_to_left"
             app:destination="@id/release_fragment" />
+        <action
+            android:id="@+id/action_navigation_dashboard_to_movies_fragment"
+            app:destination="@id/movies_fragment" />
     </fragment>
 
     <fragment
@@ -73,7 +97,7 @@
     <fragment
         android:id="@+id/info_detail"
         android:name="com.example.myplayer.ui.DetailFragment"
-        android:label="@string/title_dashboard"
+        android:label="Details"
         tools:layout="@layout/fragment_detail">
 
     </fragment>
@@ -82,7 +106,7 @@
         android:id="@+id/navigation_notifications"
         android:name="com.example.myplayer.ui.AccountFragment"
         tools:layout="@layout/fragment_account"
-        android:label="@string/title_notifications" />
+        android:label="Account" />
 
     <fragment
         android:id="@+id/city_fragment"

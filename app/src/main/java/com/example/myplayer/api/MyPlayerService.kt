@@ -128,10 +128,12 @@ interface MyPlayerService {
     @POST("walletobjects/v1/eventTicketClass")
     suspend fun device(): String
 
-    @POST("QQQ/servlet/UploadPhoto")
-    fun uploadPhoto(
-        @Part("return_attributes") return_attributes: RequestBody,
-        @Part part: MultipartBody.Part ): LoginResponse
+    @Multipart
+    @POST("QQQ/servlet/UploadPhotoServlet")
+    suspend fun uploadPhoto(@Part file: MultipartBody.Part): UploadResult
+
+    @POST("QQQ/servlet/UploadJson")
+    suspend fun uploadJson(@Body body: RequestBody): UploadResult
 
     companion object {
         fun create(): MyPlayerService {

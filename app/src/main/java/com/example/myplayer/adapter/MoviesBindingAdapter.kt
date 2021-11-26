@@ -1,6 +1,7 @@
 package com.example.myplayer.adapter
 
 import android.content.Context
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
@@ -40,6 +41,30 @@ fun bindDialogContent(view: TextView, coin: Int) {
             view.text = "是否花费1金币购买此内容？"
         } else {
             view.text = "金币"
+        }
+    }
+}
+
+@BindingAdapter(value = ["lockContent"])
+fun lockContent(view: TextView, lock: Boolean) {
+    lock?.let {
+        if (lock) {
+            view.visibility = View.VISIBLE
+        } else {
+            view.visibility = View.GONE
+        }
+    }
+}
+
+@BindingAdapter(value = ["showContent", "phoneDetail"], requireAll = true)
+fun showContent(view: TextView, lock: Boolean, phone: String) {
+    lock?.let {
+        if (lock) {
+            view.visibility = View.GONE
+            view.text = phone
+        } else {
+            view.visibility = View.VISIBLE
+            view.text = phone
         }
     }
 }

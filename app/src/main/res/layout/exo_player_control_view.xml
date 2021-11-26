@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="25dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <LinearLayout
+        android:id="@+id/control_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/exo_progress"
+        android:orientation="horizontal">
+
+        <ImageButton android:id="@id/exo_rew"
+            style="@style/ExoMediaButton.Rewind"/>
+
+        <ImageButton android:id="@id/exo_shuffle"
+            style="@style/ExoMediaButton"/>
+
+        <ImageButton android:id="@id/exo_repeat_toggle"
+            style="@style/ExoMediaButton"/>
+
+        <ImageButton android:id="@id/exo_play"
+            style="@style/ExoMediaButton.Play"/>
+
+        <ImageButton android:id="@id/exo_pause"
+            style="@style/ExoMediaButton.Pause"/>
+
+        <ImageButton android:id="@id/exo_ffwd"
+            style="@style/ExoMediaButton.FastForward"/>
+
+        <ImageButton android:id="@id/exo_vr"
+            style="@style/ExoMediaButton.VR"/>
+
+    </LinearLayout>
+
+    <com.google.android.exoplayer2.ui.DefaultTimeBar
+        android:id="@id/exo_progress"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/control_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:buffered_color="#B0FFFFFF"
+        app:played_color="#00B3E3"
+        app:scrubber_color="#FFFFFF"
+        app:unplayed_color="#B0FFFFFF"
+        tools:ignore="MissingConstraints" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/exo_progress"
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView android:id="@id/exo_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:includeFontPadding="false"
+            android:textColor="#00B3E3"/>
+
+        <View android:id="@id/exo_progress_placeholder"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="26dp"/>
+
+        <TextView android:id="@id/exo_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:includeFontPadding="false"
+            android:textColor="#00B3E3"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

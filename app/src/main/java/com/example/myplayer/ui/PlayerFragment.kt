@@ -30,7 +30,7 @@ import com.example.myplayer.R
 import kotlinx.coroutines.Job
 
 
-class PlayerFragment :Fragment(){
+class PlayerFragment :Fragment(),ExoPlayerManager.OnBackKeyPress{
     private lateinit var playerBinding: FragmentPlayerBinding
 
     lateinit var exoPlayerManager: ExoPlayerManager
@@ -76,6 +76,10 @@ class PlayerFragment :Fragment(){
                 true
             } else false
         }
+        playerBinding.playerBack.setOnClickListener {
+            exoPlayerManager.stopPlayer()
+            Navigation.findNavController(requireView()).popBackStack()
+        }
     }
 
 //    private fun setGestureListener() {
@@ -105,20 +109,27 @@ class PlayerFragment :Fragment(){
 //    }
 
     private fun initExoPlayer() {
+        android.util.Log.d("zwj url" ,"url $url")
         exoPlayerManager = ExoPlayerManager()
         exoPlayerManager.create(requireContext(), playerBinding.myPlayer)
         exoPlayerManager.initializePlayer(url)
+        exoPlayerManager.initBackListener(this)
     }
-    override fun onDestroyView() {
-        if (fromWhere != "Movies")
-        requireActivity().onBackPressed()
-       // this.findNavController().navigate(R.id.action_player_fragment_to_movies_fragment)
-        // Cancels this job with an optional cancellation.
-        homeJob?.cancel()
 
-        // Release player.
-        exoPlayerManager.releasePlayer()
-
-        super.onDestroyView()
+    override fun onBackKeyPress() {
+        exoPlayerManager.stopPlayer()
+        this.findNavController().navigate(R.id.action_player_fragment_to_movies_fragment)
     }
+//    override fun onDestroyView() {
+//        if (fromWhere != "Movies")
+//        requireActivity().onBackPressed()
+//       // this.findNavController().navigate(R.id.action_player_fragment_to_movies_fragment)
+//        // Cancels this job with an optional cancellation.
+//        homeJob?.cancel()
+//
+//        // Release player.
+//        exoPlayerManager.releasePlayer()
+//
+//        super.onDestroyView()
+//    }
 }

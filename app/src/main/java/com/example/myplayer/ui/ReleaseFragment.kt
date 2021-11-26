@@ -1,6 +1,7 @@
 package com.example.myplayer.ui
 
 import android.Manifest
+import android.R.attr
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.os.Bundle
@@ -10,27 +11,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.myplayer.R
-import com.example.myplayer.adapter.InfoAdapter
-import com.example.myplayer.adapter.MoviesAdapter
-import com.example.myplayer.adapter.bindInfoImage
-import com.example.myplayer.data.MoivesReceiveData
-import com.example.myplayer.data.db.InfoEntity
-import com.example.myplayer.data.db.MoviesEntity
-import com.example.myplayer.data.reponse.InfoResponse
-import com.example.myplayer.databinding.FragmentInfoBinding
-import com.example.myplayer.databinding.FragmentMoviesBinding
-import com.example.myplayer.databinding.FragmentReleaseBinding
-import com.example.myplayer.ui.DetailFragment.Companion.setInfoViewModel
-import com.example.myplayer.viewmodels.InfoViewModel
-import com.example.myplayer.viewmodels.MoviesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import androidx.core.app.ActivityCompat.startActivityForResult
 
 import android.content.Intent
 import com.example.myplayer.viewmodels.ReleaseViewModel
@@ -51,8 +34,7 @@ import android.widget.Toast
 import androidx.core.net.toFile
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
+
 import java.io.File
 import java.io.FileNotFoundException
 import android.os.Environment
@@ -60,6 +42,13 @@ import android.text.TextUtils
 import android.util.Log
 import java.io.FileOutputStream
 import java.lang.Exception
+import okhttp3.MultipartBody
+import android.R.attr.path
+import com.example.myplayer.databinding.FragmentReleaseBinding
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import com.google.gson.Gson
+import okhttp3.RequestBody.Companion.toRequestBody
 
 
 @AndroidEntryPoint
@@ -103,24 +92,84 @@ class ReleaseFragment: Fragment() {
 //            }
         }
         releaseBinding.releaseBtn.setOnClickListener {
-            relseaseContent()
+            if (ableToUpload()) {
+                releaseJson()
+                relseaseContent()
+            }
         }
     }
 
     private fun relseaseContent() {
+        val builder: MultipartBody.Builder = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+
         val file = saveBitMapToFile(requireContext(), "toUpload" ,toUpBitMap, true)
-        val photoRequestBody = RequestBody.create("image/jpg".toMediaTypeOrNull(), file)
-        val photoPart = MultipartBody.Part.createFormData("image_file", "toUpload", photoRequestBody)
-        val return_attributes = RequestBody.create("text/plain".toMediaTypeOrNull(), "zwj")
+        val photoRequestBody =  RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
+        val requestBody = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            //携带一个表单参数
+            .addFormDataPart("username", "Chen-XiaoMo")
+            //设置参数名、文件名和文件
+            .addFormDataPart("myfile","Naruto.jpg",photoRequestBody)
+            .build()
+        val files: File = File(file)
+        val photoPart = MultipartBody.Part.createFormData("multipartFiles", "toUpload", requestBody)
+        uploadSinglePicture(files)
+    }
+
+    private fun releaseJson() {
+        val gson = Gson()
+        var paramsMap: MutableMap<String,String> = mutableMapOf()
+        paramsMap.put("title" , releaseBinding.contentTitle.text.toString())
+        paramsMap.put("city" , releaseBinding.contentCity.text.toString())
+        paramsMap.put("desc" , releaseBinding.contentDesc.text.toString())
+        paramsMap.put("street" , releaseBinding.contentStreet.text.toString())
+        paramsMap.put("phone" , releaseBinding.contentPhoneDeatil.text.toString())
+        paramsMap.put("price" , releaseBinding.contentPrice.text.toString())
+
+        val strEntity = gson.toJson(paramsMap)
+        val body: RequestBody =
+            strEntity.toRequestBody("application/json;charset=UTF-8".toMediaTypeOrNull())
         relseaseJob?.cancel()
         relseaseJob = lifecycleScope.launch {
-            releaseViewModel.upload(return_attributes, photoPart)
+            releaseViewModel.uploadJson(body)
                 ?.observe(viewLifecycleOwner) {
-                    if (it.resultData) {
-                        Toast.makeText(requireContext(), "上传成功", Toast.LENGTH_LONG).show()
-                    } else {
-                        Toast.makeText(requireContext(), "上传失败", Toast.LENGTH_LONG).show()                    }
+                    android.util.Log.d("zwjJson","json result ${it.resultData}")
                 }
+//                    if (it.resultData) {
+//                        Toast.makeText(requireContext(), "上传成功", Toast.LENGTH_LONG).show()
+//                    } else {
+//                        Toast.makeText(requireContext(), "上传失败", Toast.LENGTH_LONG).show()                    }
+//                }
+        }
+    }
+
+    private fun ableToUpload(): Boolean {
+        if (TextUtils.isEmpty(releaseBinding.contentCity.text) || TextUtils.isEmpty(releaseBinding.contentDesc.text) || TextUtils.isEmpty(releaseBinding.contentPhoneDeatil.text) ||
+            TextUtils.isEmpty(releaseBinding.contentPrice.text) || TextUtils.isEmpty(releaseBinding.contentStreet.text) || TextUtils.isEmpty(releaseBinding.contentTitle.text) ||
+            releaseBinding.imageView2.drawable == null)
+        {return false}
+        return true
+    }
+
+
+    fun uploadSinglePicture(file: File) {
+        val builder = MultipartBody.Builder().setType(MultipartBody.FORM) //表单类型
+        val requestFile: RequestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+        requestFile.contentType()
+        builder.addFormDataPart("file", file.name, requestFile)
+        val part = builder.build().part(0)
+        relseaseJob?.cancel()
+        relseaseJob = lifecycleScope.launch {
+            releaseViewModel.upload(part)
+                ?.observe(viewLifecycleOwner) {
+                    Log.d("zwj" ,"result data ${it.resultData}")
+                }
+//                    if (it.resultData) {
+//                        Toast.makeText(requireContext(), "上传成功", Toast.LENGTH_LONG).show()
+//                    } else {
+//                        Toast.makeText(requireContext(), "上传失败", Toast.LENGTH_LONG).show()                    }
+//                }
         }
     }
 
@@ -154,16 +203,18 @@ class ReleaseFragment: Fragment() {
         isCover: Boolean
     ): String {
         if (null == context || null == bitmap) {
+            Log.d("zwj", "111")
             return "null"
         }
         if (TextUtils.isEmpty(fileName)) {
+            Log.d("zwj", "2222")
             return "null"
         }
         var fOut: FileOutputStream? = null
         return try {
             var file: File? = null
             var fileDstPath = ""
-            if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
+            if (false) {
 
                 // 保存到sd卡
                 fileDstPath = (Environment.getExternalStorageDirectory().absolutePath
@@ -200,7 +251,7 @@ class ReleaseFragment: Fragment() {
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut)
                 }
                 fOut.flush()
-                bitmap.recycle()
+                //bitmap.recycle()
             }
             Log.i(
                 "FileSave", "saveDrawableToFile " + fileName
@@ -208,6 +259,7 @@ class ReleaseFragment: Fragment() {
             )
             fileDstPath
         } catch (e: Exception) {
+            Log.d("zwj", "111 $e")
             "null"
         } finally {
             if (null != fOut) {

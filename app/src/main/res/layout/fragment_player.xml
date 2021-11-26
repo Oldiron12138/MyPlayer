@@ -5,23 +5,32 @@
     <data>
 
     </data>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_marginBottom="30dp"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.exoplayer2.ui.StyledPlayerView
-            android:id="@+id/my_player"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:animation_enabled="false"
-            app:controller_layout_id="@layout/exo_player_control_view"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:use_controller="true" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.exoplayer2.ui.StyledPlayerView
+                android:background="@color/black"
+                android:id="@+id/my_player"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:animation_enabled="false"
+                app:controller_layout_id="@layout/exo_player_control_view"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:use_controller="true" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageButton
+            android:id="@+id/player_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_baseline_chevron_left_24"/>
+    </FrameLayout>
+
 </layout>

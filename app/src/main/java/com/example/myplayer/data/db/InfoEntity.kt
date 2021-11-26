@@ -13,5 +13,6 @@ data class InfoEntity(
     val street: String,
     val phone: String,
     val price: String,
-    val url: String
+    val url: String,
+    var lock: Boolean
 )

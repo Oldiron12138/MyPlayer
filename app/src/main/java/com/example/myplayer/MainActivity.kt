@@ -14,6 +14,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.myplayer.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import android.view.MotionEvent
+import android.view.View
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -35,8 +38,39 @@ class MainActivity : AppCompatActivity() {
                 R.id.movies_fragment, R.id.navigation_dashboard, R.id.navigation_notifications
             )
         )
+        this.supportActionBar?.hide()
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            if (destination.id == R.id.player_fragment) {
+                runOnUiThread { navView.setVisibility(View.GONE) }
+            } else {
+                runOnUiThread { navView.setVisibility(View.VISIBLE) }
+            }
+        }
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+    }
+
+    private val onTouchListeners = ArrayList<MyOnTouchListener>(
+        10
+    )
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        for (listener in onTouchListeners) {
+            listener.onTouch(ev)
+        }
+        return super.dispatchTouchEvent(ev)
+    }
+
+    fun registerMyOnTouchListener(myOnTouchListener: MyOnTouchListener) {
+        onTouchListeners.add(myOnTouchListener)
+    }
+
+    fun unregisterMyOnTouchListener(myOnTouchListener: MyOnTouchListener) {
+        onTouchListeners.remove(myOnTouchListener)
+    }
+
+    interface MyOnTouchListener {
+        fun onTouch(ev: MotionEvent?): Boolean
     }
 
 }

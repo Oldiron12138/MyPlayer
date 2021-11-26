@@ -101,7 +101,7 @@ class InfoFragment: Fragment() {
                     val newInfoList: MutableList<InfoEntity> = mutableListOf()
                     repeat(seriesDetailData.size) { i ->
                         if (seriesDetailData[i].city == current) {
-                            newInfoList.add(InfoEntity(seriesDetailData[i].title, seriesDetailData[i].city, seriesDetailData[i].desc, seriesDetailData[i].street, seriesDetailData[i].phone, seriesDetailData[i].price,seriesDetailData[i].url))
+                            newInfoList.add(InfoEntity(seriesDetailData[i].title, seriesDetailData[i].city, seriesDetailData[i].desc, seriesDetailData[i].street, seriesDetailData[i].phone, seriesDetailData[i].price,seriesDetailData[i].url,seriesDetailData[i].lock))
                         }
                     }
                     infoAdapter.updateListItem(newInfoList, current)

@@ -17,4 +17,7 @@ interface InfoDao {
 
     @Query("DELETE FROM info")
     suspend fun deleteInfos()
+
+    @Query("UPDATE info SET lock = :mLock WHERE title = :mNum")
+    suspend fun updateTour(mNum: String, mLock: Boolean): Int
 }

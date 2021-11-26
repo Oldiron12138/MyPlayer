@@ -89,12 +89,12 @@ class MoviesAdapter(
                 binding.asset?.let {
                         asset ->
                     if (asset.lock) {
-                        navigateToBuy(it, asset)
+                        itemClickListener?.onItemClick(asset)
                     } else {
                         navigateToPlayer(it, asset)
                     }
 
-                    itemClickListener?.onItemClick(asset)
+
                 }
             }
         }

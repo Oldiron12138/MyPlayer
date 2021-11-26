@@ -23,33 +23,37 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
         android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/num"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:orientation="horizontal"
+            android:background="@drawable/account_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/textView3"
-                android:paddingTop="20dp"
-                android:paddingBottom="10dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="30dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="20dp"
                 android:layout_gravity="center_vertical"
-                android:text="用户： " />
+                android:text="用户: " />
 
             <TextView
                 android:id="@+id/textView4"
-                android:paddingTop="20dp"
-                android:paddingBottom="10dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -61,6 +65,9 @@
 
         <LinearLayout
             android:id="@+id/coin"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/account_background"
             android:layout_marginTop="50dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -71,8 +78,8 @@
 
             <TextView
                 android:id="@+id/textView5"
-                android:paddingTop="20dp"
-                android:paddingBottom="10dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="30dp"
@@ -87,11 +94,12 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:paddingTop="20dp"
-                android:paddingBottom="10dp"
+                android:paddingTop="15dp"
+                android:textSize="20dp"
+                android:paddingBottom="15dp"
                 android:text="@{mCoin}"
                 android:layout_marginRight="20dp"
-                android:textSize="25dp" />
+                />
         </LinearLayout>
 
         <LinearLayout

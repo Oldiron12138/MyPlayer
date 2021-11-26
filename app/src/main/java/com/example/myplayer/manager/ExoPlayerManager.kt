@@ -3,7 +3,10 @@ package com.example.myplayer.manager
 import android.content.Context
 import android.net.Uri
 import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.navigation.findNavController
+import com.example.myplayer.data.db.InfoEntity
+import com.example.myplayer.widget.ExitDialog
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.R
@@ -28,6 +31,8 @@ class ExoPlayerManager {
     private var videoUrl: String?= null
     private var exoSkipBackBut: ImageButton? = null
     private var exoResumeBut: ImageButton? = null
+    private var backButton: ImageView? = null
+    private var listener: OnBackKeyPress? = null
     fun create(context: Context, playerView: StyledPlayerView) {
         // Adaptive track selection.
         trackSelector = DefaultTrackSelector(context)
@@ -60,6 +65,10 @@ class ExoPlayerManager {
         this.playerView = playerView
     }
 
+    fun initBackListener(mListener: OnBackKeyPress) {
+        listener = mListener
+    }
+
     fun initializePlayer(
         url: String
     ) {
@@ -79,6 +88,10 @@ class ExoPlayerManager {
         }
         exoResumeBut?.setOnClickListener {
             setPlayAndPause(true)
+        }
+        backButton?.setOnClickListener {
+            listener?.onBackKeyPress()
+
         }
     }
     fun setPlayAndPause(isPlay: Boolean) {
@@ -119,6 +132,10 @@ class ExoPlayerManager {
 
     fun releasePlayer() {
         exoplayer.release()
+    }
+
+    interface OnBackKeyPress {
+        fun onBackKeyPress()
     }
 
 
