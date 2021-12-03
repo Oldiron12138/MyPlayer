@@ -44,7 +44,9 @@ import java.io.FileOutputStream
 import java.lang.Exception
 import okhttp3.MultipartBody
 import android.R.attr.path
+import androidx.fragment.app.FragmentActivity
 import com.example.myplayer.databinding.FragmentReleaseBinding
+import com.example.myplayer.widget.LoadingDialog
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import com.google.gson.Gson
@@ -58,6 +60,8 @@ class ReleaseFragment: Fragment() {
     private var relseaseJob: Job? = null
 
     private val releaseViewModel: ReleaseViewModel by viewModels()
+
+    private var loadingDialog: LoadingDialog? = null
 
     private lateinit var toUpBitMap: Bitmap
     override fun onCreateView(
@@ -93,8 +97,8 @@ class ReleaseFragment: Fragment() {
         }
         releaseBinding.releaseBtn.setOnClickListener {
             if (ableToUpload()) {
+                loadingDialog = loadDialog(requireActivity())
                 releaseJson()
-                relseaseContent()
             }
         }
     }
@@ -105,6 +109,7 @@ class ReleaseFragment: Fragment() {
 
         val file = saveBitMapToFile(requireContext(), "toUpload" ,toUpBitMap, true)
         val photoRequestBody =  RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
+
         val requestBody = MultipartBody.Builder()
             .setType(MultipartBody.FORM)
             //携带一个表单参数
@@ -135,12 +140,11 @@ class ReleaseFragment: Fragment() {
             releaseViewModel.uploadJson(body)
                 ?.observe(viewLifecycleOwner) {
                     android.util.Log.d("zwjJson","json result ${it.resultData}")
+                    if (it != null) {
+                        relseaseContent()
+                    } else {
+                        Toast.makeText(requireContext(), "上传失败", Toast.LENGTH_LONG).show()                    }
                 }
-//                    if (it.resultData) {
-//                        Toast.makeText(requireContext(), "上传成功", Toast.LENGTH_LONG).show()
-//                    } else {
-//                        Toast.makeText(requireContext(), "上传失败", Toast.LENGTH_LONG).show()                    }
-//                }
         }
     }
 
@@ -164,12 +168,16 @@ class ReleaseFragment: Fragment() {
             releaseViewModel.upload(part)
                 ?.observe(viewLifecycleOwner) {
                     Log.d("zwj" ,"result data ${it.resultData}")
+                    if (it.resultData != null) {
+                        android.util.Log.d("zwj" ,"eee ${it.resultData}")
+                        loadingDialog!!.dismissDialog()
+                        Toast.makeText(requireContext(), "上传成功", Toast.LENGTH_LONG).show()
+                    } else {
+                        loadingDialog!!.dismissDialog()
+                        Toast.makeText(requireContext(), "上传失败", Toast.LENGTH_LONG).show()
+                    }
                 }
-//                    if (it.resultData) {
-//                        Toast.makeText(requireContext(), "上传成功", Toast.LENGTH_LONG).show()
-//                    } else {
-//                        Toast.makeText(requireContext(), "上传失败", Toast.LENGTH_LONG).show()                    }
-//                }
+
         }
     }
 
@@ -269,5 +277,11 @@ class ReleaseFragment: Fragment() {
                 }
             }
         }
+    }
+
+    fun loadDialog(activity: FragmentActivity): LoadingDialog {
+        val loadDialog = LoadingDialog(activity)
+        loadDialog.show()
+        return loadDialog
     }
 }

@@ -24,6 +24,9 @@
             app:enterAnim="@anim/in_from_right"
             app:exitAnim="@anim/out_to_left"
             app:destination="@id/navigation_dashboard" />
+        <action
+            android:id="@+id/action_movies_fragment_to_uploadmovie_fragment"
+            app:destination="@id/uploadmovie_fragment" />
     </fragment>
 
     <fragment
@@ -93,6 +96,12 @@
         android:name="com.example.myplayer.ui.ReleaseFragment"
         android:label="发布"
         tools:layout="@layout/fragment_release"/>
+
+    <fragment
+        android:id="@+id/uploadmovie_fragment"
+        android:name="com.example.myplayer.ui.UploadMovie"
+        android:label="发布"
+        tools:layout="@layout/fragment_uploadmovie"/>
 
     <fragment
         android:id="@+id/info_detail"

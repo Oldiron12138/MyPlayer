@@ -28,7 +28,7 @@ buildscript {
         roomVersion = "2.3.0"
 
         // WorkManager.
-        workVersion = "2.5.0"
+        workVersion = "2.7.0"
 
         // Datastore.
         datastoreVersion = "1.0.0-rc02"
