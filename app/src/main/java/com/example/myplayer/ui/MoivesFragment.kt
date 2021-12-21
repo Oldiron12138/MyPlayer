@@ -31,6 +31,7 @@ import android.view.GestureDetector
 import android.view.GestureDetector.SimpleOnGestureListener
 import androidx.navigation.findNavController
 import com.example.myplayer.MainActivity
+import com.example.myplayer.adapter.CategoryAdapter
 import java.lang.Exception
 
 
@@ -46,8 +47,12 @@ class MoivesFragment: Fragment(), ExitDialog.OnDialogButtonClickListener,
 
     private lateinit var assetAdapter: MoviesAdapter
 
+    private lateinit var categoryAdapter: CategoryAdapter
+
     //
     private lateinit var assetLayoutManager: LinearLayoutManager
+
+    private lateinit var categoryLayoutManager: LinearLayoutManager
 
     private var receiveData: MoivesReceiveData? = null
 
@@ -114,6 +119,22 @@ class MoivesFragment: Fragment(), ExitDialog.OnDialogButtonClickListener,
                 unLockDialog(requireActivity(),asset)
             }
         })
+
+        categoryAdapter = CategoryAdapter(requireContext())
+        categoryLayoutManager = LinearLayoutManager(requireContext())
+        categoryLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        moviesBinding.categoryList.layoutManager = categoryLayoutManager
+        moviesBinding.categoryList.adapter = categoryAdapter
+        moviesBinding.categoryList.itemAnimator = null
+        categoryAdapter.setItemClickListener(object : CategoryAdapter.OnItemClickListener {
+            override fun onItemClick(asset: MoviesEntity) {
+                unLockDialog(requireActivity(),asset)
+            }
+        })
+        categoryAdapter.updateListItem()
+
+
+
         //
         getSeriesDetailData()
     }
@@ -130,13 +151,7 @@ class MoivesFragment: Fragment(), ExitDialog.OnDialogButtonClickListener,
             seriesDetailViewModel.seriesDetail
                 ?.observe(viewLifecycleOwner) { seriesDetailData ->
                     android.util.Log.d("zwj " ,"getSeriesDetailData ${seriesDetailData.size}")
-                    var new: MutableList<MoviesEntity> = mutableListOf()
-                    new.addAll(0,seriesDetailData)
-                    new.addAll(2,seriesDetailData)
-                    new.addAll(5,seriesDetailData)
-                    new.addAll(8,seriesDetailData)
-                    new.addAll(11,seriesDetailData)
-                    assetAdapter.updateListItem(new)
+                    assetAdapter.updateListItem(seriesDetailData)
                 }
             //seriesDetailViewModel.devices()
         }

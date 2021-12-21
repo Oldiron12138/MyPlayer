@@ -1,6 +1,7 @@
 package com.example.myplayer.viewmodels
 
 import android.content.ContentResolver
+import android.content.Context
 import android.database.ContentObserver
 import android.os.Build
 import android.os.Bundle
@@ -11,32 +12,44 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myplayer.MainApplication
+import com.example.myplayer.data.reponse.UploadResult
 import com.example.myplayer.data.repository.SplashRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import okhttp3.RequestBody
+import java.net.Socket
 import javax.inject.Inject
+import android.R
+import android.system.Os
+import androidx.lifecycle.viewModelScope
+import com.example.myplayer.data.repository.UploadRepository
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.Dispatcher
+
+import java.net.InetSocketAddress
+import java.net.SocketAddress
+import java.io.*
+
 
 @HiltViewModel
 class UploadViewModel @Inject constructor(
-    private val splashRepository: SplashRepository
+    private val uploadRepository: UploadRepository
 ) : ViewModel() {
     companion object {
         const val TAG = "ScreenShotViewModel"
     }
 
     //查询的照片类型
-    private val imageType = arrayOf("image/*", "image/jpeg","image/jpg")
-
+    private val imageType = arrayOf("video/*")
+    private var webSocketJob: Job? = null
     /**
      * 查询截屏照片的数据类型枚举
      */
-    private val ScreenShotProjection = arrayOf( //查询图片需要的数据列
-        MediaStore.Images.Media.BUCKET_DISPLAY_NAME,  //图片的显示名称  aaa.jpg
-        MediaStore.Images.Media.DATA,  //图片的真实路径  /storage/emulated/0/pp/downloader/wallpaper/aaa.jpg
-        MediaStore.Images.Media.SIZE,  //图片的大小，long型  132492
-        MediaStore.Images.Media.WIDTH,  //图片的宽度，int型  1s920
-        MediaStore.Images.Media.HEIGHT,  //图片的高度，int型  1080
-        MediaStore.Images.Media.MIME_TYPE,  //图片的类型     image/jpeg
-        MediaStore.Images.Media.DATE_ADDED //图片被添加的时间，long型  1450518608
+    private val ScreenShotProjection = arrayOf(
+        //查询图片需要的数据列
+        MediaStore.Video.Media.DATA,  //图片的真实路径  /storage/emulated/0/pp/downloader/wallpaper/aaa.jpg
     )
 
     //监听到截图后通过LiveData通知到view层
@@ -53,8 +66,7 @@ class UploadViewModel @Inject constructor(
     private var contentObserver: ContentObserver? = null
 
     //获取截图图片
-    fun getLatestImage(bucketId: String? = null) {
-        Thread {
+    fun getLatestImage(bucketId: String? = null):String {
 
             var data: String? = null
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -69,11 +81,19 @@ class UploadViewModel @Inject constructor(
 //                        return@forEach
 //                    }
             android.util.Log.d("zwj" ,"data$data")
-            return@Thread
-        }.start()
+            return data
     }
 
-    /**
+    suspend fun uploadFile(file: File){
+        webSocketJob?.cancel()
+        webSocketJob = viewModelScope.launch {
+            withContext(IO) {   var socket: Socket = Socket("111.229.96.2", 8897)}
+
+        }
+    }
+
+
+/**
      * 只获取普通图片，不获取Gif
      */
     fun queryImages(bucketId: String?): String {
@@ -101,7 +121,7 @@ class UploadViewModel @Inject constructor(
             if (data.moveToFirst()) {
                 //查询数据
                 val imagePath: String =
-                    data.getString(data.getColumnIndexOrThrow(ScreenShotProjection[1]))
+                    data.getString(data.getColumnIndexOrThrow(ScreenShotProjection[0]))
                 return imagePath
             }
 
@@ -123,33 +143,36 @@ class UploadViewModel @Inject constructor(
         android.util.Log.d("zwj" ,"111")
         val uri = MediaStore.Files.getContentUri("external")
         val sortOrder = MediaStore.Files.FileColumns._ID + " DESC"
-        var selection = (MediaStore.Files.FileColumns.MEDIA_TYPE + "="
-                + MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE) +
-                " AND " + MediaStore.Images.Media.MIME_TYPE + "=?" +
-                " or " + MediaStore.Images.Media.MIME_TYPE + "=?"
+        var selection = (MediaStore.Files.FileColumns.DISPLAY_NAME + "="
+                + "")
 
-        val bundle = createSqlQueryBundle(selection, imageType, sortOrder, 1)
-
+        val bundle = createSqlQueryBundle(null, null, sortOrder, 2)
+        android.util.Log.d("zwj" ,"2222")
         try {
-            val data = MainApplication.context?.contentResolver?.query(
+            val data = MainApplication.applicationContext.contentResolver?.query(
                 uri,
                 ScreenShotProjection,
                 bundle,
                 null
             )
-
             if (data == null) {
                 android.util.Log.d("zwj" ,"333")
                 return filePath
             }
 
-            if (data.moveToFirst()) {
+            while (data.moveToNext()) {
                 //查询数据
                 android.util.Log.d("zwj" ,"222")
                 val imagePath: String =
-                    data.getString(data.getColumnIndexOrThrow(ScreenShotProjection[1]))
-                android.util.Log.d("zwj" ,"path $imagePath")
-                return imagePath
+                    data.getString(data.getColumnIndexOrThrow(ScreenShotProjection[0]))
+                val path: String = data.getString(0)
+                android.util.Log.d("zwj" ,"path111 $path")
+                if (bucketId != null) {
+                    if(imagePath.indexOf(bucketId) != -1) {
+                        android.util.Log.d("zwj" ,"imagePath $imagePath")
+                        return imagePath
+                    }
+                }
             }
 
         } catch (e: Exception) {
@@ -163,8 +186,8 @@ class UploadViewModel @Inject constructor(
     * 创建Android11 所需要的bundle对象
     * */
     fun createSqlQueryBundle(
-        selection: String,
-        selectionArgs: Array<String>,
+        selection: String?,
+        selectionArgs: Array<String>?,
         sortOrder: String?, limitCount: Int = 0, offset: Int = 0
     ): Bundle? {
         if (selection == null && selectionArgs == null && sortOrder == null) {

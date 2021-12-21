@@ -7,6 +7,10 @@
         <variable
             name="clickListener"
             type="android.view.View.OnClickListener" />
+
+        <variable
+            name="clickListener1"
+            type="android.view.View.OnClickListener" />
         <variable
             name="current"
             type="String" />
@@ -29,25 +33,31 @@
             app:layout_constraintBottom_toTopOf="@id/info_list"
             android:orientation="horizontal">
 
-            <FrameLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_marginBottom="30dp"
                 android:layout_height="wrap_content">
                 <ImageView
-                    android:onClick="@{clickListener}"
+                    android:onClick="@{clickListener1}"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:background="@mipmap/local"
+                    android:background="@drawable/ic_baseline_location_on_24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     />
                 <TextView
-                    android:onClick="@{clickListener}"
+                    android:onClick="@{clickListener1}"
                     android:paddingLeft="30dp"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:textColor="@color/black"
+                    android:textColor="#36AA90"
                     android:gravity="center_vertical"
-                    android:textSize="10dp"
-                    android:text="选择城市"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:textSize="15dp"
+                    android:text="当前城市"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -56,8 +66,25 @@
                     android:gravity="center"
                     android:textSize="20dp"
                     android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     android:text="@{current}"/>
-            </FrameLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:onClick="@{clickListener}"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="15dp"
+                    android:textColor="#36AA90"
+                    android:gravity="center_vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:text="其他城市"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -73,6 +100,30 @@
             app:layout_constraintTop_toBottomOf="@id/localtion"
             tools:itemCount="1"
             tools:listitem="@layout/list_item_info" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:id="@+id/empty"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/localtion"
+            app:layout_constraintBottom_toTopOf="@+id/release">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_baseline_announcement_24">
+
+            </ImageView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textSize="20dp"
+                android:text="空空如也"/>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/release"

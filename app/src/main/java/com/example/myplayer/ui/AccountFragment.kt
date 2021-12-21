@@ -1,22 +1,17 @@
 package com.example.myplayer.ui
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.example.myplayer.R
 import com.example.myplayer.databinding.FragmentAccountBinding
-import com.example.myplayer.databinding.FragmentLoginBinding
 import com.example.myplayer.viewmodels.LoginViewModel
 import com.example.myplayer.widget.ExitDialog
 import com.example.myplayer.widget.PopDialog
@@ -25,10 +20,13 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AccountFragment: Fragment() {
+class AccountFragment: Fragment(), PopDialog.OnDialogButtonClickListener {
     private lateinit var moviesBinding: FragmentAccountBinding
 
     private var loginJob: Job? = null
+    private lateinit var num: String
+    private lateinit var pwd: String
+    private lateinit var token: String
 
     private val loginViewModel: LoginViewModel by viewModels()
     override fun onCreateView(
@@ -53,8 +51,8 @@ class AccountFragment: Fragment() {
     private fun refreshInfo() {
         val sharedPref =
             requireContext().getSharedPreferences("USER_INFO", Context.MODE_PRIVATE)
-        val num: String = sharedPref.getString("USERNAME","").toString()
-        val pwd: String = sharedPref.getString("PASSWORD","").toString()
+        num = sharedPref.getString("USERNAME","").toString()
+        pwd = sharedPref.getString("PASSWORD","").toString()
         loginNew(num, pwd)
     }
 
@@ -67,8 +65,11 @@ class AccountFragment: Fragment() {
                         val sharedPref =
                             requireContext().getSharedPreferences("USER_INFO", Context.MODE_PRIVATE)
                         sharedPref.edit().putInt("COIN", it.coin).apply()
+                        sharedPref.edit().putString("TOKEN", it.token).apply()
                         moviesBinding.number = it.num
                         moviesBinding.mCoin = it.coin.toString()
+                        moviesBinding.mName = it.name
+                        token = it.token
                     } else {
                     }
                 }
@@ -92,5 +93,14 @@ class AccountFragment: Fragment() {
     fun exitDialog(activity: FragmentActivity) {
         val exitDialog = ExitDialog(activity)
         exitDialog.show()
+    }
+
+    override fun onDialogButtonClick() {
+        val bundle = Bundle().apply {
+            putString("token", token)
+            putString("num", num)
+        }
+        requireView().findNavController().navigate(R.id.action_navigation_notifications_to_navigation_lives, bundle)
+
     }
 }

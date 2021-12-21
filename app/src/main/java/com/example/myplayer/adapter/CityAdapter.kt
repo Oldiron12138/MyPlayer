@@ -55,7 +55,7 @@ class CityAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         init {
 
-        }
+         }
 
         fun bind(item: String, position: Int) {
             binding.apply {

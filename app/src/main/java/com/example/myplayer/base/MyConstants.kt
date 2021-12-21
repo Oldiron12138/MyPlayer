@@ -2,8 +2,9 @@ package com.example.myplayer.base
 
 const val TAG = "MYPLAYER_APP"
 
-const val BASE_URL_ANDROID_TV_APP = "http://111.229.96.2:8080/"
+const val BASE_URL_ANDROID_TV_APP = "http://120.26.243.3:8080/"
 const val BASE_URL_FIRE_TV_APP = "https://www.googleapis.com/"
+const val IM_APP = "https://api.netease.im/nimserver/user/"
 
 const val SPLASH_PROGRESS_10 = 10
 const val SPLASH_PROGRESS_20 = 20

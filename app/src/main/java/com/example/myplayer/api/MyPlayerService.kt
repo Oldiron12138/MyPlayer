@@ -37,10 +37,11 @@ interface MyPlayerService {
         @Query("denglu") denglu: String
     ): LoginResponse
 
-    @GET("QQQ/servlet/ZhuceServlet")
+    @GET("QQQ/servlet/WebSocketTest")
     suspend fun register(
         @Query("name") name: String,
-        @Query("pwd") pwd: String
+        @Query("pwd") pwd: String,
+        @Query("accid") accid: String
     ): LoginResponse
 
     @GET("QQQ/servlet/Searchall")
@@ -57,74 +58,6 @@ interface MyPlayerService {
         @Query("coin") coin: Int
     ): LoginResponse
 
-    @Headers("{\n" +
-            "\t\"kind\": \"walletobjects#eventTicketClass\",\n" +
-            "\t\"id\": \"string\",\n" +
-            "\t\"reviewStatus\": \"string\",\n" +
-            "\t\"issuerName\": \"string\",\n" +
-            "\t\"eventName\": {\n" +
-            "\t\t\"kind\": \"walletobjects#localizedString\",\n" +
-            "\t\t\"translatedValues\": [{\n" +
-            "\t\t\t\"kind\": \"walletobjects#translatedString\",\n" +
-            "\t\t\t\"language\": \"string\",\n" +
-            "\t\t\t\"value\": \"string\"\n" +
-            "\t\t}],\n" +
-            "\t\t\"defaultValue\": {\n" +
-            "\t\t\t\"kind\": \"walletobjects#translatedString\",\n" +
-            "\t\t\t\"language\": \"string\",\n" +
-            "\t\t\t\"value\": \"string\"\n" +
-            "\t\t}\n" +
-            "\t},\n" +
-            "\t\"venue\": {\n" +
-            "\t\t\"kind\": \"walletobjects#eventVenue\",\n" +
-            "\t\t\"name\": {\n" +
-            "\t\t\t\"kind\": \"walletobjects#localizedString\",\n" +
-            "\t\t\t\"translatedValues\": [{\n" +
-            "\t\t\t\t\"kind\": \"walletobjects#translatedString\",\n" +
-            "\t\t\t\t\"language\": \"string\",\n" +
-            "\t\t\t\t\"value\": \"string\"\n" +
-            "\t\t\t}],\n" +
-            "\t\t\t\"defaultValue\": {\n" +
-            "\t\t\t\t\"kind\": \"walletobjects#translatedString\",\n" +
-            "\t\t\t\t\"language\": \"string\",\n" +
-            "\t\t\t\t\"value\": \"string\"\n" +
-            "\t\t\t}\n" +
-            "\t\t},\n" +
-            "\t\t\"address\": {\n" +
-            "\t\t\t\"kind\": \"walletobjects#localizedString\",\n" +
-            "\t\t\t\"translatedValues\": [{\n" +
-            "\t\t\t\t\"kind\": \"walletobjects#translatedString\",\n" +
-            "\t\t\t\t\"language\": \"string\",\n" +
-            "\t\t\t\t\"value\": \"string\"\n" +
-            "\t\t\t}],\n" +
-            "\t\t\t\"defaultValue\": {\n" +
-            "\t\t\t\t\"kind\": \"walletobjects#translatedString\",\n" +
-            "\t\t\t\t\"language\": \"string\",\n" +
-            "\t\t\t\t\"value\": \"string\"\n" +
-            "\t\t\t}\n" +
-            "\t\t}\n" +
-            "\t},\n" +
-            "\t\"dateTime\": {\n" +
-            "\t\t\"kind\": \"walletobjects#eventDateTime\",\n" +
-            "\t\t\"doorsOpenLabel\": \"string\",\n" +
-            "\t\t\"customDoorsOpenLabel\": {\n" +
-            "\t\t\t\"kind\": \"walletobjects#localizedString\",\n" +
-            "\t\t\t\"translatedValues\": [{\n" +
-            "\t\t\t\t\"kind\": \"walletobjects#translatedString\",\n" +
-            "\t\t\t\t\"language\": \"string\",\n" +
-            "\t\t\t\t\"value\": \"string\"\n" +
-            "\t\t\t}],\n" +
-            "\t\t\t\"defaultValue\": {\n" +
-            "\t\t\t\t\"kind\": \"walletobjects#translatedString\",\n" +
-            "\t\t\t\t\"language\": \"string\",\n" +
-            "\t\t\t\t\"value\": \"string\"\n" +
-            "\t\t\t}\n" +
-            "\t\t},\n" +
-            "\t\t\"doorsOpen\": \"string\",\n" +
-            "\t\t\"start\": \"string\",\n" +
-            "\t\t\"end\": \"string\"\n" +
-            "\t}\n" +
-            "}")
     @POST("walletobjects/v1/eventTicketClass")
     suspend fun device(): String
 

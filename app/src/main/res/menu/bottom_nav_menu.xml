@@ -12,6 +12,11 @@
         android:title="Infos" />
 
     <item
+        android:id="@+id/navigation_lives"
+        android:icon="@drawable/ic_notifications_black_24dp"
+        android:title="Lives" />
+
+    <item
         android:id="@+id/navigation_notifications"
         android:icon="@drawable/ic_notifications_black_24dp"
         android:title="Account" />

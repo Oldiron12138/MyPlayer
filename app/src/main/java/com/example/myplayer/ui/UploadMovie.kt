@@ -35,8 +35,14 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
+import com.example.myplayer.MainApplication
+import com.example.myplayer.R
 import com.example.myplayer.viewmodels.UploadViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import java.net.Socket
 
 @AndroidEntryPoint
 class UploadMovie: Fragment() {
@@ -67,13 +73,13 @@ class UploadMovie: Fragment() {
 
     private fun subscribeUi() {
         uploadMovie.imageView2.setOnClickListener {
-            uploadViewModel.getLatestImage(null)
+            openAlbum()
         }
     }
 
     private fun openAlbum() {
         val intent = Intent("android.intent.action.GET_CONTENT")
-        intent.type = "image/*"
+        intent.type = "video/*"
         startActivityForResult(intent, 2)
     }
 
@@ -81,12 +87,31 @@ class UploadMovie: Fragment() {
             if (resultCode == Activity.RESULT_OK) {
                 try {
                     var uri: Uri = data?.data!!
+                    android.util.Log.d("zwj" ,"uuuri $uri")
+                    val data = MainApplication.applicationContext.contentResolver.query(
+                        uri, null, null,
+                        null, null
+                    )
+                    if (data != null) {
+                        data?.moveToFirst()
+                       android.util.Log.d("zwj" ,"name ${data.getString(2)}")
+                    }
                     //android.util.Log.d("zwj" ,"file is null $uri")
-                    uploadViewModel.getLatestImage(null)
+                    val filePath:String = uploadViewModel.getLatestImage(data?.getString(2))
+                    uploadFile(filePath)
                 } catch (e: Exception) {
                 } catch (e: OutOfMemoryError) {
                 }
             }
+    }
+
+    private fun uploadFile(filePath: String) {
+        uploadJob?.cancel()
+        uploadJob = lifecycleScope.launch {
+            val file: File = File(filePath)
+            uploadViewModel.uploadFile(file)
+
+        }
     }
 
 //    @SuppressLint("NewApi")

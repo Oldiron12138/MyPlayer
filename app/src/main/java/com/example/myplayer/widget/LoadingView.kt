@@ -83,9 +83,9 @@ class LoadingView @JvmOverloads constructor(
     private var mReverse = false
     private fun initAttr(context: Context, attrs: AttributeSet?) {
         mTopColor = ContextCompat.getColor(context, R.color.red)
-        mDuration = 1000
+        mDuration = 2000
         if (mDuration <= 0) {
-            mDuration = 1000
+            mDuration = 2000
         }
         mStrokeWidth = 8f
         mMaxSweepAngle = 360
@@ -107,23 +107,38 @@ class LoadingView @JvmOverloads constructor(
         sweepAngle = -1f
         startAngle = -90f
         curStartAngle = startAngle
+        var ssweepFlag: Float = -1f
+        var valueFlag: Float = 0f
 
         // 扩展动画
         mValueAnimator = ValueAnimator.ofFloat(0f, 1f).setDuration(mDuration.toLong())
         mValueAnimator?.setRepeatMode(ValueAnimator.REVERSE)
         mValueAnimator?.setRepeatCount(ValueAnimator.INFINITE)
+
         mValueAnimator?.addUpdateListener(AnimatorUpdateListener { animation: ValueAnimator ->
             var fraction = animation.animatedFraction
             val value = animation.animatedValue as Float
+            //android.util.Log.d("zwj" ,"1f1f $value")
             if (mReverse) fraction = 1 - fraction
-            startAngle = curStartAngle + fraction * 120
-            sweepAngle = -1 - mMaxSweepAngle * value
+            ssweepFlag = -1f
+            if (value < valueFlag) {
+                startAngle = curStartAngle - (1-value) * 360f
+                android.util.Log.d("zwj" ,"1f1f")
+                ssweepFlag = 360f
+                sweepAngle = ssweepFlag - mMaxSweepAngle * (1-value)
+            } else if (value > valueFlag){
+                startAngle = curStartAngle - value * 360f
+                android.util.Log.d("zwj" ,"0f0f")
+                ssweepFlag = -1f
+                sweepAngle = ssweepFlag - mMaxSweepAngle * value
+            }
+            valueFlag = value
             postInvalidate()
         })
         mValueAnimator?.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationRepeat(animation: Animator) {
-                curStartAngle = startAngle
-                mReverse = !mReverse
+//                curStartAngle = startAngle
+//                mReverse = !mReverse
             }
         })
     }

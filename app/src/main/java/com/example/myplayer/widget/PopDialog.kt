@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
 import com.example.myplayer.R
+import com.example.myplayer.data.db.MoviesEntity
 
 class PopDialog(private val activity: FragmentActivity) :
     AlertDialog(activity, R.style.Theme_AppCompat_Dialog) {
@@ -14,11 +15,21 @@ class PopDialog(private val activity: FragmentActivity) :
     private lateinit var contentText: TextView
     private lateinit var exitText: TextView
     private var content: String = ""
+    private var listener: OnDialogButtonClickListener? = null
 
     private var currentPosition = 0
 
     constructor(activity: FragmentActivity, string: String) : this(activity) {
         content = string
+    }
+
+    constructor(activity: FragmentActivity, string: String, mListener: OnDialogButtonClickListener) : this(activity) {
+        content = string
+        this.listener = mListener
+    }
+
+    interface OnDialogButtonClickListener {
+        fun onDialogButtonClick()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +50,7 @@ class PopDialog(private val activity: FragmentActivity) :
             contentText.text = content
         }
         cancelText.setOnClickListener {
+            listener?.onDialogButtonClick()
             this.dismiss()
         }
     }

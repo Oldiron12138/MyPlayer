@@ -42,6 +42,7 @@ class InfoFragment: Fragment() {
     private lateinit var assetLayoutManager: LinearLayoutManager
 
     private var current: String = "乌鲁木齐"
+    private var defaultCurrent: String = "AAAA"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,39 +50,60 @@ class InfoFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View {
         moviesBinding = FragmentInfoBinding.inflate(inflater, container, false)
+        val sharedPref1 =
+            requireContext().getSharedPreferences("CITY_CACHE", Context.MODE_PRIVATE)
+        defaultCurrent = sharedPref1.getString("CITY", "乌鲁木齐").toString()
 
         val sharedPref =
             requireContext().getSharedPreferences("CURRENT_CITY", Context.MODE_PRIVATE)
-        current = sharedPref.getString("CURRENT","乌鲁木齐").toString()
+        current = sharedPref.getString("CURRENT",defaultCurrent).toString()
         moviesBinding.current = current
         return moviesBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val sharedPref1 =
+            requireContext().getSharedPreferences("CITY_CACHE", Context.MODE_PRIVATE)
+        defaultCurrent = sharedPref1.getString("CITY", "乌鲁木齐").toString()
+
         val sharedPref =
             requireContext().getSharedPreferences("CURRENT_CITY", Context.MODE_PRIVATE)
-        current = sharedPref.getString("CURRENT","乌鲁木齐").toString()
+        current = sharedPref.getString("CURRENT",defaultCurrent).toString()
         if (arguments?.getString("city") != null){
             current = arguments?.getString("city")!!
 
+            android.util.Log.d("zwj" ,"current $current")
             sharedPref.edit().putString("CURRENT", current).apply()
         } else {
             current = current
         }
-        //
+//        //
         moviesBinding.current = current
+        registerListener()
         subscribeUi()
         setInfoViewModel(infoViewModel)
     }
 
-    private fun subscribeUi() {
+    private fun registerListener() {
         moviesBinding.setClickListener {
             it.findNavController().navigate(R.id.action_navigation_dashboard_to_city_fragment)
         }
         moviesBinding.releaseBtn.setOnClickListener {
             it.findNavController().navigate(R.id.action_navigation_dashboard_to_release_fragment)
         }
+        moviesBinding.setClickListener1 {
+            val sharedPref =
+                requireContext().getSharedPreferences("CURRENT_CITY", Context.MODE_PRIVATE)
+            moviesBinding.current = defaultCurrent
+            current = defaultCurrent
+            sharedPref.edit().putString("CURRENT", current).apply()
+            subscribeUi()
+        }
+    }
+
+    private fun subscribeUi() {
+
         infoAdapter = InfoAdapter(requireContext())
         assetLayoutManager = LinearLayoutManager(requireContext())
         assetLayoutManager.orientation = LinearLayoutManager.VERTICAL
@@ -105,6 +127,11 @@ class InfoFragment: Fragment() {
                         }
                     }
                     infoAdapter.updateListItem(newInfoList, current)
+                    if (newInfoList.isEmpty()) {
+                        moviesBinding.empty.visibility = View.VISIBLE
+                    } else {
+                        moviesBinding.empty.visibility = View.GONE
+                    }
                 }
         }
     }

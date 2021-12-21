@@ -1,7 +1,5 @@
 package com.example.myplayer.ui
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,34 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.myplayer.MainActivity
 import com.example.myplayer.R
-import com.example.myplayer.adapter.InfoAdapter
-import com.example.myplayer.data.db.InfoEntity
-import com.example.myplayer.databinding.FragmentInfoBinding
 import com.example.myplayer.databinding.FragmentRegBinding
-import com.example.myplayer.viewmodels.InfoViewModel
-import com.example.myplayer.viewmodels.LoginViewModel
 import com.example.myplayer.viewmodels.RegViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import com.aliyuncs.exceptions.ClientException
-import org.apache.http.impl.client.HttpClientBuilder
-import org.apache.http.conn.ssl.AllowAllHostnameVerifier
-import com.aliyuncs.CommonResponse
-
-import com.aliyuncs.CommonRequest
-import com.aliyuncs.DefaultAcsClient
-
-import com.aliyuncs.IAcsClient
-import com.aliyuncs.exceptions.ServerException
-import com.aliyuncs.http.MethodType
-
-import com.aliyuncs.profile.DefaultProfile
-
-
 
 
 @AndroidEntryPoint
@@ -80,7 +56,7 @@ class RegFragment: Fragment() {
             } else {
                 if (moviesBinding.textView6.text.toString().equals(moviesBinding.pwdConfirm.text.toString())) {
                     //sendSms()
-                    register(moviesBinding.textView4.text.toString(), moviesBinding.textView6.text.toString())
+                    register(moviesBinding.textViewni2.text.toString(), moviesBinding.textView6.text.toString(), moviesBinding.textView4.text.toString())
                 } else {
                     //Toast.makeText(this.requireContext(), "两次输入的密码不同", Toast.LENGTH_SHORT).show()
                 }
@@ -88,10 +64,10 @@ class RegFragment: Fragment() {
         }
     }
 
-    private fun register(num: String, pwd: String) {
+    private fun register(num: String, pwd: String, accid: String) {
         loginJob?.cancel()
         loginJob = lifecycleScope.launch {
-            regViewModel.register(num, pwd)
+            regViewModel.register(num, pwd, accid)
                 ?.observe(viewLifecycleOwner) {
                     if (it.resultData) {
                         val bundle = Bundle().apply {
@@ -104,6 +80,7 @@ class RegFragment: Fragment() {
                     }
                 }
         }
+
     }
 
 //    fun sendSms() {

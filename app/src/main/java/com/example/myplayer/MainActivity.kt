@@ -1,5 +1,8 @@
 package com.example.myplayer
 
+import android.app.Application
+import android.content.Context
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
@@ -16,14 +19,35 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.content.ContextCompat
+import com.baidu.location.LocationClient
+import com.baidu.location.LocationClientOption
+import com.baidu.location.BDLocation
+
+import com.baidu.location.BDAbstractLocationListener
+
+
+
 
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    var mLocationClient: LocationClient? = null
+    val myListener = MyLocationListener()
+    public lateinit var currentCity: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        mainActivity = this
+        mLocationClient = LocationClient(getApplicationContext())
+        //声明LocationClient类
+        mLocationClient!!.registerLocationListener(myListener)
+
+        val option = LocationClientOption()
+        option.setIsNeedAddress(true)
+        option.setNeedNewVersionRgc(true)
+        mLocationClient!!.setLocOption(option)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -35,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.movies_fragment, R.id.navigation_dashboard, R.id.navigation_notifications
+                R.id.movies_fragment, R.id.navigation_dashboard, R.id.navigation_lives, R.id.navigation_notifications
             )
         )
         this.supportActionBar?.hide()
@@ -48,6 +72,7 @@ class MainActivity : AppCompatActivity() {
         }
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        mLocationClient!!.start()
     }
 
     private val onTouchListeners = ArrayList<MyOnTouchListener>(
@@ -71,6 +96,35 @@ class MainActivity : AppCompatActivity() {
 
     interface MyOnTouchListener {
         fun onTouch(ev: MotionEvent?): Boolean
+    }
+
+    class MyLocationListener : BDAbstractLocationListener() {
+        override fun onReceiveLocation(location: BDLocation) {
+            //此处的BDLocation为定位结果信息类，通过它的各种get方法可获取定位相关的全部结果
+            //以下只列举部分获取地址相关的结果信息
+            //更多结果信息获取说明，请参照类参考中BDLocation类中的说明
+            val addr = location.addrStr //获取详细地址信息
+            val country = location.country //获取国家
+            val province = location.province //获取省份
+            val city = location.city //获取城市
+            val district = location.district //获取区县
+            val street = location.street //获取街道信息
+            val adcode = location.adCode //获取adcode
+            val town = location.town //获取乡镇信息
+            android.util.Log.d("zwj" ,"city $addr" )
+            //this.currentCity
+            val sharedPref =
+                mainActivity.getSharedPreferences("CITY_CACHE", Context.MODE_PRIVATE)
+            sharedPref.edit().putString("CITY", "乌鲁木齐").apply()
+        }
+    }
+
+    companion object {
+        lateinit var mainActivity: MainActivity
+        var context: MainActivity? = null
+        fun getContext(): Context {
+            return context!!
+        }
     }
 
 }
