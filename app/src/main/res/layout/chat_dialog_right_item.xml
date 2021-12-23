@@ -16,6 +16,7 @@
             android:id="@+id/ivicon"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:background="@mipmap/kefu1"
             android:layout_gravity="top" />
 
         <TextView
@@ -50,6 +51,7 @@
                 android:id="@+id/iv_chat_imagr_right"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:background="@mipmap/kehu"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="top" />
 

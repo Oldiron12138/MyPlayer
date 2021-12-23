@@ -6,10 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.myplayer.adapter.CityAdapter
 import com.example.myplayer.databinding.FragmentChatsBinding
-import com.example.myplayer.databinding.FragmentCityBinding
 import com.example.myplayer.viewmodels.CityViewModel
 import com.netease.nimlib.sdk.NIMClient
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,13 +26,15 @@ import com.netease.nimlib.sdk.auth.AuthService
 import com.netease.nimlib.sdk.auth.LoginInfo
 import com.netease.nimlib.sdk.msg.MsgServiceObserve
 
-import android.os.Build
-import androidx.recyclerview.widget.GridLayoutManager
 import com.example.myplayer.adapter.ChatAdapter
-import com.example.myplayer.adapter.MoviesAdapter
-import com.example.myplayer.data.db.MoviesEntity
+import com.example.myplayer.data.db.ChatDatabase
+import com.example.myplayer.data.db.ChatEntity
+import com.example.myplayer.data.db.InfoDatabase
+import com.example.myplayer.data.db.InfoEntity
 import com.example.myplayer.data.reponse.PersonChat
+import com.example.myplayer.viewmodels.ChatViewModel
 import com.netease.nimlib.sdk.Observer
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -42,7 +43,7 @@ class ChatFrahment : Fragment() {
 
     private var cityJob: Job? = null
 
-    private val cityViewModel: CityViewModel by viewModels()
+    private val chatViewModel: ChatViewModel by viewModels()
 
     private lateinit var assetAdapter: ChatAdapter
 
@@ -52,7 +53,7 @@ class ChatFrahment : Fragment() {
     //
     private lateinit var assetLayoutManager: LinearLayoutManager
 
-    private var msgList: MutableList<PersonChat> = mutableListOf()
+    private var msgList: MutableList<ChatEntity> = mutableListOf()
 
 
     override fun onCreateView(
@@ -69,7 +70,18 @@ class ChatFrahment : Fragment() {
         accid = arguments?.getString("num")
         token = arguments?.getString("token")
         //
+        getChatHistory()
         subscribeUi()
+    }
+
+    private fun getChatHistory() {
+        cityJob?.cancel()
+        cityJob = lifecycleScope.launch {
+            chatViewModel.chatHistory()
+                ?.observe(viewLifecycleOwner) { it ->
+                    msgList.addAll(it)
+                }
+        }
     }
 
     private fun subscribeUi() {
@@ -81,7 +93,10 @@ class ChatFrahment : Fragment() {
         cityBinding.lvChatDialog.itemAnimator = null
         doLogin()
         cityBinding.btnChatMessageSend.setOnClickListener {
-            sendTextMsg()
+            if (cityBinding.etChatMessage.text.toString().isNotEmpty()) {
+                sendTextMsg(cityBinding.etChatMessage.text.toString())
+            }
+
         }
     }
     override fun onStart() {
@@ -90,13 +105,13 @@ class ChatFrahment : Fragment() {
     }
 
 
-    private fun sendTextMsg() {
+    private fun sendTextMsg(content: String) {
         val sessionType = SessionTypeEnum.P2P
-        val text = "this is an example"
-        val textMessage = MessageBuilder.createTextMessage("15940850831", sessionType, text)
-        val personChat:PersonChat = PersonChat(true, text)
+        val textMessage = MessageBuilder.createTextMessage("15940850831", sessionType, content+accid)
+        val personChat:ChatEntity = ChatEntity(content, true)
         msgList.add(personChat)
         assetAdapter.updateListItem(msgList)
+        updateDao(msgList)
         NIMClient.getService(MsgService::class.java).sendMessage(textMessage, false)
     }
 
@@ -111,18 +126,35 @@ class ChatFrahment : Fragment() {
 
                             val content: String = message?.content.toString()
                             android.util.Log.d("zwj " ,"receive $content")
-                            val personChat:PersonChat = PersonChat(false, content)
+                            val personChat:ChatEntity = ChatEntity(content, false)
                             msgList.add(personChat)
                             for (asset in msgList) {
                                 android.util.Log.d("zwj" ,"size ${msgList.size}" )
                             }
                             assetAdapter.updateListItem(msgList)
+                            updateDao(msgList)
                         }
                     }
                 }
             }
         NIMClient.getService(MsgServiceObserve::class.java)
             .observeReceiveMessage(incomingMessageObserver, true)
+    }
+
+    fun updateDao(chatList: MutableList<ChatEntity>) {
+        cityJob = lifecycleScope.launch {
+            val infos: MutableList<ChatEntity> = mutableListOf()
+
+            repeat(chatList.size) { i ->
+                infos.add(ChatEntity(chatList[i].content, chatList[i].isMe))
+            }
+
+            val database = ChatDatabase.getInstance(requireContext())
+
+            database.chatDao().deleteInfos()
+
+            database.chatDao().insertChat(chatList)
+        }
     }
 
 

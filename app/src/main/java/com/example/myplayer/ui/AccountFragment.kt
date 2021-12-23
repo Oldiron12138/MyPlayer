@@ -86,7 +86,7 @@ class AccountFragment: Fragment(), PopDialog.OnDialogButtonClickListener {
     }
 
     fun popDialog(activity: FragmentActivity) {
-        val popDialog = PopDialog(activity)
+        val popDialog = PopDialog(activity, this)
         popDialog.show()
     }
 
@@ -96,11 +96,12 @@ class AccountFragment: Fragment(), PopDialog.OnDialogButtonClickListener {
     }
 
     override fun onDialogButtonClick() {
+        android.util.Log.d("zwj" ,"onclick")
         val bundle = Bundle().apply {
             putString("token", token)
             putString("num", num)
         }
-        requireView().findNavController().navigate(R.id.action_navigation_notifications_to_navigation_lives, bundle)
+        requireView().findNavController().navigate(R.id.action_navigation_notifications_to_chat_fragment, bundle)
 
     }
 }

@@ -13,7 +13,7 @@
         android:background="#c2c2c2"
         android:orientation="vertical"
         android:padding="16dp"
-        android:layout_marginBottom="30dp">
+        android:layout_marginBottom="60dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -50,7 +50,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="14sp"
+                android:textSize="10sp"
                 android:gravity="center|left"
                 android:padding="8dp" />
 
@@ -58,6 +58,8 @@
                 android:id="@+id/btn_chat_message_send"
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="64dp"
+                android:text="发送"
+                android:textSize="10dp"
                 android:layout_marginLeft="8dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center|right"

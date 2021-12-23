@@ -15,9 +15,7 @@ import android.text.TextUtils
 import com.netease.nimlib.sdk.util.NIMUtil
 import java.io.IOException
 import android.R
-
-
-
+import com.netease.nimlib.sdk.StatusBarNotificationConfig
 
 
 @HiltAndroidApp
@@ -58,6 +56,7 @@ class MainApplication: Application() {
             }
         } catch (e: IOException) {
             e.printStackTrace()
+
         }
         if (TextUtils.isEmpty(storageRootPath)) {
             // SD卡应用公共存储区(APP卸载后，该目录不会被清除，下载安装APP后，缓存数据依然可以被加载。SDK默认使用此目录)，该存储区域需要写权限!
@@ -66,8 +65,6 @@ class MainApplication: Application() {
         }
         return storageRootPath
     }
-
-
 
     companion object {
         lateinit var applicationContext: Application

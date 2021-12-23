@@ -2,10 +2,7 @@ package com.example.myplayer.di
 
 import android.content.Context
 import android.icu.text.IDNA
-import com.example.myplayer.data.db.InfoDao
-import com.example.myplayer.data.db.InfoDatabase
-import com.example.myplayer.data.db.MoviesDao
-import com.example.myplayer.data.db.MoviesDatabase
+import com.example.myplayer.data.db.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,6 +26,12 @@ class DatabaseModule {
         return InfoDatabase.getInstance(context)
     }
 
+    @Singleton
+    @Provides
+    fun provideChatDatabase(@ApplicationContext context: Context): ChatDatabase {
+        return ChatDatabase.getInstance(context)
+    }
+
     @Provides
     fun provideMoviesDao(database: MoviesDatabase): MoviesDao {
         return database.moviesDao()
@@ -37,5 +40,10 @@ class DatabaseModule {
     @Provides
     fun provideInfoDao(database: InfoDatabase): InfoDao {
         return database.infoDao()
+    }
+
+    @Provides
+    fun provideChatDao(database: ChatDatabase): ChatDao {
+        return database.chatDao()
     }
 }

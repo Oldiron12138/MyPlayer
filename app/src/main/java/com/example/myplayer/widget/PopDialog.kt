@@ -23,8 +23,7 @@ class PopDialog(private val activity: FragmentActivity) :
         content = string
     }
 
-    constructor(activity: FragmentActivity, string: String, mListener: OnDialogButtonClickListener) : this(activity) {
-        content = string
+    constructor(activity: FragmentActivity, mListener: OnDialogButtonClickListener) : this(activity) {
         this.listener = mListener
     }
 

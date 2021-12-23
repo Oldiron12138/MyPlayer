@@ -14,17 +14,18 @@
             android:id="@+id/tv_chat_me_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
             android:layout_toLeftOf="@+id/iv_chat_imagr_right"
             android:background="@drawable/dialog_btn_select"
             android:padding="8dp"
-            android:text="把那些贩毒的关到小黑屋，枪毙五十次，快去" />
+            android:text="zzz" />
 
         <ImageView
             android:id="@+id/iv_chat_imagr_right"
             android:layout_width="24dp"
             android:layout_height="24dp"
+
             android:layout_alignParentRight="true"
             android:layout_gravity="top" />
 

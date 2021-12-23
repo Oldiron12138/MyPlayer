@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myplayer.R
+import com.example.myplayer.data.db.ChatEntity
 import com.example.myplayer.data.db.InfoEntity
 import com.example.myplayer.data.reponse.PersonChat
 import com.example.myplayer.databinding.ChatDialogLeftItemBinding
@@ -19,7 +20,7 @@ import com.example.myplayer.databinding.ListItemInfoBinding
 class ChatAdapter(private val context: Context) :
     RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
 
-    private var assets: MutableList<PersonChat> = mutableListOf()
+    private var assets: MutableList<ChatEntity> = mutableListOf()
 
     /**
      * 是否是自己发送的消息
@@ -32,7 +33,7 @@ class ChatAdapter(private val context: Context) :
             const val IMVT_TO_MSG = 1 // 自己发送出去的消息
         }
     }
-    fun updateListItem(datas: MutableList<PersonChat>) {
+    fun updateListItem(datas: MutableList<ChatEntity>) {
         val diffCallback = ChatDiffCallback(assets, datas)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         assets.clear()
@@ -69,7 +70,7 @@ class ChatAdapter(private val context: Context) :
         init {
 
         }
-        fun bind(item: PersonChat, position: Int) {
+        fun bind(item: ChatEntity, position: Int) {
             binding.apply {
                 binding.tvname.text = item.content
                 binding.tvChatMeMessage.text = item.content
@@ -86,8 +87,8 @@ class ChatAdapter(private val context: Context) :
     }
 
 private class ChatDiffCallback(
-    val oldList: List<PersonChat>,
-    val newList: List<PersonChat>
+    val oldList: List<ChatEntity>,
+    val newList: List<ChatEntity>
 ) : DiffUtil.Callback() {
     override fun getOldListSize(): Int {
         return oldList.size
