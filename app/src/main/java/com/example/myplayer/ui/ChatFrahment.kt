@@ -109,8 +109,11 @@ class ChatFrahment : Fragment() {
         val sessionType = SessionTypeEnum.P2P
         val textMessage = MessageBuilder.createTextMessage("15940850831", sessionType, content+accid)
         val personChat:ChatEntity = ChatEntity(content, true)
-        msgList.add(personChat)
-        assetAdapter.updateListItem(msgList)
+        assetAdapter.addOneItem(personChat)
+//        msgList.add(personChat)
+//        android.util.Log.d("zwj", "size ${msgList.size}")
+//        assetAdapter.updateListItem(msgList)
+        cityBinding.lvChatDialog.scrollToPosition(msgList.size - 1);
         updateDao(msgList)
         NIMClient.getService(MsgService::class.java).sendMessage(textMessage, false)
     }
@@ -127,11 +130,13 @@ class ChatFrahment : Fragment() {
                             val content: String = message?.content.toString()
                             android.util.Log.d("zwj " ,"receive $content")
                             val personChat:ChatEntity = ChatEntity(content, false)
-                            msgList.add(personChat)
-                            for (asset in msgList) {
-                                android.util.Log.d("zwj" ,"size ${msgList.size}" )
-                            }
-                            assetAdapter.updateListItem(msgList)
+                            assetAdapter.addOneItem(personChat)
+//                            msgList.add(personChat)
+//                            for (asset in msgList) {
+//                                android.util.Log.d("zwj" ,"size ${msgList.size}" )
+//                            }
+//                            assetAdapter.updateListItem(msgList)
+                            cityBinding.lvChatDialog.scrollToPosition(msgList.size - 1);
                             updateDao(msgList)
                         }
                     }

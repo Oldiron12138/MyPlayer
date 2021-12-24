@@ -46,6 +46,9 @@ class MainActivity : AppCompatActivity() {
 
         val option = LocationClientOption()
         option.setIsNeedAddress(true)
+        option.setOpenGps(true)
+        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy)
+        option.setCoorType("gcj02");
         option.setNeedNewVersionRgc(true)
         mLocationClient!!.setLocOption(option)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -111,7 +114,8 @@ class MainActivity : AppCompatActivity() {
             val street = location.street //获取街道信息
             val adcode = location.adCode //获取adcode
             val town = location.town //获取乡镇信息
-            android.util.Log.d("zwj" ,"city $addr" )
+            //val ccc:String = city.toString()
+            android.util.Log.d("zwj" ,"city ${location.locType}" )
             //this.currentCity
             val sharedPref =
                 mainActivity.getSharedPreferences("CITY_CACHE", Context.MODE_PRIVATE)

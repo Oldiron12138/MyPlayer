@@ -46,6 +46,12 @@ class ChatAdapter(private val context: Context) :
         diffResult.dispatchUpdatesTo(this)
     }
 
+    fun addOneItem(datas: ChatEntity) {
+        var index = if (assets.size == 0) 0 else assets.size
+        assets.add(index,datas)
+        notifyDataSetChanged()
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatAdapter.ChatViewHolder {
         return ChatViewHolder(

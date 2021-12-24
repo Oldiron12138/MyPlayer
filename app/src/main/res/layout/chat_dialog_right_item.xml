@@ -6,11 +6,19 @@
     </data>
 
     <LinearLayout
-        android:id="@+id/firend"
-        android:visibility="gone"
+        android:id="@+id/all"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
+        <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/firend"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/ivicon"
@@ -28,8 +36,10 @@
             android:padding="8dp"
             android:background="@drawable/account_background"
             android:text="权志龙好帅！！！" />
+        </RelativeLayout>
 
         <RelativeLayout
+            android:layout_weight="1"
             android:visibility="gone"
             android:id="@+id/me"
             android:layout_width="match_parent"
