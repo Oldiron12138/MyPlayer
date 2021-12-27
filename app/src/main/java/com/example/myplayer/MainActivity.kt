@@ -3,6 +3,7 @@ package com.example.myplayer
 import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
@@ -25,6 +26,14 @@ import com.baidu.location.LocationClientOption
 import com.baidu.location.BDLocation
 
 import com.baidu.location.BDAbstractLocationListener
+import android.view.WindowManager
+
+import android.os.Build
+import android.view.Window
+import android.app.Activity
+import android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+import androidx.annotation.RequiresApi
+import android.view.ViewGroup
 
 
 
@@ -53,8 +62,26 @@ class MainActivity : AppCompatActivity() {
         mLocationClient!!.setLocOption(option)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
+        setRootViewFitsSystemWindows(this, true)
+        fullScreen(this)
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            val flagTranslucentStatus = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+//            val flagTranslucentNavigation = WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                val window: Window = window
+//                val attributes: WindowManager.LayoutParams = window.getAttributes()
+//                attributes.flags = attributes.flags or flagTranslucentNavigation
+//                window.setAttributes(attributes)
+//                getWindow().statusBarColor = Color.TRANSPARENT
+//            } else {
+//                val window: Window = window
+//                val attributes: WindowManager.LayoutParams = window.getAttributes()
+//                attributes.flags =
+//                    attributes.flags or (flagTranslucentStatus or flagTranslucentNavigation)
+//                window.setAttributes(attributes)
+//            }
+//        }
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.main_nav_host_fragment)
@@ -78,9 +105,60 @@ class MainActivity : AppCompatActivity() {
         mLocationClient!!.start()
     }
 
+    fun setRootViewFitsSystemWindows(activity: Activity, fitSystemWindows: Boolean) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            val winContent = activity.findViewById<View>(android.R.id.content) as ViewGroup
+            if (winContent.childCount > 0) {
+                val rootView = winContent.getChildAt(0) as ViewGroup
+                if (rootView != null) {
+                    rootView.fitsSystemWindows = fitSystemWindows
+                }
+            }
+        }
+    }
+
     private val onTouchListeners = ArrayList<MyOnTouchListener>(
         10
     )
+
+    private fun fullScreen(activity: Activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                //5.x开始需要把颜色设置透明，否则导航栏会呈现系统默认的浅灰色
+                val window = activity.window
+                val decorView = window.decorView
+                //两个 flag 要结合使用，表示让应用的主体内容占用系统状态栏的空间
+//                val option = (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                        or View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
+//                decorView.systemUiVisibility = option
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                setAndroidNativeLightStatusBar(this, true)
+                window.statusBarColor = Color.TRANSPARENT
+                //导航栏颜色也可以正常设置
+//                window.setNavigationBarColor(Color.TRANSPARENT);
+            } else {
+                val window = activity.window
+                val attributes = window.attributes
+                val flagTranslucentStatus = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+                val flagTranslucentNavigation =
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION
+                attributes.flags = attributes.flags or flagTranslucentStatus
+                //                attributes.flags |= flagTranslucentNavigation;
+                window.attributes = attributes
+            }
+        }
+    }
+
+    private fun setAndroidNativeLightStatusBar(activity: Activity, dark: Boolean) {
+        val decor = activity.window.decorView
+        if (dark) {
+            decor.systemUiVisibility =
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        } else {
+            decor.systemUiVisibility =
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        }
+    }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         for (listener in onTouchListeners) {

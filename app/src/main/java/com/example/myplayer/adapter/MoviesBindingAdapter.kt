@@ -2,6 +2,7 @@ package com.example.myplayer.adapter
 
 import android.content.Context
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
@@ -65,6 +66,39 @@ fun showContent(view: TextView, lock: Boolean, phone: String) {
         } else {
             view.visibility = View.VISIBLE
             view.text = phone
+        }
+    }
+}
+
+@BindingAdapter(value = ["isPhoto"])
+fun isPhoto(view: androidx.recyclerview.widget.RecyclerView, isP: Boolean) {
+    isP?.let {
+        if (isP) {
+            view.visibility = View.VISIBLE
+        } else {
+            view.visibility = View.GONE
+        }
+    }
+}
+
+@BindingAdapter(value = ["isVideo"])
+fun isVideo(view: FrameLayout, isP: Boolean) {
+    isP?.let {
+        if (isP) {
+            view.visibility = View.GONE
+        } else {
+            view.visibility = View.VISIBLE
+        }
+    }
+}
+
+@BindingAdapter(value = ["isPlayButtonShow"])
+fun isPlayButtonShow(view: ImageView, isP: Boolean) {
+    isP?.let {
+        if (isP) {
+            view.visibility = View.GONE
+        } else {
+            view.visibility = View.VISIBLE
         }
     }
 }

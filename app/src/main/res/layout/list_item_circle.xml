@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="circles"
+            type="com.example.myplayer.data.reponse.CircleResponse" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/ivicon"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:background="@mipmap/kefu1"
+            android:layout_gravity="top" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{circles.name}"
+            android:textSize="17dp"
+            android:textColor="#003399"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/ivicon"
+            android:layout_marginLeft="5dp"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{circles.content}"
+            android:textSize="14dp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintStart_toEndOf="@+id/ivicon"
+            android:layout_marginLeft="5dp"
+            android:paddingRight="10dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/name"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:visibility="gone"
+            android:id="@+id/photo_list"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="1"
+            app:isPhoto="@{circles.isPhoto}"
+            app:layout_constraintStart_toEndOf="@+id/ivicon"
+            app:layout_constraintTop_toBottomOf="@+id/content"
+            tools:listitem="@layout/list_circle_photo" />
+
+        <FrameLayout
+            app:isVideo="@{circles.isPhoto}"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="10dp"
+            app:layout_constraintStart_toEndOf="@+id/ivicon"
+            app:layout_constraintTop_toBottomOf="@+id/content" >
+
+            <ImageView
+                android:layout_width="match_parent"
+                app:bindInfoImage="@{circles.thumbnail}"
+                android:layout_height="match_parent"/>
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:isPlayButtonShow="@{circles.isPhoto}"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_baseline_play_circle_outline_24" />
+        </FrameLayout>
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="#FF909090" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

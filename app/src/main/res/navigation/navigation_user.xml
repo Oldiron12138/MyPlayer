@@ -119,8 +119,8 @@
 
     <fragment
         android:id="@+id/navigation_lives"
-        android:name="com.example.myplayer.ui.AccountFragment"
-        tools:layout="@layout/fragment_account"
+        android:name="com.example.myplayer.ui.CircleFragment"
+        tools:layout="@layout/fragment_circle"
         android:label="Square" />
 
     <fragment

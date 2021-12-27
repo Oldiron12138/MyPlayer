@@ -29,6 +29,9 @@ interface MyPlayerService {
     @GET("test/city.json")
     suspend fun cityList(): List<CityResponse>
 
+    @GET("test/circle.json")
+    suspend fun circleList(): List<CircleResponse>
+
     //http://111.229.96.2:8080/QQQ/servlet/DengluServlet?name=15940850830&pwd=111111&denglu=%E7%99%BB%E5%BD%95
     @GET("QQQ/servlet/DengluServlet")
     suspend fun login(
