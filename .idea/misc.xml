@@ -26,26 +26,30 @@
         <entry key="app/src/main/res/drawable/pop_dialog_bg.xml" value="0.18958333333333333" />
         <entry key="app/src/main/res/drawable/title_background.xml" value="0.10648148148148148" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.29030797101449274" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.15" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.2" />
         <entry key="app/src/main/res/layout/chat_dialog_left_item.xml" value="0.16" />
         <entry key="app/src/main/res/layout/chat_dialog_right_item.xml" value="0.25" />
         <entry key="app/src/main/res/layout/dialog_exit.xml" value="0.25" />
         <entry key="app/src/main/res/layout/dialog_loading.xml" value="0.25" />
         <entry key="app/src/main/res/layout/dialog_pop.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/dialog_share.xml" value="0.22" />
         <entry key="app/src/main/res/layout/exo_player_control_view.xml" value="0.16" />
         <entry key="app/src/main/res/layout/fragment_account.xml" value="0.16" />
         <entry key="app/src/main/res/layout/fragment_buy.xml" value="0.148046875" />
         <entry key="app/src/main/res/layout/fragment_chats.xml" value="0.2" />
-        <entry key="app/src/main/res/layout/fragment_circle.xml" value="0.25859375" />
+        <entry key="app/src/main/res/layout/fragment_circle.xml" value="0.15" />
         <entry key="app/src/main/res/layout/fragment_city.xml" value="0.13293051359516617" />
         <entry key="app/src/main/res/layout/fragment_detail.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_dynamic.xml" value="0.17" />
         <entry key="app/src/main/res/layout/fragment_info.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_movies.xml" value="0.23771790808240886" />
         <entry key="app/src/main/res/layout/fragment_player.xml" value="0.15" />
         <entry key="app/src/main/res/layout/fragment_reg.xml" value="0.2" />
         <entry key="app/src/main/res/layout/fragment_release.xml" value="0.12" />
+        <entry key="app/src/main/res/layout/fragment_scan.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/fragment_select.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_uploadmovie.xml" value="0.215625" />
         <entry key="app/src/main/res/layout/list_cate_item.xml" value="0.25" />
         <entry key="app/src/main/res/layout/list_circle_photo.xml" value="0.25859375" />

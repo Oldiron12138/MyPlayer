@@ -105,6 +105,26 @@ class MainActivity : AppCompatActivity() {
         mLocationClient!!.start()
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        // Add the FLAG_KEEP_SCREEN_ON flag for keeping on screen.
+        window.clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
+        window.addFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN or
+                    WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS or
+                    WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+        )
+        hideNavigationBar()
+    }
+
+    private fun hideNavigationBar() {
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                View.SYSTEM_UI_FLAG_FULLSCREEN
+    }
+
     fun setRootViewFitsSystemWindows(activity: Activity, fitSystemWindows: Boolean) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             val winContent = activity.findViewById<View>(android.R.id.content) as ViewGroup
@@ -122,42 +142,7 @@ class MainActivity : AppCompatActivity() {
     )
 
     private fun fullScreen(activity: Activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                //5.x开始需要把颜色设置透明，否则导航栏会呈现系统默认的浅灰色
-                val window = activity.window
-                val decorView = window.decorView
-                //两个 flag 要结合使用，表示让应用的主体内容占用系统状态栏的空间
-//                val option = (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                        or View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
-//                decorView.systemUiVisibility = option
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                setAndroidNativeLightStatusBar(this, true)
-                window.statusBarColor = Color.TRANSPARENT
-                //导航栏颜色也可以正常设置
-//                window.setNavigationBarColor(Color.TRANSPARENT);
-            } else {
-                val window = activity.window
-                val attributes = window.attributes
-                val flagTranslucentStatus = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-                val flagTranslucentNavigation =
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION
-                attributes.flags = attributes.flags or flagTranslucentStatus
-                //                attributes.flags |= flagTranslucentNavigation;
-                window.attributes = attributes
-            }
-        }
-    }
 
-    private fun setAndroidNativeLightStatusBar(activity: Activity, dark: Boolean) {
-        val decor = activity.window.decorView
-        if (dark) {
-            decor.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        } else {
-            decor.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-        }
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {

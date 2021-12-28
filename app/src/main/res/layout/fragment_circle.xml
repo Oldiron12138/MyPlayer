@@ -7,31 +7,93 @@
 
     </data>
 
-    <LinearLayout
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:layout_marginBottom="60dp">
-        <LinearLayout
+        android:layout_height="match_parent">
+
+
+
+        <ScrollView
             android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="60dp"
+                    android:orientation="vertical"
+                    android:paddingBottom="10dp">
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="250dp"
+                        android:background="@drawable/jinx"
+                        android:gravity="right"
+                        android:orientation="horizontal"
+                        android:paddingRight="10dp">
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:padding="8dp">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/lv_circle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:divider="#0000"
+                            android:dividerHeight="8dp"
+                            android:scrollbars="none"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            tools:itemCount="1">
+
+                        </androidx.recyclerview.widget.RecyclerView>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/child_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="bottom"
+                    android:visibility="gone" />
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/child_container2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:visibility="gone" />
+            </FrameLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/capture"
+            android:layout_width="match_parent"
+            android:gravity="right"
+            android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/share"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/lv_circle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:divider="#0000"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:dividerHeight="8dp"
-                tools:itemCount="1"
-                android:scrollbars="none">
-
-            </androidx.recyclerview.widget.RecyclerView>
+            android:layout_marginRight="25dp"
+            android:background="@drawable/ic_baseline_camera_alt_24"
+            android:gravity="right"
+            android:paddingRight="10dp" />
         </LinearLayout>
-    </LinearLayout>
+    </FrameLayout>
 </layout>

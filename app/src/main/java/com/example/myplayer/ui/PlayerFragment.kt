@@ -27,6 +27,7 @@ import android.view.View.OnTouchListener
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.myplayer.R
+import com.example.myplayer.viewmodels.InfoViewModel
 import kotlinx.coroutines.Job
 
 
@@ -42,6 +43,10 @@ class PlayerFragment :Fragment(),ExoPlayerManager.OnBackKeyPress{
     var mCurPosY: Float = 0f
     private var fromWhere = ""
     private var homeJob: Job? = null
+    private var onBackFromCircle: OnBackFromCircle? = null
+    public fun setOnBackClick(listener: OnBackFromCircle?) {
+        onBackFromCircle = listener
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -77,8 +82,13 @@ class PlayerFragment :Fragment(),ExoPlayerManager.OnBackKeyPress{
             } else false
         }
         playerBinding.playerBack.setOnClickListener {
+            if ("circle" == fromWhere) {
+                android.util.Log.d("zwj" ,"backfromcircle")
+                onBackFromCircle?.backFromCircle()
+            } else {
+                Navigation.findNavController(requireView()).popBackStack()
+            }
             exoPlayerManager.stopPlayer()
-            Navigation.findNavController(requireView()).popBackStack()
         }
     }
 
@@ -116,9 +126,19 @@ class PlayerFragment :Fragment(),ExoPlayerManager.OnBackKeyPress{
         exoPlayerManager.initBackListener(this)
     }
 
+    interface OnBackFromCircle {
+        fun backFromCircle()
+    }
+
     override fun onBackKeyPress() {
+        android.util.Log.d("zwj" ,"backfromcircle  $fromWhere")
+        if ("circle" == fromWhere) {
+            android.util.Log.d("zwj" ,"backfromcircle")
+            onBackFromCircle?.backFromCircle()
+        } else {
+            this.findNavController().navigate(R.id.action_player_fragment_to_movies_fragment)
+        }
         exoPlayerManager.stopPlayer()
-        this.findNavController().navigate(R.id.action_player_fragment_to_movies_fragment)
     }
 //    override fun onDestroyView() {
 //        if (fromWhere != "Movies")
@@ -132,4 +152,9 @@ class PlayerFragment :Fragment(),ExoPlayerManager.OnBackKeyPress{
 //
 //        super.onDestroyView()
 //    }
+
+    companion object {
+        const val PLAYER_TAG = "PLAYER_TAG"
+
+    }
 }

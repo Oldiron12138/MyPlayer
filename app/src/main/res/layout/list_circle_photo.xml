@@ -5,6 +5,9 @@
 
     <data>
         <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+        <variable
             name="asset"
             type="com.example.myplayer.data.reponse.CirclePhotoResponse" />
     </data>
@@ -16,9 +19,9 @@
         <ImageView
             android:id="@+id/imageView"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_width="110dp"
-            android:layout_height="110dp"
-            android:paddingRight="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="130dp"
+            android:paddingRight="10dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:bindInfoImage="@{asset.photoDetail}"
