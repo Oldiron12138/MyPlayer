@@ -135,4 +135,8 @@ class InfoFragment: Fragment() {
                 }
         }
     }
+    override fun onDestroyView() {
+        infoJob?.cancel()
+        super.onDestroyView()
+    }
 }

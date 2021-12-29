@@ -104,4 +104,8 @@ class AccountFragment: Fragment(), PopDialog.OnDialogButtonClickListener {
         requireView().findNavController().navigate(R.id.action_navigation_notifications_to_chat_fragment, bundle)
 
     }
+    override fun onDestroyView() {
+        loginJob?.cancel()
+        super.onDestroyView()
+    }
 }

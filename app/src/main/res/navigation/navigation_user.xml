@@ -124,6 +124,12 @@
         android:label="Square" />
 
     <fragment
+        android:id="@+id/scan_fragment"
+        android:name="com.example.myplayer.ui.ScanFragment"
+        tools:layout="@layout/fragment_scan"
+        android:label="Square" />
+
+    <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.example.myplayer.ui.AccountFragment"
         tools:layout="@layout/fragment_account"

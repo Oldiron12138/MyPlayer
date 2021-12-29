@@ -61,6 +61,7 @@ class ChatFrahment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         cityBinding = FragmentChatsBinding.inflate(inflater, container, false)
         return cityBinding.root
     }
@@ -110,11 +111,13 @@ class ChatFrahment : Fragment() {
         val textMessage = MessageBuilder.createTextMessage("15940850831", sessionType, content+accid)
         val personChat:ChatEntity = ChatEntity(content, true)
         assetAdapter.addOneItem(personChat)
-//        msgList.add(personChat)
+        msgList.add(personChat)
 //        android.util.Log.d("zwj", "size ${msgList.size}")
 //        assetAdapter.updateListItem(msgList)
-        cityBinding.lvChatDialog.scrollToPosition(msgList.size - 1);
-        updateDao(msgList)
+        android.util.Log.d("zwjscorll" ,"size ${msgList.size}")
+        assetLayoutManager.scrollToPosition(msgList.size-1)
+      //  updateDao(msgList)
+        assetAdapter.notifyDataSetChanged()
         NIMClient.getService(MsgService::class.java).sendMessage(textMessage, false)
     }
 
@@ -131,13 +134,13 @@ class ChatFrahment : Fragment() {
                             android.util.Log.d("zwj " ,"receive $content")
                             val personChat:ChatEntity = ChatEntity(content, false)
                             assetAdapter.addOneItem(personChat)
-//                            msgList.add(personChat)
+                            msgList.add(personChat)
 //                            for (asset in msgList) {
 //                                android.util.Log.d("zwj" ,"size ${msgList.size}" )
 //                            }
 //                            assetAdapter.updateListItem(msgList)
-                            cityBinding.lvChatDialog.scrollToPosition(msgList.size - 1);
-                            updateDao(msgList)
+                            assetLayoutManager.scrollToPosition(msgList.size - 1);
+                           // updateDao(msgList)
                         }
                     }
                 }
@@ -147,6 +150,7 @@ class ChatFrahment : Fragment() {
     }
 
     fun updateDao(chatList: MutableList<ChatEntity>) {
+        android.util.Log.d("zwjupdataDao" ,"size ${chatList.size}")
         cityJob = lifecycleScope.launch {
             val infos: MutableList<ChatEntity> = mutableListOf()
 
@@ -159,6 +163,7 @@ class ChatFrahment : Fragment() {
             database.chatDao().deleteInfos()
 
             database.chatDao().insertChat(chatList)
+            android.util.Log.d("zwjupdataDao" ,"size ${chatList.size}")
         }
     }
 

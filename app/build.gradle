@@ -56,7 +56,7 @@ dependencies {
     implementation 'com.netease.nimlib:chatroom:8.9.0'
 
     implementation 'com.netease.nimlib:avchat:8.9.0'
-
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
     // 通过云信来集成小米等厂商推送需要
     implementation 'com.netease.nimlib:push:8.9.0'
 

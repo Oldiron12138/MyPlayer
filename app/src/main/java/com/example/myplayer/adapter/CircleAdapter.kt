@@ -17,6 +17,7 @@ import android.view.ViewGroup.MarginLayoutParams
 
 import android.widget.RelativeLayout
 import com.example.myplayer.data.db.MoviesEntity
+import com.example.myplayer.data.reponse.CirclePhotoResponse
 
 
 class CircleAdapter(private val context: Context) :
@@ -83,8 +84,8 @@ class CircleAdapter(private val context: Context) :
                 if (isItemClick) {
                     childAdapter.setItemClickListener(object :
                         CircleChildAdapter.OnItemClickListener {
-                        override fun onItemClick(photo : String) {
-                            itemClickListener?.onItemClick(photo)
+                        override fun onItemClick(photo : MutableList<CirclePhotoResponse>, position: Int) {
+                            itemClickListener?.onItemClick(photo,position)
                         }
                     })
                 }
@@ -119,7 +120,7 @@ class CircleAdapter(private val context: Context) :
     }
 
     interface OnItemClickListener {
-        fun onItemClick(photo:String)
+        fun onItemClick(photo:MutableList<CirclePhotoResponse>, position: Int)
     }
 
     interface OnVideoClickListener {

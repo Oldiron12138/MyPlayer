@@ -83,7 +83,7 @@ class CircleChildAdapter(context: Context) : RecyclerView.Adapter<CircleChildAda
         }
 
         assets[position].let { asset ->
-            holder.bind(asset, itemClickListener)
+            holder.bind(asset, itemClickListener, assets, position)
 //            if (isItemClick) {
 //                itemClickListener?.onItemClick(asset.photoDetail)
 //            }
@@ -101,11 +101,11 @@ class CircleChildAdapter(context: Context) : RecyclerView.Adapter<CircleChildAda
     class CircleChildViewHolder(
         val binding: ListCirclePhotoBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: CirclePhotoResponse, itemClickListener: OnItemClickListener?) {
+        fun bind(item: CirclePhotoResponse, itemClickListener: OnItemClickListener?, assetsList: MutableList<CirclePhotoResponse>, position: Int) {
             binding.apply {
                 asset = item
                 binding.imageView.setOnClickListener {
-                    itemClickListener?.onItemClick(item.photoDetail)
+                    itemClickListener?.onItemClick(assetsList,position)
                 }
                 executePendingBindings()
             }
@@ -114,7 +114,7 @@ class CircleChildAdapter(context: Context) : RecyclerView.Adapter<CircleChildAda
     }
 
     interface OnItemClickListener {
-        fun onItemClick(photo: String)
+        fun onItemClick(photo: MutableList<CirclePhotoResponse>, position: Int)
     }
 }
 

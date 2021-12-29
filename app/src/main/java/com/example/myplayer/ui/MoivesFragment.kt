@@ -256,4 +256,9 @@ class MoivesFragment: Fragment(), ExitDialog.OnDialogButtonClickListener,
         return false
     }
 
+    override fun onDestroyView() {
+        moviesJob?.cancel()
+        super.onDestroyView()
+    }
+
 }

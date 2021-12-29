@@ -11,9 +11,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:id="@+id/fragment"
+        android:background="#e0000000"
         android:layout_height="match_parent">
 
-        <ImageView
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp2"
             android:layout_width="match_parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -22,7 +24,6 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             app:layout_heightPercent="65%"
-            app:bindInfoImage="@{url}"
             app:layout_widthPercent="100%" />
 
 

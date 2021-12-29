@@ -64,21 +64,25 @@
 
                 </LinearLayout>
 
-                <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/child_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="bottom"
-                    android:visibility="gone" />
 
-                <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/child_container2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:visibility="gone" />
+
+
             </FrameLayout>
         </ScrollView>
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/child_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:visibility="gone" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/child_container2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/capture"

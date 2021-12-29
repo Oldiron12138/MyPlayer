@@ -27,6 +27,7 @@ import androidx.fragment.app.FragmentTransaction
 import com.example.myplayer.widget.PopDialog
 import com.example.myplayer.widget.ShareDialog
 import android.view.WindowManager
+import com.example.myplayer.data.reponse.CirclePhotoResponse
 
 
 @AndroidEntryPoint
@@ -106,7 +107,7 @@ class CircleFragment: Fragment(), ShareDialog.OnVideoClick, ShareDialog.OnPhotoC
                 ?.observe(viewLifecycleOwner) { seriesDetailData ->
                     circleAdapter.setData(seriesDetailData)
                     circleAdapter.setItemClickListener(object :CircleAdapter.OnItemClickListener {
-                        override fun onItemClick(photo:String) {
+                        override fun onItemClick(photo:MutableList<CirclePhotoResponse>, position:Int) {
                             circleBinding.childContainer.visibility = View.VISIBLE
                             val fragment = ScanFragment(object: ScanFragment.OnFragmentClick{
                                 override fun fragmentClick() {
@@ -115,7 +116,12 @@ class CircleFragment: Fragment(), ShareDialog.OnVideoClick, ShareDialog.OnPhotoC
                                 }
                             })
                             val bundle = Bundle()
-                            bundle.putString("url", photo)
+                            var photoString  = arrayListOf<String>()
+                            for (circlePhotoResponse in photo) {
+                                photoString.add(circlePhotoResponse.photoDetail)
+                            }
+                            bundle.putStringArrayList("url", photoString)
+                            bundle.putInt("position", position)
                             fragment.arguments = bundle
                             childFragmentManager.beginTransaction()
                                 .add(R.id.child_container, fragment, ScanFragment.SCAN_TAG)
@@ -171,8 +177,13 @@ class CircleFragment: Fragment(), ShareDialog.OnVideoClick, ShareDialog.OnPhotoC
             .commit()
         circleBinding.capture.visibility = View.GONE
     }
-//    override fun onBackKeyPress() {
+
+    //    override fun onBackKeyPress() {
 //        val fragment = ScanFragment()
 //        childFragmentManager.beginTransaction().remove(fragment)
 //    }
+    override fun onDestroyView() {
+        circleJob?.cancel()
+        super.onDestroyView()
+    }
 }

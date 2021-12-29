@@ -1,16 +1,8 @@
 package com.example.myplayer
 
-import android.app.Application
 import android.content.Context
-import android.content.pm.PackageManager
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.databinding.DataBindingUtil
-import androidx.navigation.NavArgument
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -20,7 +12,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import android.view.MotionEvent
 import android.view.View
-import androidx.core.content.ContextCompat
 import com.baidu.location.LocationClient
 import com.baidu.location.LocationClientOption
 import com.baidu.location.BDLocation
@@ -29,15 +20,8 @@ import com.baidu.location.BDAbstractLocationListener
 import android.view.WindowManager
 
 import android.os.Build
-import android.view.Window
 import android.app.Activity
-import android.view.View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-import androidx.annotation.RequiresApi
 import android.view.ViewGroup
-
-
-
-
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -64,29 +48,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setRootViewFitsSystemWindows(this, true)
         fullScreen(this)
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            val flagTranslucentStatus = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-//            val flagTranslucentNavigation = WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                val window: Window = window
-//                val attributes: WindowManager.LayoutParams = window.getAttributes()
-//                attributes.flags = attributes.flags or flagTranslucentNavigation
-//                window.setAttributes(attributes)
-//                getWindow().statusBarColor = Color.TRANSPARENT
-//            } else {
-//                val window: Window = window
-//                val attributes: WindowManager.LayoutParams = window.getAttributes()
-//                attributes.flags =
-//                    attributes.flags or (flagTranslucentStatus or flagTranslucentNavigation)
-//                window.setAttributes(attributes)
-//            }
-//        }
-        val navView: BottomNavigationView = binding.navView
+        navView = binding.navView
 
         val navController = findNavController(R.id.main_nav_host_fragment)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.movies_fragment, R.id.navigation_dashboard, R.id.navigation_lives, R.id.navigation_notifications
@@ -94,14 +58,14 @@ class MainActivity : AppCompatActivity() {
         )
         this.supportActionBar?.hide()
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            if (destination.id == R.id.player_fragment) {
-                runOnUiThread { navView.setVisibility(View.GONE) }
+            if (destination.id == R.id.player_fragment || destination.id == R.id.scan_fragment) {
+                runOnUiThread { navView!!.setVisibility(View.GONE) }
             } else {
-                runOnUiThread { navView.setVisibility(View.VISIBLE) }
+                runOnUiThread { navView!!.setVisibility(View.VISIBLE) }
             }
         }
         setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+        navView!!.setupWithNavController(navController)
         mLocationClient!!.start()
     }
 
@@ -189,8 +153,12 @@ class MainActivity : AppCompatActivity() {
     companion object {
         lateinit var mainActivity: MainActivity
         var context: MainActivity? = null
+        var navView: BottomNavigationView? = null
         fun getContext(): Context {
             return context!!
+        }
+        fun getNav(): BottomNavigationView {
+            return navView!!
         }
     }
 

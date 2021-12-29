@@ -59,6 +59,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        maven { url "https://jitpack.io" }
     }
 
 
@@ -75,4 +76,3 @@ buildscript {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-

@@ -47,7 +47,7 @@ class ChatAdapter(private val context: Context) :
     }
 
     fun addOneItem(datas: ChatEntity) {
-        var index = if (assets.size == 0) 0 else assets.size
+        var index = assets.size
         assets.add(index,datas)
         notifyDataSetChanged()
     }
