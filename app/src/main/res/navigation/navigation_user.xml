@@ -115,6 +115,11 @@
         android:label="Details"
         tools:layout="@layout/fragment_detail">
 
+        <action
+            android:id="@+id/action_info_detail_to_navigation_dashboard"
+            app:enterAnim="@anim/in_from_left"
+            app:exitAnim="@anim/out_to_right"
+            app:destination="@id/navigation_dashboard" />
     </fragment>
 
     <fragment

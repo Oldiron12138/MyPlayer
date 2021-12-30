@@ -78,12 +78,23 @@ class ChatAdapter(private val context: Context) :
         }
         fun bind(item: ChatEntity, position: Int) {
             binding.apply {
+                binding.entity = item
                 binding.tvname.text = item.content
                 binding.tvChatMeMessage.text = item.content
                 if (item.isMe) {
+                    if (item.content == "null" ) {
+                        binding.tvChatMeMessage.visibility = View.GONE
+                    }else {
+                        binding.tvChatMeMessage.visibility = View.VISIBLE
+                    }
                     binding.me.visibility = View.VISIBLE
                     binding.firend.visibility = View.GONE
                 } else {
+                    if (item.content == "null" ) {
+                        binding.tvname.visibility = View.GONE
+                    } else {
+                        binding.tvname.visibility = View.VISIBLE
+                    }
                     binding.me.visibility = View.GONE
                     binding.firend.visibility = View.VISIBLE
                 }

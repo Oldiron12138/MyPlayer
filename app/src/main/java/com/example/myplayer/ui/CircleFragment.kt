@@ -162,9 +162,9 @@ class CircleFragment: Fragment(), ShareDialog.OnVideoClick, ShareDialog.OnPhotoC
 
     override fun onVideoClick() {
         circleBinding.childContainer.visibility = View.VISIBLE
-        val fragment = SelectVideo()
+        val fragment = CaptureFragment()
         childFragmentManager.beginTransaction()
-            .add(R.id.child_container, fragment, SelectVideo.SELECT_TAG)
+            .add(R.id.child_container, fragment, CaptureFragment.CAPTURE_TAG)
             .commit()
         circleBinding.capture.visibility = View.GONE
     }

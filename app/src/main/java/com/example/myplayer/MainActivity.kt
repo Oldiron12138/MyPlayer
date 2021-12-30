@@ -22,13 +22,16 @@ import android.view.WindowManager
 import android.os.Build
 import android.app.Activity
 import android.view.ViewGroup
-
+import java.io.File
+const val KEY_EVENT_ACTION = "key_event_action"
+const val KEY_EVENT_EXTRA = "key_event_extra"
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     var mLocationClient: LocationClient? = null
     val myListener = MyLocationListener()
     public lateinit var currentCity: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -58,7 +61,7 @@ class MainActivity : AppCompatActivity() {
         )
         this.supportActionBar?.hide()
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            if (destination.id == R.id.player_fragment || destination.id == R.id.scan_fragment) {
+            if (destination.id == R.id.player_fragment || destination.id == R.id.info_detail) {
                 runOnUiThread { navView!!.setVisibility(View.GONE) }
             } else {
                 runOnUiThread { navView!!.setVisibility(View.VISIBLE) }
@@ -159,6 +162,14 @@ class MainActivity : AppCompatActivity() {
         }
         fun getNav(): BottomNavigationView {
             return navView!!
+        }
+
+        fun getOutputDirectory(context: Context): File {
+            val appContext = context.applicationContext
+            val mediaDir = context.externalMediaDirs.firstOrNull()?.let {
+                File(it, appContext.resources.getString(R.string.app_name)).apply { mkdirs() } }
+            return if (mediaDir != null && mediaDir.exists())
+                mediaDir else appContext.filesDir
         }
     }
 

@@ -204,7 +204,7 @@ class ReleaseFragment: Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    fun saveBitMapToFile(
+    private fun saveBitMapToFile(
         context: Context?,
         fileName: String,
         bitmap: Bitmap?,

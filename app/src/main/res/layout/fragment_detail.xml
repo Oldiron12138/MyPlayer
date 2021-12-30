@@ -18,6 +18,14 @@
         android:layout_marginTop="10dp"
         android:layout_height="match_parent">
 
+        <ImageButton
+            android:id="@+id/player_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/black_back"/>
+
 
         <ImageView
             android:layout_marginBottom="5dp"
@@ -179,9 +187,10 @@
 
             <TextView
                 android:id="@+id/content_desc"
+                android:layout_marginRight="30dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@{info.desc}"
                 android:textSize="15dp"

@@ -92,10 +92,20 @@ dependencies {
     implementation files('libs/aliyun-java-sdk-dysmsapi-1.0.0.jar')
     implementation files('libs/BaiduLBS_Android.jar')
     kapt "androidx.room:room-compiler:2.3.0"
+    implementation "androidx.cardview:cardview:1.0.0"
+    def camerax_version = '1.1.0-alpha07'
+    implementation "androidx.camera:camera-core:$camerax_version"
+
+    // CameraX Camera2 extensions
+    implementation "androidx.camera:camera-camera2:$camerax_version"
+    // CameraX Lifecycle library[可选]避免手动在生命周期释放和销毁数据
+    implementation 'androidx.camera:camera-lifecycle:1.0.0-alpha07'
+    // CameraX View class[可选]最佳实践，最好用里面的PreviewView，它会自行判断用SurfaceView还是TextureView来实现
+    implementation 'androidx.camera:camera-view:1.0.0-alpha27'
 
     // WorkManager library.
     implementation "androidx.work:work-runtime-ktx:$rootProject.workVersion"
-
+    implementation 'androidx.window:window:1.0.0-alpha09'
     // Preferences DataStore.
     implementation "androidx.datastore:datastore-preferences:$rootProject.datastoreVersion"
     implementation "com.android.support:percent:25.2.0"

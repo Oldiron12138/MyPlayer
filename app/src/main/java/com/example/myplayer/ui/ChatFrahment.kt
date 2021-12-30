@@ -1,13 +1,26 @@
 package com.example.myplayer.ui
 
+import android.Manifest
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.database.Cursor
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.myplayer.MainApplication
 import com.example.myplayer.databinding.FragmentChatsBinding
 import com.example.myplayer.viewmodels.CityViewModel
 import com.netease.nimlib.sdk.NIMClient
@@ -35,6 +48,13 @@ import com.example.myplayer.data.reponse.PersonChat
 import com.example.myplayer.viewmodels.ChatViewModel
 import com.netease.nimlib.sdk.Observer
 import kotlinx.coroutines.launch
+import java.io.File
+import java.lang.Exception
+import com.netease.nimlib.sdk.AbortableFuture
+import com.netease.nimlib.sdk.msg.attachment.FileAttachment
+import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum
+import com.netease.nimlib.sdk.msg.attachment.ImageAttachment
+import org.json.JSONObject
 
 
 @AndroidEntryPoint
@@ -42,7 +62,8 @@ class ChatFrahment : Fragment() {
     private lateinit var cityBinding: FragmentChatsBinding
 
     private var cityJob: Job? = null
-
+    var permissions = Manifest.permission.READ_EXTERNAL_STORAGE
+    var permissionArray = arrayOf(permissions)
     private val chatViewModel: ChatViewModel by viewModels()
 
     private lateinit var assetAdapter: ChatAdapter
@@ -61,7 +82,10 @@ class ChatFrahment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
+        val checkPermission = requireActivity().let { ActivityCompat.checkSelfPermission(it, permissions) }
+        if (checkPermission != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(permissionArray, 0)
+        }
         cityBinding = FragmentChatsBinding.inflate(inflater, container, false)
         return cityBinding.root
     }
@@ -99,6 +123,9 @@ class ChatFrahment : Fragment() {
             }
 
         }
+        cityBinding.sndImage.setOnClickListener{
+            openAlbum()
+        }
     }
     override fun onStart() {
         super.onStart()
@@ -109,7 +136,7 @@ class ChatFrahment : Fragment() {
     private fun sendTextMsg(content: String) {
         val sessionType = SessionTypeEnum.P2P
         val textMessage = MessageBuilder.createTextMessage("15940850831", sessionType, content+accid)
-        val personChat:ChatEntity = ChatEntity(content, true)
+        val personChat:ChatEntity = ChatEntity(content, true,false,"null")
         assetAdapter.addOneItem(personChat)
         msgList.add(personChat)
 //        android.util.Log.d("zwj", "size ${msgList.size}")
@@ -121,32 +148,170 @@ class ChatFrahment : Fragment() {
         NIMClient.getService(MsgService::class.java).sendMessage(textMessage, false)
     }
 
+    private fun sendImgMsg(pathName: String, url: String) {
+        val account = "15940850831"
+
+        val sessionType = SessionTypeEnum.P2P
+
+        val file = File(pathName)
+
+        val message:IMMessage = MessageBuilder.createImageMessage(account, sessionType, file, file.getName())
+//        val message:IMMessage = MessageBuilder.createImageMessage(
+//            account,
+//            sessionType,
+//            file,
+//            file.getName(),
+//            "nos_scene_key"
+//        )
+        val personChat:ChatEntity = ChatEntity("null", true,true,url)
+        assetAdapter.addOneItem(personChat)
+        msgList.add(personChat)
+        android.util.Log.d("zwjscorll" ,"size ${msgList.size}")
+        assetLayoutManager.scrollToPosition(msgList.size-1)
+        //  updateDao(msgList)
+        assetAdapter.notifyDataSetChanged()
+        NIMClient.getService(MsgService::class.java).sendMessage(message, false)
+            .setCallback(object : RequestCallback<Void?> {
+                override fun onSuccess(param: Void?) {
+                    android.util.Log.d("zwj" ,"sendimgsuccess")
+                }
+                override fun onFailed(code: Int) {
+                    android.util.Log.d("zwj" ,"sendfail $code")
+                }
+                override fun onException(exception: Throwable) {
+                    android.util.Log.d("zwj" ,"sendExp $exception")
+                }
+            })
+
+    }
+
+    private fun openAlbum() {
+        val intent = Intent("android.intent.action.GET_CONTENT")
+        intent.type = "image/*"
+        startActivityForResult(intent, 2)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            try {
+                var uri: Uri = data?.data!!
+                android.util.Log.d("zwj" ,"uuuri $uri")
+                val data = MainApplication.applicationContext.contentResolver.query(
+                    uri, null, null,
+                    null, null
+                )
+                if (data != null) {
+                    data?.moveToFirst()
+                    android.util.Log.d("zwj" ,"name ${data.getString(2)}")
+                }
+                val filePath:String = getLatestImage(data?.getString(2))
+                sendImgMsg(filePath, uri.toString())
+            } catch (e: Exception) {
+            } catch (e: OutOfMemoryError) {
+            }
+        }
+    }
+
+    //获取截图图片
+    fun getLatestImage(bucketId: String? = null):String {
+
+        var data: String? = null
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            data = chatViewModel.queryImagesP(bucketId)
+        } else {
+            data = chatViewModel.queryImages(bucketId)
+        }
+//                val imagePath = data.path?.toLowerCase()
+//                screenShoot.forEach {
+//                    if (imagePath?.contains(it)!! && (System.currentTimeMillis() / 1000 - data.addTime < 2)) {
+//                        _screentShotInfoData.postValue(data)
+//                        return@forEach
+//                    }
+        android.util.Log.d("zwj" ,"data$data")
+        return data
+    }
+
+    private fun getDataColumn(
+        context: Context?,
+        uri: Uri?,
+        selection: String?,
+        selectionArgs: Array<String>?
+    ): String? {
+        try {
+            val pojo = arrayOf(MediaStore.Images.Media.DATA)
+            val cursor: Cursor? =
+                uri?.let { context?.contentResolver?.query(it, pojo, null, null, null) }
+            if (cursor != null) {
+
+                if(cursor.moveToFirst()){
+                    android.util.Log.d("zwj", "filePath1111zz")
+                }
+                val colunm_index:Int = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                val columnIndex: Int = cursor.getColumnIndexOrThrow(pojo[0])
+                val path = cursor.getString(colunm_index)
+                /***
+                 * 这里加这样一个判断主要是为了第三方的软件选择，比如：使用第三方的文件管理器的话，你选择的文件就不一定是图片了，这样的话，我们判断文件的后缀名
+                 * 如果是图片格式的话，那么才可以
+                 */
+                android.util.Log.d("zwj", "filePath $path")
+                return path
+            } else {
+            }
+        } catch (e: Exception) {
+            android.util.Log.d("zwj" ,"eeee $e")
+        }
+        return null
+    }
+
 
     private fun registerMsgReceiver() {
         val incomingMessageObserver: Observer<List<IMMessage?>?> =
             object : Observer<List<IMMessage?>?> {
                 override fun onEvent(t: List<IMMessage?>?) {
                     android.util.Log.d("zwj " ,"receive")
-                    if (t != null) {
+                    if (t != null && t[0]!!.msgType.equals(MsgTypeEnum.text)) {
+                        android.util.Log.d("zwj " ,"receivetext")
                         for (message in t) {
 
+                            //val content: String = message?.content.toString()
                             val content: String = message?.content.toString()
                             android.util.Log.d("zwj " ,"receive $content")
-                            val personChat:ChatEntity = ChatEntity(content, false)
+                            val personChat:ChatEntity = ChatEntity(content, false, false, "null")
                             assetAdapter.addOneItem(personChat)
                             msgList.add(personChat)
-//                            for (asset in msgList) {
-//                                android.util.Log.d("zwj" ,"size ${msgList.size}" )
-//                            }
-//                            assetAdapter.updateListItem(msgList)
-                            assetLayoutManager.scrollToPosition(msgList.size - 1);
+                            assetLayoutManager.scrollToPosition(msgList.size - 1)
                            // updateDao(msgList)
                         }
+                    } else if(t != null && t[0]!!.msgType.equals(MsgTypeEnum.image)) {
+                        android.util.Log.d("zwj " ,"receiveimage")
+                        for (message in t) {
+                            val json: String? = message?.attachment?.toJson(true)
+                            val url: String? = parseEasyJson(json)
+                            val personChat:ChatEntity? =
+                                url?.let { ChatEntity("null", false, true, it) }
+                            assetAdapter.addOneItem(personChat!!)
+                            msgList.add(personChat)
+                            assetLayoutManager.scrollToPosition(msgList.size - 1)
+                        }
+
                     }
                 }
             }
+
         NIMClient.getService(MsgServiceObserve::class.java)
             .observeReceiveMessage(incomingMessageObserver, true)
+    }
+
+    private fun parseEasyJson(json: String?):String? {
+        try {
+            val jsonObject = JSONObject(json)
+            return jsonObject.getString("url")
+        } catch (e: Exception) {
+            e.printStackTrace()
+            android.util.Log.d("zwj eeee","eeee$e")
+            return "eeeee"
+        }
+        return "111"
     }
 
     fun updateDao(chatList: MutableList<ChatEntity>) {
@@ -155,7 +320,7 @@ class ChatFrahment : Fragment() {
             val infos: MutableList<ChatEntity> = mutableListOf()
 
             repeat(chatList.size) { i ->
-                infos.add(ChatEntity(chatList[i].content, chatList[i].isMe))
+                infos.add(ChatEntity(chatList[i].content, chatList[i].isMe,chatList[i].isImage,chatList[i].url))
             }
 
             val database = ChatDatabase.getInstance(requireContext())
@@ -191,6 +356,20 @@ class ChatFrahment : Fragment() {
 
         //执行手动登录
         NIMClient.getService(AuthService::class.java).login(info).setCallback(callback)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            0 ->
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(requireContext(), "权限申请成功", Toast.LENGTH_LONG).show()
+                }
+        }
     }
 
 }

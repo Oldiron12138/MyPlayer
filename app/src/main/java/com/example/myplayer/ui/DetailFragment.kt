@@ -70,7 +70,14 @@ class DetailFragment : Fragment(), ExitDialog.OnDialogButtonClickListenerForInfo
         } else {
             index = 0
         }
+        subscribeUi()
         getInfoDetailData()
+    }
+
+    private fun subscribeUi() {
+        detailBinding.playerBack.setOnClickListener{
+            this.findNavController().navigate(R.id.action_info_detail_to_navigation_dashboard)
+        }
     }
 
     override fun onResume() {

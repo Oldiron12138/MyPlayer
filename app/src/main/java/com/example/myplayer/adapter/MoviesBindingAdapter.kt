@@ -70,6 +70,27 @@ fun showContent(view: TextView, lock: Boolean, phone: String) {
     }
 }
 
+@BindingAdapter(value = ["bindChatImage", "imageUrl"], requireAll = true)
+fun bindChatImage(view: ImageView, bindChatImage: Boolean, imageUrl: String) {
+    bindChatImage?.let {
+        if (bindChatImage) {
+            view.visibility = View.VISIBLE
+            imageUrl?.let {
+                val url = it
+
+                Glide.with(view.context)
+                    .load(url)
+                    .dontAnimate()
+                    .error(R.drawable.ic_launcher_foreground)
+                    .into(view)
+            }
+        } else {
+            view.visibility = View.GONE
+        }
+    }
+}
+
+
 @BindingAdapter(value = ["isPhoto"])
 fun isPhoto(view: androidx.recyclerview.widget.RecyclerView, isP: Boolean) {
     isP?.let {
