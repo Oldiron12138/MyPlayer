@@ -4,12 +4,10 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import com.example.myplayer.MainActivity
-import com.example.myplayer.widget.ExitDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 open class BaseFragment: Fragment(),GestureDetector.OnGestureListener {
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

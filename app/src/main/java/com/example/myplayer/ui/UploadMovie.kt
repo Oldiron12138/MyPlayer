@@ -87,16 +87,13 @@ class UploadMovie: Fragment() {
             if (resultCode == Activity.RESULT_OK) {
                 try {
                     var uri: Uri = data?.data!!
-                    android.util.Log.d("zwj" ,"uuuri $uri")
                     val data = MainApplication.applicationContext.contentResolver.query(
                         uri, null, null,
                         null, null
                     )
                     if (data != null) {
                         data?.moveToFirst()
-                       android.util.Log.d("zwj" ,"name ${data.getString(2)}")
                     }
-                    //android.util.Log.d("zwj" ,"file is null $uri")
                     val filePath:String = uploadViewModel.getLatestImage(data?.getString(2))
                     uploadFile(filePath)
                 } catch (e: Exception) {
@@ -159,7 +156,6 @@ class UploadMovie: Fragment() {
             if (cursor != null) {
 
                 if(cursor.moveToFirst()){
-                    android.util.Log.d("zwj", "filePath1111zz")
                 }
                 val colunm_index:Int = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
                 val columnIndex: Int = cursor.getColumnIndexOrThrow(pojo[0])
@@ -168,12 +164,10 @@ class UploadMovie: Fragment() {
                  * 这里加这样一个判断主要是为了第三方的软件选择，比如：使用第三方的文件管理器的话，你选择的文件就不一定是图片了，这样的话，我们判断文件的后缀名
                  * 如果是图片格式的话，那么才可以
                  */
-                android.util.Log.d("zwj", "filePath $path")
                 return path
             } else {
             }
         } catch (e: Exception) {
-            android.util.Log.d("zwj" ,"eeee $e")
         }
         return null
     }

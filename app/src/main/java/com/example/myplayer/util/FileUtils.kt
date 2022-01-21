@@ -1,5 +1,6 @@
 package com.example.myplayer.util
 
+import android.animation.Animator
 import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
@@ -14,6 +15,18 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.WorkerThread
 import com.example.myplayer.MainApplication
 import java.lang.Exception
+import android.graphics.Bitmap
+import android.view.View
+import com.example.myplayer.util.Bulr.doBlur
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator
+
+import android.view.ViewGroup
+
+import android.view.animation.Animation
+import android.view.animation.Transformation
+import android.animation.ValueAnimator
+import android.animation.ValueAnimator.AnimatorUpdateListener
+import androidx.core.animation.addListener
 
 
 /**
@@ -25,7 +38,80 @@ import java.lang.Exception
  * @date 2020/8/24  11:24
  */
 object FileUtils {
-    private val imageType = arrayOf("image/png", "image/jpeg")
+    private const val BLUR_RADIUS = 25f
+
+    fun getPingMuSize(mContext: Context): Int {
+        val height: Int = mContext.getResources().getDisplayMetrics().heightPixels
+        return px2dip(mContext,height.toFloat())
+    }
+
+    fun px2dip(context: Context, pxValue: Float): Int {
+        val scale = context.resources.displayMetrics.density
+        return (pxValue / scale + 0.5f).toInt()
+    }
+
+
+
+    fun toBlur(originBitmap: Bitmap, scaleRatio: Int): Bitmap? {
+        val blurRadius = 8
+        if (scaleRatio <= 0) {
+            val scaleRatio: Int = 10
+        }
+        val scaledBitmap = Bitmap.createScaledBitmap(
+            originBitmap,
+            originBitmap.width / scaleRatio,
+            originBitmap.height / scaleRatio,
+            false
+        )
+        return doBlur(scaledBitmap, blurRadius, true)
+    }
+
+    fun expand(view: View) {
+        view.measure(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        val viewHeight: Int = view.measuredHeight
+        view.alpha = 0f
+        //view.layoutParams.height = 0
+        view.visibility = View.VISIBLE
+
+        val valueAnimator = ValueAnimator.ofFloat(0f, 1f)
+        valueAnimator.duration = 400
+        valueAnimator.addUpdateListener { animation ->
+            val curValue = animation.animatedValue as Float
+           // view.layoutParams.height = curValue
+            view.alpha = curValue
+            view.requestLayout()
+//            if (curValue == viewHeight) {
+//
+//                view.visibility = View.VISIBLE
+//                view.requestLayout()
+//            }
+        }
+        valueAnimator.start()
+    }
+
+    @SuppressLint("WrongConstant")
+    fun collapse(view: View) {
+        view.measure(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        val viewWidth = view.measuredWidth
+        val valueAnimator = ValueAnimator.ofInt(viewWidth, 0)
+        valueAnimator.duration = 400
+        valueAnimator.addUpdateListener { animation ->
+            val curValue = animation.animatedValue as Int
+            view.layoutParams.width = curValue
+            view.requestLayout()
+            if (curValue == 0) {
+                view.layoutParams.width = 0
+                view.visibility = View.INVISIBLE
+                view.requestLayout()
+            }
+        }
+        valueAnimator.start()
+    }
+
+
+
+
+private val imageType = arrayOf("image/png", "image/jpeg")
     //从 File Path 中获取 Uri
     //----------------------------------------------------------------
 
@@ -65,12 +151,10 @@ object FileUtils {
     private fun getRealPathFromUriAboveApi19(context: Context, uri: Uri): String? {
         var filePath: String? = null
         if (DocumentsContract.isDocumentUri(context, uri)) {
-            android.util.Log.d("zwj" ,"111")
             // 如果是document类型的 uri, 则通过document id来进行处理
             val documentId = DocumentsContract.getDocumentId(uri)
             if (isMediaDocument(uri)) {
                 val contentUri:Uri = MediaStore.Files.getContentUri("external")
-                android.util.Log.d("zwj" ,"filepath 111$contentUri")// MediaProvider
                 // 使用':'分割
                 val id = documentId.split(":").toTypedArray()[1]
                 val selection = MediaStore.Images.Media._ID + "=?"
@@ -82,7 +166,6 @@ object FileUtils {
                     selectionArgs
                 )
             } else if (isDownloadsDocument(uri)) { // DownloadsProvider
-                android.util.Log.d("zwj" ,"filepath1222")
                 val contentUri = ContentUris.withAppendedId(
                     Uri.parse("content://downloads/public_downloads"),
                     java.lang.Long.valueOf(documentId)
@@ -96,7 +179,6 @@ object FileUtils {
             // 如果是 file 类型的 Uri,直接获取图片对应的路径
             filePath = uri.path
         }
-        android.util.Log.d("zwj" ,"filepath $filePath")
         return filePath
     }
 
@@ -117,23 +199,17 @@ object FileUtils {
         val bundle = selection?.let { createSqlQueryBundle(it, imageType, sortOrder, 1) }
         try {
             cursor = context.contentResolver.query(uri, projection, selection, selectionArgs, null)
-            android.util.Log.d("zwj" ,"uri：$uri projection$projection sele $selection seleargs $selectionArgs")
             if(cursor == null) {
-                android.util.Log.d("zwj" ,"cursor is null ")
             }
             if (cursor != null) {
-                android.util.Log.d("zwj" ,"cursor is null1111 ")
                 if(cursor.moveToFirst()) {
-                    android.util.Log.d("zwj" ,"cursor is null ")
                 }
             }
             if (cursor != null && cursor.moveToFirst()) {
-                android.util.Log.d("zwj" ,"cursor")
                 val columnIndex: Int = cursor.getColumnIndexOrThrow(projection[0])
                 path = cursor.getString(columnIndex)
             }
         } catch (e: Exception) {
-            android.util.Log.d("zwj" ,"eeee $e")
             if (cursor != null) {
                 cursor.close()
             }
@@ -202,7 +278,6 @@ object FileUtils {
     @WorkerThread
     fun queryImagesP(bucketId: String?): String {
         val filePath :String = "null"
-        android.util.Log.d("zwj" ,"111")
         val uri = MediaStore.Files.getContentUri("external")
         val sortOrder = MediaStore.Files.FileColumns._ID + " DESC"
         var selection = (MediaStore.Files.FileColumns.MEDIA_TYPE + "="
@@ -226,15 +301,12 @@ object FileUtils {
 
             if (data.moveToFirst()) {
                 //查询数据
-                android.util.Log.d("zwj" ,"222")
                 val imagePath: String =
                     data.getString(data.getColumnIndexOrThrow(ScreenShotProjection[1]))
-                android.util.Log.d("zwj" ,"path $imagePath")
                 return imagePath
             }
 
         } catch (e: Exception) {
-            android.util.Log.d("zwj" ,"333$e")
             e.printStackTrace()
         }
         return filePath

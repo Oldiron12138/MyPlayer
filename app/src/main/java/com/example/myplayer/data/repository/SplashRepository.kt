@@ -4,17 +4,14 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.myplayer.api.MyPlayerService
-import com.example.myplayer.api.TestServices
 import com.example.myplayer.data.db.*
 import com.example.myplayer.data.reponse.*
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class SplashRepository @Inject constructor(
     private val androidTvMdsService: MyPlayerService,
-    private val testServices: TestServices
 
 ) {
 //    suspend fun citys(context: Context): Boolean {
@@ -78,7 +75,6 @@ class SplashRepository @Inject constructor(
         return try {
             val response =
                 androidTvMdsService.seriesDetail()
-            android.util.Log.d("zwj" ,"size ${response.size}" )
 
             val infos: MutableList<MoviesEntity> = mutableListOf()
 

@@ -3,12 +3,18 @@ package com.example.myplayer.widget
 
 import android.os.Bundle
 import android.view.KeyEvent
+import android.view.View
 import android.view.Window
+import android.view.WindowManager
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
 import com.example.myplayer.R
 import com.example.myplayer.data.db.MoviesEntity
+import android.os.Build
+
+
+
 
 class ShareDialog(private val activity: FragmentActivity) :
     AlertDialog(activity, R.style.Theme_AppCompat_Dialog) {
@@ -43,6 +49,10 @@ class ShareDialog(private val activity: FragmentActivity) :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        this.window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                View.SYSTEM_UI_FLAG_FULLSCREEN
+        this.window?.setWindowAnimations(R.style.DialogOutAndInStyle)
 
         setContentView(R.layout.dialog_share)
 
@@ -54,15 +64,6 @@ class ShareDialog(private val activity: FragmentActivity) :
     }
 
     private fun initView() {
-//        contentText = findViewById(R.id.content)!!
-//        cancelText = findViewById(R.id.exit_dialog_cancel)!!
-//        if(content != "") {
-//            contentText.text = content
-//        }
-//        cancelText.setOnClickListener {
-//            listener?.onDialogButtonClick()
-//            this.dismiss()
-//        }
         cancelText = findViewById(R.id.cancel)!!
         cancelText.setOnClickListener{
             this.dismiss()

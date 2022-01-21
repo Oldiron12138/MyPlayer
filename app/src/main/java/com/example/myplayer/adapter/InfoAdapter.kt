@@ -12,6 +12,9 @@ import com.example.myplayer.R
 import com.example.myplayer.data.db.InfoEntity
 import com.example.myplayer.data.reponse.MoviesResponse
 import com.example.myplayer.databinding.ListItemInfoBinding
+import androidx.core.app.ActivityOptionsCompat
+import com.example.myplayer.data.reponse.CirclePhotoResponse
+
 
 class InfoAdapter(
     val context: Context

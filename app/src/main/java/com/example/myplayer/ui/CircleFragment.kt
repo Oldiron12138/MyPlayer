@@ -56,6 +56,7 @@ class CircleFragment: Fragment(), ShareDialog.OnVideoClick, ShareDialog.OnPhotoC
         super.onViewCreated(view, savedInstanceState)
        // registerListener()
         subscribeUi()
+   //     circleBinding.capture.visibility = View.VISIBLE
         getInfoDetailData()
     }
 
@@ -150,7 +151,7 @@ class CircleFragment: Fragment(), ShareDialog.OnVideoClick, ShareDialog.OnPhotoC
                 }
         }
     }
-    private fun clearChildFragmentByTag(tag: String) {
+    public fun clearChildFragmentByTag(tag: String) {
         val fragmentManager = childFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         val fragment = fragmentManager.findFragmentByTag(tag)
@@ -166,7 +167,7 @@ class CircleFragment: Fragment(), ShareDialog.OnVideoClick, ShareDialog.OnPhotoC
         childFragmentManager.beginTransaction()
             .add(R.id.child_container, fragment, CaptureFragment.CAPTURE_TAG)
             .commit()
-        circleBinding.capture.visibility = View.GONE
+        //circleBinding.capture.visibility = View.GONE
     }
 
     override fun onPhotoClick() {
@@ -175,7 +176,7 @@ class CircleFragment: Fragment(), ShareDialog.OnVideoClick, ShareDialog.OnPhotoC
         childFragmentManager.beginTransaction()
             .add(R.id.child_container, fragment, SelectVideo.SELECT_TAG)
             .commit()
-        circleBinding.capture.visibility = View.GONE
+        //circleBinding.capture.visibility = View.GONE
     }
 
     //    override fun onBackKeyPress() {

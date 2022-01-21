@@ -21,9 +21,6 @@ class MoviesViewModel @Inject constructor(
     val seriesDetail: LiveData<List<MoviesEntity>> =
         moviesRepository.seriesDetail().asLiveData()
 
-    suspend fun devices(): String? {
-        return moviesRepository.devices()
-    }
     var loginRes: LiveData<LoginResponse>? = null
     suspend fun buy(id: Int, name: String, pwd: String, coin: Int): LiveData<LoginResponse>? {
         loginRes = moviesRepository.buy(id, name, pwd, coin)

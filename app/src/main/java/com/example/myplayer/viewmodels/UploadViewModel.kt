@@ -80,7 +80,6 @@ class UploadViewModel @Inject constructor(
 //                        _screentShotInfoData.postValue(data)
 //                        return@forEach
 //                    }
-            android.util.Log.d("zwj" ,"data$data")
             return data
     }
 
@@ -140,14 +139,12 @@ class UploadViewModel @Inject constructor(
     @WorkerThread
     fun queryImagesP(bucketId: String?): String {
         val filePath :String = "null"
-        android.util.Log.d("zwj" ,"111")
         val uri = MediaStore.Files.getContentUri("external")
         val sortOrder = MediaStore.Files.FileColumns._ID + " DESC"
         var selection = (MediaStore.Files.FileColumns.DISPLAY_NAME + "="
                 + "")
 
         val bundle = createSqlQueryBundle(null, null, sortOrder, 2)
-        android.util.Log.d("zwj" ,"2222")
         try {
             val data = MainApplication.applicationContext.contentResolver?.query(
                 uri,
@@ -156,27 +153,22 @@ class UploadViewModel @Inject constructor(
                 null
             )
             if (data == null) {
-                android.util.Log.d("zwj" ,"333")
                 return filePath
             }
 
             while (data.moveToNext()) {
                 //查询数据
-                android.util.Log.d("zwj" ,"222")
                 val imagePath: String =
                     data.getString(data.getColumnIndexOrThrow(ScreenShotProjection[0]))
                 val path: String = data.getString(0)
-                android.util.Log.d("zwj" ,"path111 $path")
                 if (bucketId != null) {
                     if(imagePath.indexOf(bucketId) != -1) {
-                        android.util.Log.d("zwj" ,"imagePath $imagePath")
                         return imagePath
                     }
                 }
             }
 
         } catch (e: Exception) {
-            android.util.Log.d("zwj" ,"444$e")
             e.printStackTrace()
         }
         return filePath

@@ -38,11 +38,6 @@ class ChatAdapter(private val context: Context) :
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         assets.clear()
         assets.addAll(datas)
-
-        android.util.Log.d("zwj" ,"updateListItem")
-        for (asset in datas) {
-            android.util.Log.d("zwj" ,"isMe ${asset.isMe}" )
-        }
         diffResult.dispatchUpdatesTo(this)
     }
 

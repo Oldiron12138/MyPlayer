@@ -102,7 +102,6 @@ class MoviesAdapter(
         fun bind(item: MoviesEntity, position: Int) {
             binding.apply {
                 asset = item
-                android.util.Log.d("zwj" ,"lock is ${item.lock}")
                 executePendingBindings()
             }
         }

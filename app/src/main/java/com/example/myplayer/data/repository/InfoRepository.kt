@@ -1,13 +1,7 @@
 package com.example.myplayer.data.repository
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.myplayer.api.MyPlayerService
-import com.example.myplayer.api.TestServices
 import com.example.myplayer.data.db.InfoDao
-import com.example.myplayer.data.db.MoviesDao
-import com.example.myplayer.data.reponse.InfoResponse
-import com.example.myplayer.data.reponse.MoviesResponse
 import javax.inject.Inject
 import javax.inject.Singleton
 

@@ -69,21 +69,18 @@ class PlayerFragment :Fragment(),ExoPlayerManager.OnBackKeyPress{
         super.onResume()
         playerBinding.root.setOnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_BACK) {
-                android.util.Log.d("zwj " ,"back1")
                 Navigation.findNavController(requireView()).popBackStack()
                 true
             } else false
         }
         playerBinding.myPlayer.setOnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_BACK) {
-                android.util.Log.d("zwj " ,"back")
                 Navigation.findNavController(requireView()).popBackStack()
                 true
             } else false
         }
         playerBinding.playerBack.setOnClickListener {
             if ("circle" == fromWhere) {
-                android.util.Log.d("zwj" ,"backfromcircle")
                 onBackFromCircle?.backFromCircle()
             } else {
                 Navigation.findNavController(requireView()).popBackStack()
@@ -119,7 +116,6 @@ class PlayerFragment :Fragment(),ExoPlayerManager.OnBackKeyPress{
 //    }
 
     private fun initExoPlayer() {
-        android.util.Log.d("zwj url" ,"url $url")
         exoPlayerManager = ExoPlayerManager()
         exoPlayerManager.create(requireContext(), playerBinding.myPlayer)
         exoPlayerManager.initializePlayer(url)
@@ -131,9 +127,7 @@ class PlayerFragment :Fragment(),ExoPlayerManager.OnBackKeyPress{
     }
 
     override fun onBackKeyPress() {
-        android.util.Log.d("zwj" ,"backfromcircle  $fromWhere")
         if ("circle" == fromWhere) {
-            android.util.Log.d("zwj" ,"backfromcircle")
             onBackFromCircle?.backFromCircle()
         } else {
             this.findNavController().navigate(R.id.action_player_fragment_to_movies_fragment)

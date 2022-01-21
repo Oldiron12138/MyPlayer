@@ -6,6 +6,8 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
@@ -78,6 +80,8 @@ class DetailFragment : Fragment(), ExitDialog.OnDialogButtonClickListenerForInfo
         detailBinding.playerBack.setOnClickListener{
             this.findNavController().navigate(R.id.action_info_detail_to_navigation_dashboard)
         }
+        val animation: Animation = AnimationUtils.loadAnimation(requireContext(), R.anim.anim_scale_in)
+        detailBinding.anim.startAnimation(animation)
     }
 
     override fun onResume() {
@@ -126,8 +130,6 @@ class DetailFragment : Fragment(), ExitDialog.OnDialogButtonClickListenerForInfo
     private fun updateMovies(title: String) {
         detailJob?.cancel()
         detailJob = lifecycleScope.launch {
-            android.util.Log.d("zwj" ,"updateMovies222")
-
             // Init DB.
             val database = InfoDatabase.getInstance(requireContext())
             database.infoDao().updateTour(title, false)
@@ -148,6 +150,7 @@ class DetailFragment : Fragment(), ExitDialog.OnDialogButtonClickListenerForInfo
         fun setInfoViewModel(viewModel: InfoViewModel?) {
             infoViewModel = viewModel
         }
+        const val DETAIL_TAG = "DETAIL_TAG"
     }
 
     override fun onDialogButtonClickForInfo(isPositive: Boolean, info: InfoEntity) {

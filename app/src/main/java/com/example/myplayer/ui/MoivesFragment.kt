@@ -3,9 +3,7 @@ package com.example.myplayer.ui
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
@@ -25,13 +23,12 @@ import com.example.myplayer.widget.PopDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import android.view.MotionEvent
 
-import android.view.GestureDetector
 import android.view.GestureDetector.SimpleOnGestureListener
 import androidx.navigation.findNavController
 import com.example.myplayer.MainActivity
 import com.example.myplayer.adapter.CategoryAdapter
+import com.example.myplayer.util.FileUtils
 import java.lang.Exception
 
 
@@ -127,10 +124,15 @@ class MoivesFragment: Fragment(), ExitDialog.OnDialogButtonClickListener,
         moviesBinding.categoryList.adapter = categoryAdapter
         moviesBinding.categoryList.itemAnimator = null
         categoryAdapter.setItemClickListener(object : CategoryAdapter.OnItemClickListener {
-            override fun onItemClick(asset: MoviesEntity) {
-                unLockDialog(requireActivity(),asset)
+            override fun onItemClick(asset: String) {
+                if (moviesBinding.categoryList.visibility == View.VISIBLE)
+                    FileUtils.collapse(moviesBinding.categoryList) else FileUtils.expand(moviesBinding.categoryList)
             }
         })
+        moviesBinding.menu.setOnClickListener{
+            if (moviesBinding.categoryList.visibility == View.VISIBLE)
+            FileUtils.collapse(moviesBinding.categoryList) else FileUtils.expand(moviesBinding.categoryList)
+        }
         categoryAdapter.updateListItem()
 
 
@@ -199,7 +201,6 @@ class MoivesFragment: Fragment(), ExitDialog.OnDialogButtonClickListener,
     private fun updateMovies(num: String) {
         moviesJob?.cancel()
         moviesJob = lifecycleScope.launch {
-            android.util.Log.d("zwj" ,"updateMovies222")
 
             // Init DB.
             val database = MoviesDatabase.getInstance(requireContext())

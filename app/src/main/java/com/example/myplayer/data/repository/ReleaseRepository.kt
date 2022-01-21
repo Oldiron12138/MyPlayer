@@ -19,7 +19,6 @@ class ReleaseRepository @Inject constructor(
     suspend fun uploadPhoto(file: MultipartBody.Part): LiveData<UploadResult> {
         val seriesDetailResponse = MutableLiveData<UploadResult>()
         return try {
-            android.util.Log.d("zwj" ,"upload")
             val response =
                 androidTvMdsService.uploadPhoto(file)
 
@@ -37,7 +36,6 @@ class ReleaseRepository @Inject constructor(
     suspend fun uploadJson(body: RequestBody): LiveData<UploadResult> {
         val seriesDetailResponse = MutableLiveData<UploadResult>()
         return try {
-            android.util.Log.d("zwj" ,"upload")
             val response =
                 androidTvMdsService.uploadJson(body)
 

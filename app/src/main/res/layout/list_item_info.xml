@@ -29,6 +29,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:bindInfoImage="@{info.url}"
+            android:transitionName="image"
             tools:srcCompat="@tools:sample/avatars" />
 
         <androidx.constraintlayout.widget.ConstraintLayout

@@ -2,21 +2,13 @@ package com.example.myplayer.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myplayer.data.db.ChatEntity
 import com.example.myplayer.data.reponse.CircleResponse
 import com.example.myplayer.databinding.ListItemCircleBinding
-import android.R
-import android.view.ViewGroup.MarginLayoutParams
-
-import android.widget.RelativeLayout
-import com.example.myplayer.data.db.MoviesEntity
 import com.example.myplayer.data.reponse.CirclePhotoResponse
 
 

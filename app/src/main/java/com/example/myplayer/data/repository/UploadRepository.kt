@@ -20,7 +20,6 @@ class UploadRepository @Inject constructor(
     suspend fun uploadFile(file: File) {
         Thread(Runnable Thread@{
             try {
-                android.util.Log.d("zwj" ,"uploadFile")
                 var socket: Socket = Socket("111.229.96.2", 8897)
                 val outStream: OutputStream = socket.getOutputStream()
                 var `in`: ObjectInputStream? = null
@@ -61,7 +60,6 @@ class UploadRepository @Inject constructor(
                         //                listener.onFinish(result)
                     }
                 } catch (e: Exception) {
-                    android.util.Log.d("zwj", "eee$e")
                 }
                 val seriesDetailResponse = MutableLiveData<UploadResult>()
                 return@Thread

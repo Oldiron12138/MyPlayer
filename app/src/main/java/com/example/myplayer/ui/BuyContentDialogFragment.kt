@@ -96,8 +96,6 @@ class BuyContentDialogFragment: DialogFragment() {
     private fun updateMovies(num: String) {
         infoJob2?.cancel()
         infoJob2 = lifecycleScope.launch {
-            android.util.Log.d("zwj" ,"updateMovies222")
-
             // Init DB.
             val database = MoviesDatabase.getInstance(requireContext())
             database.moviesDao().updateTour(num, false)

@@ -35,7 +35,6 @@ class SplashActivity : AppCompatActivity() {
         if (!hasPermissions(this)) {
             initCity()
         } else {
-            // If permissions have already been granted, proceed
             initCity()
         }
     }
@@ -43,7 +42,6 @@ class SplashActivity : AppCompatActivity() {
     private fun initCity() {
         splashJob?.cancel()
         splashJob = lifecycleScope.launch {
-            //splashViewModel.user(baseContext)
             binding.process = 30
             initInfo()
         }
@@ -64,7 +62,6 @@ class SplashActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == PERMISSIONS_REQUEST_CODE) {
             if (PackageManager.PERMISSION_GRANTED == grantResults.firstOrNull()) {
-                // Take the user to the success fragment when permission is granted
                 Toast.makeText(context, "Permission request granted", Toast.LENGTH_LONG).show()
                 initCity()
             } else {
@@ -86,8 +83,6 @@ class SplashActivity : AppCompatActivity() {
     }
 
     companion object {
-
-        /** Convenience method used to check if all permissions required by this app are granted */
         fun hasPermissions(context: Context) = PERMISSIONS_REQUIRED.all {
             ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
         }

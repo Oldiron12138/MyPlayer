@@ -4,27 +4,28 @@
 
     <data>
         <variable
-        name="clickListener"
-        type="android.view.View.OnClickListener" />
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
         <variable
-            name="city"
+            name="chasr"
             type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_margin="5dp"
+        android:layout_width="wrap_content"
         android:onClick="@{clickListener}"
-        android:layout_height="40dp">
+        android:layout_height="20dp">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="20dp"
+            android:gravity="end"
+            android:layout_marginRight="5dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="@{city}"
-            android:textSize="20dp" />
+            android:text="@{chasr}"
+            android:textSize="15dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

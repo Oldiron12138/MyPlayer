@@ -69,6 +69,22 @@
 
             </FrameLayout>
         </ScrollView>
+        <LinearLayout
+            android:id="@+id/capture"
+            android:layout_width="match_parent"
+            android:gravity="right"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="25dp"
+                android:background="@drawable/ic_baseline_camera_alt_24"
+                android:gravity="right"
+                android:paddingRight="10dp" />
+        </LinearLayout>
+
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/child_container"
@@ -77,6 +93,7 @@
             android:layout_gravity="bottom"
             android:visibility="gone" />
 
+
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/child_container2"
             android:layout_width="match_parent"
@@ -84,20 +101,6 @@
             android:layout_gravity="bottom"
             android:visibility="gone" />
 
-        <LinearLayout
-            android:id="@+id/capture"
-            android:layout_width="match_parent"
-            android:gravity="right"
-            android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/share"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="25dp"
-            android:background="@drawable/ic_baseline_camera_alt_24"
-            android:gravity="right"
-            android:paddingRight="10dp" />
-        </LinearLayout>
+
     </FrameLayout>
 </layout>

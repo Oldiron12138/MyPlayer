@@ -8,6 +8,14 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.example.myplayer.R
+import androidx.core.app.ActivityCompat.startPostponedEnterTransition
+import com.example.myplayer.MainActivity
+import com.squareup.picasso.Callback
+
+import com.squareup.picasso.Picasso
+
+
+
 
 @BindingAdapter(value = ["bindMoviesImage"])
 fun bindMoviesImage(view: ImageView, episodeId: String?) {
@@ -32,6 +40,26 @@ fun bindInfoImage(view: ImageView, episodeId: String?) {
             .dontAnimate()
             .error(R.drawable.ic_launcher_foreground)
             .into(view)
+    }
+}
+
+@BindingAdapter(value = ["bindInfoImagePP"])
+fun bindInfoImagePP(view: ImageView, episodeId: String?) {
+    episodeId?.let {
+        val url = it
+
+        Picasso.with(view.context)
+            .load(url)
+            .centerCrop()
+            .noFade()
+            .fit()
+            .into(view, object : Callback {
+                override fun onSuccess() {
+                    startPostponedEnterTransition(MainActivity.mainActivity)
+                }
+
+                override fun onError() {}
+            })
     }
 }
 

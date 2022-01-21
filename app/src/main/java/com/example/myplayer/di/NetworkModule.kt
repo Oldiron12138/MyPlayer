@@ -2,7 +2,6 @@ package com.example.myplayer.di
 
 import com.example.myplayer.api.IMServices
 import com.example.myplayer.api.MyPlayerService
-import com.example.myplayer.api.TestServices
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,12 +16,6 @@ class NetworkModule {
     @Provides
     fun provideHttpApi(): MyPlayerService {
         return MyPlayerService.create()
-    }
-
-    @Singleton
-    @Provides
-    fun provideTestHttpApi(): TestServices {
-        return TestServices.create()
     }
 
     @Singleton

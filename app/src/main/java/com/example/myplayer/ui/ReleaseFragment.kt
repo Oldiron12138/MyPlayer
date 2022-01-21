@@ -139,7 +139,6 @@ class ReleaseFragment: Fragment() {
         relseaseJob = lifecycleScope.launch {
             releaseViewModel.uploadJson(body)
                 ?.observe(viewLifecycleOwner) {
-                    android.util.Log.d("zwjJson","json result ${it.resultData}")
                     if (it != null) {
                         relseaseContent()
                     } else {
@@ -167,9 +166,7 @@ class ReleaseFragment: Fragment() {
         relseaseJob = lifecycleScope.launch {
             releaseViewModel.upload(part)
                 ?.observe(viewLifecycleOwner) {
-                    Log.d("zwj" ,"result data ${it.resultData}")
                     if (it.resultData != null) {
-                        android.util.Log.d("zwj" ,"eee ${it.resultData}")
                         loadingDialog!!.dismissDialog()
                         Toast.makeText(requireContext(), "上传成功", Toast.LENGTH_LONG).show()
                     } else {
@@ -188,7 +185,6 @@ class ReleaseFragment: Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        android.util.Log.d("zwj" ,"000")
         if (resultCode == RESULT_OK) {
 
             val uri: Uri? = data?.data
@@ -211,11 +207,9 @@ class ReleaseFragment: Fragment() {
         isCover: Boolean
     ): String {
         if (null == context || null == bitmap) {
-            Log.d("zwj", "111")
             return "null"
         }
         if (TextUtils.isEmpty(fileName)) {
-            Log.d("zwj", "2222")
             return "null"
         }
         var fOut: FileOutputStream? = null
@@ -267,7 +261,6 @@ class ReleaseFragment: Fragment() {
             )
             fileDstPath
         } catch (e: Exception) {
-            Log.d("zwj", "111 $e")
             "null"
         } finally {
             if (null != fOut) {

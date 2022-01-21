@@ -1,6 +1,11 @@
 package com.example.myplayer.ui
 
+import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +23,10 @@ import com.example.myplayer.widget.PopDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import android.graphics.drawable.BitmapDrawable
+import com.example.myplayer.MainActivity
+import com.example.myplayer.util.FileUtils
+
 
 @AndroidEntryPoint
 class AccountFragment: Fragment(), PopDialog.OnDialogButtonClickListener {
@@ -38,7 +47,24 @@ class AccountFragment: Fragment(), PopDialog.OnDialogButtonClickListener {
         return moviesBinding.root
     }
 
+    @SuppressLint("WrongConstant")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val bitmap: Bitmap = BitmapFactory.decodeResource(MainActivity.context?.resources,R.mipmap.screenback)
+
+        val valueAnimator = ValueAnimator.ofInt(200, 255)
+        valueAnimator.duration = 8000
+        valueAnimator.addUpdateListener { animation ->
+            val curValue = animation.animatedValue as Int
+
+            var bitmapB: Bitmap? = FileUtils.toBlur(bitmap,2)
+            val bd = BitmapDrawable(bitmapB)
+            bd.alpha = curValue
+            moviesBinding.background.background = bd
+        }
+        valueAnimator.repeatMode = 2
+        valueAnimator.repeatCount = 10000
+        valueAnimator.start()
+
         super.onViewCreated(view, savedInstanceState)
         if (arguments?.getString("number") != null) {
             moviesBinding.textView4.setText(arguments?.getString("number"))
@@ -46,6 +72,13 @@ class AccountFragment: Fragment(), PopDialog.OnDialogButtonClickListener {
         initListener()
         refreshInfo()
 
+    }
+
+    fun bitMapScale(bitmap: Bitmap, scale: Float): Bitmap? {
+        val matrix = Matrix()
+        matrix.postScale(scale, scale) //长和宽放大缩小的比例
+        android.util.Log.d("zwj" ,"width $scale ${bitmap.width} ${bitmap.height}")
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
     }
 
     private fun refreshInfo() {
@@ -96,7 +129,6 @@ class AccountFragment: Fragment(), PopDialog.OnDialogButtonClickListener {
     }
 
     override fun onDialogButtonClick() {
-        android.util.Log.d("zwj" ,"onclick")
         val bundle = Bundle().apply {
             putString("token", token)
             putString("num", num)
@@ -106,6 +138,7 @@ class AccountFragment: Fragment(), PopDialog.OnDialogButtonClickListener {
     }
     override fun onDestroyView() {
         loginJob?.cancel()
+
         super.onDestroyView()
     }
 }

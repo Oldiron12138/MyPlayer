@@ -118,17 +118,14 @@ class LoadingView @JvmOverloads constructor(
         mValueAnimator?.addUpdateListener(AnimatorUpdateListener { animation: ValueAnimator ->
             var fraction = animation.animatedFraction
             val value = animation.animatedValue as Float
-            //android.util.Log.d("zwj" ,"1f1f $value")
             if (mReverse) fraction = 1 - fraction
             ssweepFlag = -1f
             if (value < valueFlag) {
                 startAngle = curStartAngle - (1-value) * 360f
-                android.util.Log.d("zwj" ,"1f1f")
                 ssweepFlag = 360f
                 sweepAngle = ssweepFlag - mMaxSweepAngle * (1-value)
             } else if (value > valueFlag){
                 startAngle = curStartAngle - value * 360f
-                android.util.Log.d("zwj" ,"0f0f")
                 ssweepFlag = -1f
                 sweepAngle = ssweepFlag - mMaxSweepAngle * value
             }

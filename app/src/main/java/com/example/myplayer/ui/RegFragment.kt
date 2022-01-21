@@ -83,30 +83,4 @@ class RegFragment: Fragment() {
 
     }
 
-//    fun sendSms() {
-//        val profile = DefaultProfile.getProfile(
-//            "zhangweijie12138",
-//            "<LTAI5tQjersCWei4hrzbZtNM>",
-//            "<Sh71NeXn7gFcIu6g6kKtQrwHNYeVJU>"
-//        ) //自己账号的AccessKey信息
-//        val client: IAcsClient = DefaultAcsClient(profile)
-//        val request = CommonRequest()
-//        request.sysMethod = MethodType.POST
-//        request.sysDomain = "dysmsapi.aliyuncs.com" //短信服务的服务接入地址
-//        request.sysVersion = "2017-05-25" //API的版本号
-//        request.sysAction = "SendSms" //API的名称
-//        request.putQueryParameter("PhoneNumbers", "15940850830") //接收短信的手机号码
-//        request.putQueryParameter("SignName", "阿里大于测试专用") //短信签名名称
-//        request.putQueryParameter("TemplateCode", "SMS_209335004") //短信模板ID
-//        request.putQueryParameter("TemplateParam", "{\"code\":\"1111\"}") //短信模板变量对应的实际值
-//        try {
-//            val response = client.getCommonResponse(request)
-//            android.util.Log.d("zwj " ,"reponse ${response.data}")
-//        } catch (e: ServerException) {
-//            e.printStackTrace()
-//        } catch (e: ClientException) {
-//            e.printStackTrace()
-//        }
-//        }
-
 }

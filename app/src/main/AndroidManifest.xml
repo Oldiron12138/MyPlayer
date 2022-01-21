@@ -34,6 +34,15 @@
     <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位-->
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"></uses-permission>
 
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
+    <!--用于写入缓存数据到扩展存储卡-->
+    <!--用于申请调用A-GPS模块-->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"></uses-permission>
+    <!--如果设置了target >= 28 如果需要启动后台定位则必须声明这个权限-->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <!--如果您的应用需要后台定位权限，且有可能运行在Android Q设备上,并且设置了target>28，必须增加这个权限声明-->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+
     <permission
         android:name="com.example.myplayer.permission.RECEIVE_MSG"
         android:protectionLevel="signature"/>
@@ -79,9 +88,6 @@
             android:theme="@style/NoActionBar"
             android:exported="true">
         </activity>
-        <service android:name="com.baidu.location.f"
-            android:enabled="true"
-            android:process=":remote"/>
 
         <service
             android:name="com.netease.nimlib.service.NimService"
@@ -89,6 +95,8 @@
         <service
             android:name="com.netease.nimlib.service.NimService$Aux"
             android:process=":core"/>
+
+        <service android:name="com.amap.api.location.APSService"></service>
 
         <!-- 云信后台辅助服务 -->
         <service
@@ -130,6 +138,9 @@
             android:name="com.netease.nim.appKey"
             android:value="37e03c9b288eff731388d655b2284f0e" />
 
+
+        <meta-data android:name="com.amap.api.v2.apikey" android:value="4385199f431fc6639c27fd854229b7e0">
+        </meta-data>
 
 
     </application>

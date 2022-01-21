@@ -1,5 +1,6 @@
 package com.example.myplayer
 
+import android.Manifest
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,41 +13,51 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import android.view.MotionEvent
 import android.view.View
-import com.baidu.location.LocationClient
-import com.baidu.location.LocationClientOption
-import com.baidu.location.BDLocation
 
-import com.baidu.location.BDAbstractLocationListener
 import android.view.WindowManager
 
 import android.os.Build
 import android.app.Activity
+import android.content.pm.PackageManager
+import android.content.res.Resources
+import android.util.Log
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
+import com.amap.api.location.AMapLocation
+import com.amap.api.location.AMapLocationClient
+import com.amap.api.location.AMapLocationListener
 import java.io.File
+import com.amap.api.location.AMapLocationClientOption
+import java.lang.Exception
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.concurrent.schedule
+
+
 const val KEY_EVENT_ACTION = "key_event_action"
 const val KEY_EVENT_EXTRA = "key_event_extra"
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    var mLocationClient: LocationClient? = null
-    val myListener = MyLocationListener()
-    public lateinit var currentCity: String
+    var permissions = Manifest.permission.READ_EXTERNAL_STORAGE
+    var permissionArray = arrayOf(permissions,Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS,
+        Manifest.permission.CAMERA,Manifest.permission.CAPTURE_AUDIO_OUTPUT)
 
+
+    var  mLocationClient: AMapLocationClient? = null
+
+
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        val checkPermission = this.let { ActivityCompat.checkSelfPermission(it, permissions) }
+        if (checkPermission != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(permissionArray, 0)
+        }
         mainActivity = this
-        mLocationClient = LocationClient(getApplicationContext())
-        //声明LocationClient类
-        mLocationClient!!.registerLocationListener(myListener)
-
-        val option = LocationClientOption()
-        option.setIsNeedAddress(true)
-        option.setOpenGps(true)
-        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy)
-        option.setCoorType("gcj02");
-        option.setNeedNewVersionRgc(true)
-        mLocationClient!!.setLocOption(option)
+        context = this
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setRootViewFitsSystemWindows(this, true)
@@ -69,12 +80,13 @@ class MainActivity : AppCompatActivity() {
         }
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView!!.setupWithNavController(navController)
-        mLocationClient!!.start()
+       // mLocationClient!!.start()
+        mResources = resources
+        binding.navView.background.alpha = 200
     }
 
     override fun onResume() {
         super.onResume()
-
         // Add the FLAG_KEEP_SCREEN_ON flag for keeping on screen.
         window.clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN)
         window.addFlags(
@@ -84,6 +96,48 @@ class MainActivity : AppCompatActivity() {
                     WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
         )
         hideNavigationBar()
+            setUpLocal()
+    }
+
+    private fun setUpLocal() {
+//        AMapLocationClient.updatePrivacyShow(context,true,true)
+//        AMapLocationClient.updatePrivacyAgree(context,true)
+        try {
+            mLocationClient = AMapLocationClient(getApplicationContext())
+            if (mLocationClient == null ) {
+            }
+        } catch (e: Exception) {
+        }
+        //声明LocationClient类
+        mLocationClient!!.setLocationListener(object: AMapLocationListener {
+            override fun onLocationChanged(amapLocation: AMapLocation?) {
+                if (amapLocation != null) {
+                    if (amapLocation.getErrorCode() == 0) {
+                        val sharedPref =
+                            mainActivity.getSharedPreferences("CITY_CACHE", Context.MODE_PRIVATE)
+                        sharedPref.edit().putString("CITY", cutString(amapLocation.city)).apply()
+                    }else {
+                        Log.e("AmapError","location Error, ErrCode:"
+                                + amapLocation.getErrorCode() + ", errInfo:"
+                                + amapLocation.getErrorInfo());
+                    }
+                }
+            }
+
+        })
+        var mLocationOption: AMapLocationClientOption? = null
+        mLocationOption = AMapLocationClientOption()
+        mLocationOption.isOnceLocation = true
+        mLocationOption.isOnceLocationLatest = true
+        mLocationClient!!.setLocationOption(mLocationOption)
+        mLocationClient!!.startLocation()
+
+    }
+
+    private fun cutString(city:String): String {
+        var str: String = city
+        var strs: List<String> = str.split("市")
+        return strs[0].toString()
     }
 
     private fun hideNavigationBar() {
@@ -131,29 +185,23 @@ class MainActivity : AppCompatActivity() {
         fun onTouch(ev: MotionEvent?): Boolean
     }
 
-    class MyLocationListener : BDAbstractLocationListener() {
-        override fun onReceiveLocation(location: BDLocation) {
-            //此处的BDLocation为定位结果信息类，通过它的各种get方法可获取定位相关的全部结果
-            //以下只列举部分获取地址相关的结果信息
-            //更多结果信息获取说明，请参照类参考中BDLocation类中的说明
-            val addr = location.addrStr //获取详细地址信息
-            val country = location.country //获取国家
-            val province = location.province //获取省份
-            val city = location.city //获取城市
-            val district = location.district //获取区县
-            val street = location.street //获取街道信息
-            val adcode = location.adCode //获取adcode
-            val town = location.town //获取乡镇信息
-            //val ccc:String = city.toString()
-            android.util.Log.d("zwj" ,"city ${location.locType}" )
-            //this.currentCity
-            val sharedPref =
-                mainActivity.getSharedPreferences("CITY_CACHE", Context.MODE_PRIVATE)
-            sharedPref.edit().putString("CITY", "乌鲁木齐").apply()
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            0 ->
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "权限申请成功", Toast.LENGTH_LONG).show()
+                }
         }
     }
 
     companion object {
+        lateinit var mResources: Resources
         lateinit var mainActivity: MainActivity
         var context: MainActivity? = null
         var navView: BottomNavigationView? = null

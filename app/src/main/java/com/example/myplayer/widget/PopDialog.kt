@@ -2,6 +2,7 @@ package com.example.myplayer.widget
 
 import android.os.Bundle
 import android.view.KeyEvent
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
@@ -34,7 +35,10 @@ class PopDialog(private val activity: FragmentActivity) :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_pop)
-
+        this.window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                View.SYSTEM_UI_FLAG_FULLSCREEN
+        this.window?.setWindowAnimations(R.style.DialogOutAndInStyle)
         //
         setCanceledOnTouchOutside(true)
 

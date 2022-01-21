@@ -15,19 +15,29 @@
         android:layout_marginTop="10dp"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:id="@+id/menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/category_list"
+            app:layout_constraintTop_toTopOf="@+id/category_list"
+            app:layout_constraintBottom_toBottomOf="@+id/category_list"
+            android:background="@drawable/ic_baseline_format_list_bulleted_24"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/category_list"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clipToPadding="false"
-            android:overScrollMode="never"
             android:scrollbars="none"
+            android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/menu"
             app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/list_cate_item" />
 

@@ -68,8 +68,6 @@ class CircleChildAdapter(context: Context) : RecyclerView.Adapter<CircleChildAda
         val screenWidth = dm.widthPixels // 屏幕宽（像素，如：480px）
         val screenHeight = dm.heightPixels
 
-        android.util.Log.d("zwjSize" ,"width $screenWidth")
-        android.util.Log.d("zwjSize" ,"height $screenHeight")
         val parm = holder.itemView.layoutParams
         if (itemCount == 1) {
             parm.width = (screenWidth - px2dip(1,density)) / 2

@@ -24,7 +24,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:background="#61BDBD"
+        android:background="#5561BDBD"
         android:layout_height="wrap_content">
 
         <ImageView

@@ -15,14 +15,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myplayer.MainApplication
 import com.example.myplayer.databinding.FragmentChatsBinding
-import com.example.myplayer.viewmodels.CityViewModel
 import com.netease.nimlib.sdk.NIMClient
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -42,18 +40,12 @@ import com.netease.nimlib.sdk.msg.MsgServiceObserve
 import com.example.myplayer.adapter.ChatAdapter
 import com.example.myplayer.data.db.ChatDatabase
 import com.example.myplayer.data.db.ChatEntity
-import com.example.myplayer.data.db.InfoDatabase
-import com.example.myplayer.data.db.InfoEntity
-import com.example.myplayer.data.reponse.PersonChat
 import com.example.myplayer.viewmodels.ChatViewModel
 import com.netease.nimlib.sdk.Observer
 import kotlinx.coroutines.launch
 import java.io.File
 import java.lang.Exception
-import com.netease.nimlib.sdk.AbortableFuture
-import com.netease.nimlib.sdk.msg.attachment.FileAttachment
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum
-import com.netease.nimlib.sdk.msg.attachment.ImageAttachment
 import org.json.JSONObject
 
 
@@ -139,11 +131,7 @@ class ChatFrahment : Fragment() {
         val personChat:ChatEntity = ChatEntity(content, true,false,"null")
         assetAdapter.addOneItem(personChat)
         msgList.add(personChat)
-//        android.util.Log.d("zwj", "size ${msgList.size}")
-//        assetAdapter.updateListItem(msgList)
-        android.util.Log.d("zwjscorll" ,"size ${msgList.size}")
         assetLayoutManager.scrollToPosition(msgList.size-1)
-      //  updateDao(msgList)
         assetAdapter.notifyDataSetChanged()
         NIMClient.getService(MsgService::class.java).sendMessage(textMessage, false)
     }
@@ -156,13 +144,6 @@ class ChatFrahment : Fragment() {
         val file = File(pathName)
 
         val message:IMMessage = MessageBuilder.createImageMessage(account, sessionType, file, file.getName())
-//        val message:IMMessage = MessageBuilder.createImageMessage(
-//            account,
-//            sessionType,
-//            file,
-//            file.getName(),
-//            "nos_scene_key"
-//        )
         val personChat:ChatEntity = ChatEntity("null", true,true,url)
         assetAdapter.addOneItem(personChat)
         msgList.add(personChat)
@@ -173,13 +154,10 @@ class ChatFrahment : Fragment() {
         NIMClient.getService(MsgService::class.java).sendMessage(message, false)
             .setCallback(object : RequestCallback<Void?> {
                 override fun onSuccess(param: Void?) {
-                    android.util.Log.d("zwj" ,"sendimgsuccess")
                 }
                 override fun onFailed(code: Int) {
-                    android.util.Log.d("zwj" ,"sendfail $code")
                 }
                 override fun onException(exception: Throwable) {
-                    android.util.Log.d("zwj" ,"sendExp $exception")
                 }
             })
 
@@ -195,14 +173,12 @@ class ChatFrahment : Fragment() {
         if (resultCode == Activity.RESULT_OK) {
             try {
                 var uri: Uri = data?.data!!
-                android.util.Log.d("zwj" ,"uuuri $uri")
                 val data = MainApplication.applicationContext.contentResolver.query(
                     uri, null, null,
                     null, null
                 )
                 if (data != null) {
                     data?.moveToFirst()
-                    android.util.Log.d("zwj" ,"name ${data.getString(2)}")
                 }
                 val filePath:String = getLatestImage(data?.getString(2))
                 sendImgMsg(filePath, uri.toString())
@@ -227,7 +203,6 @@ class ChatFrahment : Fragment() {
 //                        _screentShotInfoData.postValue(data)
 //                        return@forEach
 //                    }
-        android.util.Log.d("zwj" ,"data$data")
         return data
     }
 
@@ -244,7 +219,6 @@ class ChatFrahment : Fragment() {
             if (cursor != null) {
 
                 if(cursor.moveToFirst()){
-                    android.util.Log.d("zwj", "filePath1111zz")
                 }
                 val colunm_index:Int = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
                 val columnIndex: Int = cursor.getColumnIndexOrThrow(pojo[0])
@@ -253,12 +227,10 @@ class ChatFrahment : Fragment() {
                  * 这里加这样一个判断主要是为了第三方的软件选择，比如：使用第三方的文件管理器的话，你选择的文件就不一定是图片了，这样的话，我们判断文件的后缀名
                  * 如果是图片格式的话，那么才可以
                  */
-                android.util.Log.d("zwj", "filePath $path")
                 return path
             } else {
             }
         } catch (e: Exception) {
-            android.util.Log.d("zwj" ,"eeee $e")
         }
         return null
     }
@@ -268,14 +240,11 @@ class ChatFrahment : Fragment() {
         val incomingMessageObserver: Observer<List<IMMessage?>?> =
             object : Observer<List<IMMessage?>?> {
                 override fun onEvent(t: List<IMMessage?>?) {
-                    android.util.Log.d("zwj " ,"receive")
                     if (t != null && t[0]!!.msgType.equals(MsgTypeEnum.text)) {
-                        android.util.Log.d("zwj " ,"receivetext")
                         for (message in t) {
 
                             //val content: String = message?.content.toString()
                             val content: String = message?.content.toString()
-                            android.util.Log.d("zwj " ,"receive $content")
                             val personChat:ChatEntity = ChatEntity(content, false, false, "null")
                             assetAdapter.addOneItem(personChat)
                             msgList.add(personChat)
@@ -283,7 +252,6 @@ class ChatFrahment : Fragment() {
                            // updateDao(msgList)
                         }
                     } else if(t != null && t[0]!!.msgType.equals(MsgTypeEnum.image)) {
-                        android.util.Log.d("zwj " ,"receiveimage")
                         for (message in t) {
                             val json: String? = message?.attachment?.toJson(true)
                             val url: String? = parseEasyJson(json)
@@ -308,37 +276,16 @@ class ChatFrahment : Fragment() {
             return jsonObject.getString("url")
         } catch (e: Exception) {
             e.printStackTrace()
-            android.util.Log.d("zwj eeee","eeee$e")
             return "eeeee"
         }
         return "111"
     }
-
-    fun updateDao(chatList: MutableList<ChatEntity>) {
-        android.util.Log.d("zwjupdataDao" ,"size ${chatList.size}")
-        cityJob = lifecycleScope.launch {
-            val infos: MutableList<ChatEntity> = mutableListOf()
-
-            repeat(chatList.size) { i ->
-                infos.add(ChatEntity(chatList[i].content, chatList[i].isMe,chatList[i].isImage,chatList[i].url))
-            }
-
-            val database = ChatDatabase.getInstance(requireContext())
-
-            database.chatDao().deleteInfos()
-
-            database.chatDao().insertChat(chatList)
-            android.util.Log.d("zwjupdataDao" ,"size ${chatList.size}")
-        }
-    }
-
 
     fun doLogin() {
         val info: LoginInfo = LoginInfo(accid ,token)
         val callback: RequestCallback<LoginInfo?> = object : RequestCallback<LoginInfo?> {
             override fun onSuccess(param: LoginInfo?) {
                 // your code
-                android.util.Log.d("zwj", "login success")
             }
 
             override fun onFailed(code: Int) {

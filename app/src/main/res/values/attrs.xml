@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2019 Sony Mobile Communications Inc.
+  ~ All rights, including trade secret rights, reserved.
+  -->
+<resources>
+
+    <declare-styleable name="ArcRuler">
+        <attr name="arcThumb" format="reference"/>
+        <attr name="arcTick" format="reference"/>
+        <attr name="arcTrackColor" format="color"/>
+        <attr name="arcTrackWidth" format="dimension"/>
+        <attr name="arcTrackOutlineWidth" format="dimension" />
+        <attr name="arcTrackOutlineColor" format="color" />
+        <attr name="arcLabelColor" format="color"/>
+        <attr name="arcLabelSize" format="dimension"/>
+        <attr name="arcTrackRadius" format="dimension|fraction"/>
+        <attr name="arcSweepAngle" format="integer"/>
+        <attr name="arcPaddingAngle" format="integer"/>
+    </declare-styleable>
+
+</resources>

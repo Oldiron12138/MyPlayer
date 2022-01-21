@@ -51,17 +51,19 @@ android {
 
 dependencies {
     implementation 'com.netease.nimlib:basesdk:8.9.0'
-
+    implementation 'com.squareup.picasso:picasso:2.5.2'
     // 聊天室需要
     implementation 'com.netease.nimlib:chatroom:8.9.0'
-
     implementation 'com.netease.nimlib:avchat:8.9.0'
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
     // 通过云信来集成小米等厂商推送需要
-    implementation 'com.netease.nimlib:push:8.9.0'
+    //implementation 'com.netease.nimlib:push:8.9.0'
+    implementation 'com.amap.api:location:5.3.1'
+    //implementation 'jp.wasabeef:glide-transformations:3.3.0'
+
 
     // 超大群需要
-    implementation 'com.netease.nimlib:superteam:8.9.0'
+    //implementation 'com.netease.nimlib:superteam:8.9.0'
 
 
     // 全文检索插件
@@ -90,7 +92,6 @@ dependencies {
     implementation files('libs/httpclient-4.5.5.jar')
     implementation files('libs/aliyun-java-sdk-core-4.5.16.jar')
     implementation files('libs/aliyun-java-sdk-dysmsapi-1.0.0.jar')
-    implementation files('libs/BaiduLBS_Android.jar')
     kapt "androidx.room:room-compiler:2.3.0"
     implementation "androidx.cardview:cardview:1.0.0"
     def camerax_version = '1.1.0-alpha07'

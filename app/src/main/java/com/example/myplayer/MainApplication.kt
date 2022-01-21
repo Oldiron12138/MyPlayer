@@ -28,9 +28,6 @@ class MainApplication: Application() {
         MainApplication.applicationContext = this
     }
 
-
-
-
     private fun loginInfo(): LoginInfo? {
         val loginInfo: LoginInfo = LoginInfo("15940850832","feaf81e470b6281ef0063ac82b66182e")
         return loginInfo
@@ -49,8 +46,6 @@ class MainApplication: Application() {
     fun getAppCacheDir(context: Context): String? {
         var storageRootPath: String? = null
         try {
-            // SD卡应用扩展存储区(APP卸载后，该目录下被清除，用户也可以在设置界面中手动清除)，请根据APP对数据缓存的重要性及生命周期来决定是否采用此缓存目录.
-            // 该存储区在API 19以上不需要写权限，即可配置 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="18"/>
             if (context.externalCacheDir != null) {
                 storageRootPath = context.externalCacheDir!!.canonicalPath
             }
@@ -59,7 +54,6 @@ class MainApplication: Application() {
 
         }
         if (TextUtils.isEmpty(storageRootPath)) {
-            // SD卡应用公共存储区(APP卸载后，该目录不会被清除，下载安装APP后，缓存数据依然可以被加载。SDK默认使用此目录)，该存储区域需要写权限!
             storageRootPath = Environment.getExternalStorageDirectory()
                 .toString() + "/" + MainApplication.context?.getPackageName() //DemoCache.getContext()
         }

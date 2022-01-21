@@ -7,7 +7,6 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.hardware.display.DisplayManager
-import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -15,26 +14,18 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.*
-import android.webkit.MimeTypeMap
 import androidx.annotation.RequiresApi
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.core.net.toFile
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import androidx.navigation.Navigation
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.myplayer.MainActivity
 import com.example.myplayer.databinding.CameraUiContainerBinding
 import com.example.myplayer.databinding.FragmentCaptureBinding
-import com.example.myplayer.databinding.FragmentPlayerBinding
 import com.example.myplayer.util.simulateClick
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.ArrayDeque
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
@@ -52,6 +43,7 @@ import java.util.*
 import androidx.window.WindowManager
 import com.example.myplayer.KEY_EVENT_ACTION
 import com.example.myplayer.KEY_EVENT_EXTRA
+import com.example.myplayer.R
 import com.example.myplayer.util.ANIMATION_FAST_MILLIS
 import com.example.myplayer.util.ANIMATION_SLOW_MILLIS
 import java.util.concurrent.ExecutorService
@@ -65,7 +57,13 @@ class CaptureFragment: Fragment() {
 
     private var cameraUiContainerBinding: CameraUiContainerBinding? = null
 
-    private lateinit var outputDirectory: File
+    protected val outputDirectory: String by lazy {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            "${Environment.DIRECTORY_DCIM}/CameraXDemo/"
+        } else {
+            "${requireContext().getExternalFilesDir(Environment.DIRECTORY_DCIM)}/CameraXDemo/"
+        }
+    }
     private lateinit var broadcastManager: LocalBroadcastManager
     val EXTENSION_WHITELIST = arrayOf("JPG")
     private var displayId: Int = -1
@@ -111,25 +109,12 @@ class CaptureFragment: Fragment() {
         } ?: Unit
     }
 
-    override fun onResume() {
-        super.onResume()
-        // Make sure that all permissions are still present, since the
-        // user could have removed them while the app was in paused state.
-//        if (!PermissionsFragment.hasPermissions(requireContext())) {
-//            Navigation.findNavController(requireActivity(), R.id.fragment_container).navigate(
-//                CameraFragmentDirections.actionCameraToPermissions()
-//            )
-//        }
-    }
-
     override fun onDestroyView() {
         _fragmentCameraBinding = null
         super.onDestroyView()
 
-        // Shut down our background executor
         cameraExecutor.shutdown()
 
-        // Unregister the broadcast receivers and listeners
         broadcastManager.unregisterReceiver(volumeDownReceiver)
         displayManager.unregisterDisplayListener(displayListener)
     }
@@ -139,19 +124,15 @@ class CaptureFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        android.util.Log.d("zwj" ,"oncreateCaptur")
         _fragmentCameraBinding = FragmentCaptureBinding.inflate(inflater, container, false)
         return fragmentCameraBinding.root
     }
 
     private fun setGalleryThumbnail(uri: Uri) {
-        // Run the operations in the view's thread
         cameraUiContainerBinding?.photoViewButton?.let { photoViewButton ->
             photoViewButton.post {
-                // Remove thumbnail padding
                 photoViewButton.setPadding(4)
 
-                // Load thumbnail into circular button using Glide
                 Glide.with(photoViewButton)
                     .load(uri)
                     .apply(RequestOptions.circleCropTransform())
@@ -181,14 +162,10 @@ class CaptureFragment: Fragment() {
         windowManager = WindowManager(view.context)
 
         // Determine the output directory
-        outputDirectory = MainActivity.getOutputDirectory(requireContext())
         val cw = ContextWrapper(requireContext())
         val directory = cw.getExternalFilesDir(Environment.DIRECTORY_DCIM)
         val file = File(directory?.absolutePath)
 
-        outputDirectory = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getCanonicalPath()
-        )
         // Wait for the views to be properly laid out
         fragmentCameraBinding.viewFinder.post {
 
@@ -343,25 +320,25 @@ class CaptureFragment: Fragment() {
     @RequiresApi(Build.VERSION_CODES.R)
     private fun updateCameraUi() {
 
-        // Remove previous UI if any
+//        // Remove previous UI if any
 //        cameraUiContainerBinding?.root?.let {
 //            _fragmentCameraBinding?.root.removeView(it)
 //        }
-//
-//        cameraUiContainerBinding = CameraUiContainerBinding.inflate(
-//            LayoutInflater.from(requireContext()),
-//            _fragmentCameraBinding?.root as ViewGroup?,
-//            true
-//        )
+
+        cameraUiContainerBinding = CameraUiContainerBinding.inflate(
+            LayoutInflater.from(requireContext()),
+            _fragmentCameraBinding?.root as ViewGroup?,
+            true
+        )
 
         // In the background, load latest photo taken (if any) for gallery thumbnail
-        lifecycleScope.launch(Dispatchers.IO) {
-            outputDirectory.listFiles { file ->
-                EXTENSION_WHITELIST.contains(file.extension.toUpperCase(Locale.ROOT))
-            }?.maxOrNull()?.let {
-                setGalleryThumbnail(Uri.fromFile(it))
-            }
-        }
+//        lifecycleScope.launch(Dispatchers.IO) {
+//            outputDirectory.listFiles { file ->
+//                EXTENSION_WHITELIST.contains(file.extension.toUpperCase(Locale.ROOT))
+//            }?.maxOrNull()?.let {
+//                setGalleryThumbnail(Uri.fromFile(it))
+//            }
+//        }
 
         // Listener for button used to capture photo
         cameraUiContainerBinding?.cameraCaptureButton?.setOnClickListener {
@@ -370,7 +347,7 @@ class CaptureFragment: Fragment() {
             imageCapture?.let { imageCapture ->
 
                 // Create output file to hold the image
-                val photoFile = createFile(outputDirectory, FILENAME, PHOTO_EXTENSION)
+//                val photoFile = createFile(outputDirectory, FILENAME, PHOTO_EXTENSION)
 
                 // Setup image capture metadata
                 val metadata = Metadata().apply {
@@ -380,9 +357,25 @@ class CaptureFragment: Fragment() {
                 }
 
                 // Create output options object which contains file + metadata
-                val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile)
-                    .setMetadata(metadata)
-                    .build()
+                val outputOptions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    val contentValues = ContentValues().apply {
+                        put(MediaStore.MediaColumns.DISPLAY_NAME, System.currentTimeMillis())
+                        put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+                        put(MediaStore.MediaColumns.RELATIVE_PATH, outputDirectory)
+                    }
+
+                    val contentResolver = requireContext().contentResolver
+
+                    // Create the output uri
+                    val contentUri = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+
+                    ImageCapture.OutputFileOptions.Builder(contentResolver, contentUri, contentValues)
+                } else {
+                    File(outputDirectory).mkdirs()
+                    val file = File(outputDirectory, "${System.currentTimeMillis()}.jpg")
+
+                    ImageCapture.OutputFileOptions.Builder(file)
+                }.setMetadata(metadata).build()
 
 //                imageCapture.takePicture(cameraExecutor, object :
 //                    ImageCapture.OnImageCapturedCallback() {
@@ -400,36 +393,21 @@ class CaptureFragment: Fragment() {
                             Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
                         }
 
-                        override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                            val savedUri = output.savedUri ?: Uri.fromFile(photoFile)
-                            Log.d(TAG, "Photo capture succeeded: $savedUri")
+                        override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                            val fragmentManager = parentFragmentManager
 
-                            // We can only change the foreground Drawable using API level 23+ API
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                // Update the gallery thumbnail with latest picture taken
-                                setGalleryThumbnail(savedUri)
-                            }
+                            outputFileResults.savedUri
+                                ?.let { uri ->
+                                    setGalleryThumbnail(uri)
+                                    val fragment = SendFirendCircle(uri)
+                                    if (fragment != null) {
+                                        parentFragmentManager.beginTransaction()
+                                            .replace(R.id.child_container, fragment, SendFirendCircle.SEND_TAG)
+                                            .commit()
+                                    }
 
-                            // Implicit broadcasts will be ignored for devices running API level >= 24
-                            // so if you only target API level 24+ you can remove this statement
-                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                                requireActivity().sendBroadcast(
-                                    Intent(android.hardware.Camera.ACTION_NEW_PICTURE, savedUri)
-                                )
-                            }
-
-                            // If the folder selected is an external media directory, this is
-                            // unnecessary but otherwise other apps will not be able to access our
-                            // images unless we scan them using [MediaScannerConnection]
-                            val mimeType = MimeTypeMap.getSingleton()
-                                .getMimeTypeFromExtension(savedUri.toFile().extension)
-                            MediaScannerConnection.scanFile(
-                                context,
-                                arrayOf(savedUri.toFile().absolutePath),
-                                arrayOf(mimeType)
-                            ) { _, uri ->
-                                Log.d(TAG, "Image capture scanned into media store: $uri")
-                            }
+                                }
+                            // ?: setLastPictureThumbnail()
                         }
                     })
 

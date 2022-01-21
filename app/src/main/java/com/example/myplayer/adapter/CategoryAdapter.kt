@@ -48,7 +48,7 @@ class CategoryAdapter(
     }
 
     interface OnItemClickListener {
-        fun onItemClick(asset: MoviesEntity)
+        fun onItemClick(asset: String)
     }
 
     fun updateListItem() {
@@ -83,6 +83,7 @@ class CategoryAdapter(
             binding.apply {
                 city = item
                 executePendingBindings()
+                binding.setClickListener { itemClickListener?.onItemClick(item) }
             }
         }
     }

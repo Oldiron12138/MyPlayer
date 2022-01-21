@@ -11,3 +11,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "MyPlayer"
 include ':app'
+
