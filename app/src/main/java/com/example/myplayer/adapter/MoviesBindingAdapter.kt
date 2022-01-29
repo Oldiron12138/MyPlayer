@@ -160,10 +160,10 @@ fun bindUntilDays(view: TextView, time: Long?) {
         if (time < current_time) {
             view.text = "0小时"
         } else {
-            if ((time - current_time)/60/60 > 1 ) {
-                view.text = ((time - current_time)/60/60+1).toString()+"小时"
-            } else {
+            if ((time - current_time)/60/60 < 1 ) {
                 view.text = "<"+((time - current_time)/60/60+1).toString()+"小时"
+            } else {
+                view.text = ((time - current_time)/60/60).toString()+"小时"
             }
 
         }
