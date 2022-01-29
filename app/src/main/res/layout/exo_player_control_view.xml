@@ -28,9 +28,11 @@
             style="@style/ExoMediaButton"/>
 
         <ImageButton android:id="@id/exo_play"
+            android:visibility="gone"
             style="@style/ExoMediaButton.Play"/>
 
         <ImageButton android:id="@id/exo_pause"
+            android:visibility="gone"
             style="@style/ExoMediaButton.Pause"/>
 
         <ImageButton android:id="@id/exo_ffwd"

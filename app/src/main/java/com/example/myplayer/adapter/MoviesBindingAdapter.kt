@@ -151,3 +151,21 @@ fun isPlayButtonShow(view: ImageView, isP: Boolean) {
         }
     }
 }
+
+@BindingAdapter(value = ["bindUntilDays"])
+fun bindUntilDays(view: TextView, time: Long?) {
+    time?.let {
+        var current_time: Long = System.currentTimeMillis() / 1000
+        android.util.Log.d("zwj" ,"time$current_time")
+        if (time < current_time) {
+            view.text = "0小时"
+        } else {
+            if ((time - current_time)/60/60 > 1 ) {
+                view.text = ((time - current_time)/60/60+1).toString()+"小时"
+            } else {
+                view.text = "<"+((time - current_time)/60/60+1).toString()+"小时"
+            }
+
+        }
+    }
+}

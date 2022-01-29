@@ -61,6 +61,15 @@ interface MyPlayerService {
         @Query("coin") coin: Int
     ): LoginResponse
 
+    @GET("QQQ/servlet/UploadPhoto")
+    suspend fun buyCard(
+        @Query("id") id: Int,
+        @Query("name") name: String,
+        @Query("card1") card1: Long,
+        @Query("card2") card2: Long
+    ): LoginResponse
+
+
     @POST("walletobjects/v1/eventTicketClass")
     suspend fun device(): String
 

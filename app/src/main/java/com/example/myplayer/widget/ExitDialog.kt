@@ -30,7 +30,9 @@ class ExitDialog(private val activity: FragmentActivity) :
     private var content: String? = null
     private var listener: OnDialogButtonClickListener? = null
     private var listener2: OnDialogButtonClickListenerForInfo? = null
+    private var listener3: OnDialogButtonClickListenerForWeb? = null
     private var asset:MoviesEntity? = null
+    private var index:Int? = 0
     private var info:InfoEntity? = null
 
     constructor(activity: FragmentActivity, string: String, mListener: OnDialogButtonClickListener, mAsset: MoviesEntity) : this(activity) {
@@ -39,10 +41,19 @@ class ExitDialog(private val activity: FragmentActivity) :
         asset = mAsset
     }
 
+    constructor(activity: FragmentActivity, string: String, mListener: OnDialogButtonClickListenerForWeb,mIndex: Int) : this(activity) {
+        content = string
+        this.listener3 = mListener
+        index = mIndex
+    }
+
     constructor(activity: FragmentActivity, string: String, mListener: OnDialogButtonClickListenerForInfo, mInfo: InfoEntity) : this(activity) {
         content = string
         this.listener2 = mListener
         info = mInfo
+    }
+    interface OnDialogButtonClickListenerForWeb {
+        fun onDialogButtonClick(isPositive: Boolean, index:Int)
     }
 
     interface OnDialogButtonClickListener {
@@ -96,33 +107,38 @@ class ExitDialog(private val activity: FragmentActivity) :
         centerText = findViewById(R.id.main_content)!!
         cancelText = findViewById(R.id.exit_dialog_cancel)!!
         exitText = findViewById(R.id.exit_dialog_exit)!!
-        if (listener != null || listener2 != null) {
+        if (listener != null || listener2 != null || listener3!=null) {
             centerText.text = content
             cancelText.setOnClickListener{ it ->
-                if (asset == null) {
+                if (asset == null && info!=null) {
                     when (it.id) {
                         R.id.exit_dialog_cancel ->
                             info?.let { listener2!!.onDialogButtonClickForInfo(true, it) }
                     }
-                } else {
+                } else if(asset != null && info==null){
                     when (it.id) {
                         R.id.exit_dialog_cancel ->
                             asset?.let { listener!!.onDialogButtonClick(true, it) }
                     }
+                } else {
+                    android.util.Log.d("zwj " ,"adddaddd3")
+                    index?.let { it1 -> listener3!!.onDialogButtonClick(true, it1) }
                 }
                 dismiss()
             }
             exitText.setOnClickListener{ it ->
-                if (asset == null) {
+                if (asset == null && info!=null) {
                     when (it.id) {
                         R.id.exit_dialog_exit ->
                             info?.let { listener2!!.onDialogButtonClickForInfo(false, it) }
                     }
-                } else {
+                } else if(asset != null && info==null){
                     when (it.id) {
                         R.id.exit_dialog_exit ->
                             asset?.let { listener!!.onDialogButtonClick(false, it) }
                     }
+                } else {
+                     dismiss()
                 }
                 dismiss()
             }

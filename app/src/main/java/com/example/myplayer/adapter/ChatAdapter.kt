@@ -22,11 +22,7 @@ class ChatAdapter(private val context: Context) :
 
     private var assets: MutableList<ChatEntity> = mutableListOf()
 
-    /**
-     * 是否是自己发送的消息
-     *
-     * @author cyf
-     */
+
     interface IMsgViewType {
         companion object {
             const val IMVT_COM_MSG = 0 // 收到对方的消息

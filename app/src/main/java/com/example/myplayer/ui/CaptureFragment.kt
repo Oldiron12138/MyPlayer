@@ -262,6 +262,7 @@ class CaptureFragment: Fragment() {
             .setTargetRotation(rotation)
             .build()
 
+        android.util.Log.d("zwj " ,"rotation $rotation" )
         // ImageAnalysis
         imageAnalyzer = ImageAnalysis.Builder()
             // We request aspect ratio but no resolution

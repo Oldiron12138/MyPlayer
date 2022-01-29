@@ -27,6 +27,9 @@
         <action
             android:id="@+id/action_movies_fragment_to_uploadmovie_fragment"
             app:destination="@id/uploadmovie_fragment" />
+        <action
+            android:id="@+id/action_movies_fragment_to_other_fragment"
+            app:destination="@id/other_fragment" />
     </fragment>
 
     <fragment
@@ -153,5 +156,22 @@
             android:id="@+id/action_city_fragment_to_navigation_dashboard"
             app:destination="@id/navigation_dashboard" />
     </fragment>
+
+    <fragment
+        android:id="@+id/other_fragment"
+        android:name="com.example.myplayer.ui.OtherWebFragment"
+        android:label="其他"
+        tools:layout="@layout/fragment_other">
+        <action
+            android:id="@+id/action_other_fragment_to_web_fragment"
+            app:destination="@id/web_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/web_fragment"
+        android:name="com.example.myplayer.ui.WebFragment"
+        android:label="其他"
+        tools:layout="@layout/fragment_web"/>
+
 
 </navigation>

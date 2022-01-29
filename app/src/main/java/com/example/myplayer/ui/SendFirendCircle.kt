@@ -38,6 +38,7 @@ class SendFirendCircle(uri: Uri) : Fragment() {
         try {
             val bitmap = BitmapFactory.decodeStream(uri?.let { cr.openInputStream(it) })
             selectBinding.photo.setImageBitmap(bitmap)
+            selectBinding.photo.rotation = 90f
         } catch (e: FileNotFoundException) {
             // Log.e("Exception", e.getMessage(), e)
         }

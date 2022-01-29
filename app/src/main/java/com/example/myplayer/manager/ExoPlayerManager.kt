@@ -2,6 +2,7 @@ package com.example.myplayer.manager
 
 import android.content.Context
 import android.net.Uri
+import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.navigation.findNavController
@@ -59,6 +60,7 @@ class ExoPlayerManager {
 
         //
         playerView.player = exoplayer
+
         progressBar = playerView.findViewById(R.id.exo_progress)
         exoSkipBackBut = playerView.findViewById(R.id.exo_pause)
         exoResumeBut = playerView.findViewById(R.id.exo_play)
@@ -82,12 +84,18 @@ class ExoPlayerManager {
         with(exoplayer) {
             setMediaItem(mediaItem)
             prepare()
+            play()
+            exoSkipBackBut?.visibility = View.VISIBLE
         }
         exoSkipBackBut?.setOnClickListener {
             setPlayAndPause(false)
+            exoSkipBackBut?.visibility = View.GONE
+            exoResumeBut?.visibility = View.VISIBLE
         }
         exoResumeBut?.setOnClickListener {
             setPlayAndPause(true)
+            exoResumeBut?.visibility = View.GONE
+            exoSkipBackBut?.visibility = View.VISIBLE
         }
         backButton?.setOnClickListener {
             listener?.onBackKeyPress()

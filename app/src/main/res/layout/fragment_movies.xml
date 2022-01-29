@@ -37,6 +37,7 @@
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="1"
+            android:visibility="invisible"
             app:layout_constraintStart_toEndOf="@id/menu"
             app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/list_cate_item" />
@@ -65,12 +66,21 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:gravity="center"
             android:orientation="horizontal">
+
             <Button
                 android:id="@+id/release_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="发布"
-                android:textSize="20dp"/>
+                android:textSize="20dp" />
+
+            <Button
+                android:id="@+id/other_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="其他资源"
+                android:layout_marginLeft="30dp"
+                android:textSize="20dp" />
 
         </LinearLayout>
 

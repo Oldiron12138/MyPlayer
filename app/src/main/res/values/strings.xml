@@ -15,4 +15,5 @@
     <string name="delete_button_alt">Delete</string>
     <string name="delete_dialog">Delete current photo?</string>
     <string name="delete_title">Confirm</string>
+    <string name="info_desc">我们为宁收集整理了国内外各大艾薇平台地址，无需注册充值其年卡或会员，只需要花费一金币即可获取相应平台一小时的限时会员体验资格</string>
 </resources>

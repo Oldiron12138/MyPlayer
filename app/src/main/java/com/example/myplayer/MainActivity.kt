@@ -72,10 +72,10 @@ class MainActivity : AppCompatActivity() {
         )
         this.supportActionBar?.hide()
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            if (destination.id == R.id.player_fragment || destination.id == R.id.info_detail) {
-                runOnUiThread { navView!!.setVisibility(View.GONE) }
+            if (destination.id == R.id.player_fragment || destination.id == R.id.info_detail || destination.id == R.id.web_fragment) {
+                runOnUiThread { navView!!.visibility = View.GONE }
             } else {
-                runOnUiThread { navView!!.setVisibility(View.VISIBLE) }
+                runOnUiThread { navView!!.visibility = View.VISIBLE }
             }
         }
         setupActionBarWithNavController(navController, appBarConfiguration)

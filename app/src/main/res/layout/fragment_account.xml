@@ -161,5 +161,7 @@
                 android:onClick="@{clickListenerLogout}"
                 android:textSize="20dp" />
         </LinearLayout>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -105,6 +105,10 @@ class MoivesFragment: Fragment(), ExitDialog.OnDialogButtonClickListener,
         moviesBinding.releaseBtn.setOnClickListener { it ->
             it.findNavController().navigate(R.id.action_movies_fragment_to_uploadmovie_fragment)
         }
+
+        moviesBinding.otherButton.setOnClickListener{
+            it.findNavController().navigate(R.id.action_movies_fragment_to_other_fragment)
+        }
         assetAdapter = MoviesAdapter(requireContext())
         assetLayoutManager = GridLayoutManager(requireContext(), 2)
         assetLayoutManager.orientation = LinearLayoutManager.VERTICAL

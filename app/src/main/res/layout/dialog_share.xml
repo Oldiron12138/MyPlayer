@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@+id/line1"
-            android:text="从相册中选择视频"
+            android:text="拍照"
             android:gravity="center" />
 
         <View
@@ -68,7 +68,7 @@
             android:paddingBottom="5dp"
             app:layout_constraintBottom_toTopOf="@+id/line2"
             android:gravity="center"
-            android:text="从相册中选择照片" />
+            android:text="从相册中选择照片(TODO)" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
