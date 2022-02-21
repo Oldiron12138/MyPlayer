@@ -9,5 +9,5 @@ data class InfoResponse(
     @field:SerializedName("street") val street: String,
     @field:SerializedName("phone") val phone: String,
     @field:SerializedName("price") val price: String,
-    @field:SerializedName("url") val url: String
+    @field:SerializedName("url") val url: List<String>
 )

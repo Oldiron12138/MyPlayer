@@ -1,10 +1,13 @@
 package com.example.myplayer.ui
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.RotateAnimation
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
@@ -17,11 +20,16 @@ import com.example.myplayer.viewmodels.MoviesViewModel
 import com.example.myplayer.viewmodels.WebViewModel
 import com.example.myplayer.widget.DetailDialog
 import com.example.myplayer.widget.ExitDialog
+import com.example.myplayer.widget.LoadingPic
 import com.example.myplayer.widget.PopDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.util.*
+import android.view.animation.LinearInterpolator
+
+
+
 @AndroidEntryPoint
 class OtherWebFragment : Fragment(),ExitDialog.OnDialogButtonClickListenerForWeb {
 
@@ -62,10 +70,20 @@ class OtherWebFragment : Fragment(),ExitDialog.OnDialogButtonClickListenerForWeb
     }
 
     private fun subscriedUi() {
+        val rotate: RotateAnimation = RotateAnimation(0f,360f,
+            Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
+        rotate.duration = 1000
+        val lin = LinearInterpolator()
+        rotate.interpolator = lin
+        rotate.repeatCount = -1
+        binding.infoDesc.startAnimation(rotate)
         binding.back.setOnClickListener{
             this.findNavController().popBackStack()
         }
         binding.infoDesc.setOnClickListener{
+            context?.resources?.let { it1 -> popDialog(requireActivity(), it1.getString(R.string.info_desc)) }
+        }
+        binding.infoDesc2.setOnClickListener{
             context?.resources?.let { it1 -> popDialog(requireActivity(), it1.getString(R.string.info_desc)) }
         }
         mTimer.schedule(object :TimerTask() {

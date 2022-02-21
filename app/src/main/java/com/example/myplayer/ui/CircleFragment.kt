@@ -28,6 +28,7 @@ import com.example.myplayer.widget.PopDialog
 import com.example.myplayer.widget.ShareDialog
 import android.view.WindowManager
 import com.example.myplayer.data.reponse.CirclePhotoResponse
+import java.text.FieldPosition
 
 
 @AndroidEntryPoint
@@ -111,7 +112,7 @@ class CircleFragment: Fragment(), ShareDialog.OnVideoClick, ShareDialog.OnPhotoC
                         override fun onItemClick(photo:MutableList<CirclePhotoResponse>, position:Int) {
                             circleBinding.childContainer.visibility = View.VISIBLE
                             val fragment = ScanFragment(object: ScanFragment.OnFragmentClick{
-                                override fun fragmentClick() {
+                                override fun fragmentClick(position: Int) {
                                     clearChildFragmentByTag(ScanFragment.SCAN_TAG)
                                     circleBinding.childContainer.visibility = View.GONE
                                 }

@@ -13,21 +13,49 @@
     </data>
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
 
-        <ImageView
-            android:drawable="@mipmap/camera1"
-            android:layout_marginBottom="5dp"
-            android:id="@+id/imageView2"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="30dp"
+        android:layout_height="match_parent">
+        <ImageButton
+            android:id="@+id/player_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/black_back"/>
+        <FrameLayout
             android:layout_width="300dp"
+            android:id="@+id/imageView3"
             android:layout_height="200dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@+id/imageView4"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:background="@mipmap/camera1"/>
+
+            <ImageView
+                android:layout_marginBottom="5dp"
+                android:id="@+id/imageView2"
+                android:layout_width="300dp"
+                android:layout_height="200dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@tools:sample/avatars" />
+
+        </FrameLayout>
+
 
         <View
             android:id="@+id/line"
@@ -36,7 +64,7 @@
             android:layout_marginTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imageView2"
+            app:layout_constraintTop_toBottomOf="@id/imageView3"
             android:background="#FF909090" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -63,6 +91,7 @@
                 android:id="@+id/content_title"
                 android:layout_marginLeft="20dp"
                 android:textSize="15dp"
+                android:singleLine="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="请添加您的标题"
@@ -83,6 +112,7 @@
                 android:textSize="15dp"
                 android:id="@+id/content_city"
                 android:layout_marginLeft="20dp"
+                android:singleLine="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="请输入城市，如：北京"
@@ -107,6 +137,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="请在此处输入详细地址"
+                android:singleLine="true"
                 app:layout_constraintTop_toTopOf="@id/head_street"
                 app:layout_constraintStart_toEndOf="@id/head_street"
                 app:layout_constraintBottom_toBottomOf="@+id/head_street" />
@@ -128,6 +159,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="如：500-1000"
+                android:singleLine="true"
                 app:layout_constraintTop_toTopOf="@id/head_price"
                 app:layout_constraintStart_toEndOf="@id/head_price"
                 app:layout_constraintBottom_toBottomOf="@+id/head_price" />
@@ -148,6 +180,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 app:layout_constraintTop_toTopOf="@id/head_phone_deatil"
                 app:layout_constraintStart_toEndOf="@id/head_phone_deatil"
                 app:layout_constraintBottom_toBottomOf="@+id/head_phone_deatil" />
@@ -169,18 +202,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="@id/head_desc"
-                app:layout_constraintStart_toEndOf="@id/head_desc"
-                app:layout_constraintBottom_toBottomOf="@+id/head_desc" />
+                app:layout_constraintStart_toEndOf="@id/head_desc" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
         <LinearLayout
             android:id="@+id/release"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="60dp"
             android:paddingBottom="60dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/head"
             android:gravity="center"
             android:orientation="horizontal">
             <Button
@@ -193,4 +227,6 @@
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 </layout>

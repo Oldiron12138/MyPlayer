@@ -23,8 +23,10 @@ interface MyPlayerService {
 
     /**
      */
-    @GET("test/test4.json")
-    suspend fun infoDetail(): List<InfoResponse>
+    @GET("{test}/test4.json")
+    suspend fun infoDetail(
+        @Path("test") test:String
+    ): List<InfoResponse>
 
     @GET("test/city.json")
     suspend fun cityList(): List<CityResponse>
@@ -75,7 +77,7 @@ interface MyPlayerService {
 
     @Multipart
     @POST("QQQ/servlet/UploadPhotoServlet")
-    suspend fun uploadPhoto(@Part file: MultipartBody.Part): UploadResult
+    suspend fun uploadPhoto(@Part file: List<MultipartBody.Part>): UploadResult
 
     @POST("QQQ/servlet/UploadJson")
     suspend fun uploadJson(@Body body: RequestBody): UploadResult

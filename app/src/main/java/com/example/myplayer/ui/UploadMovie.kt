@@ -32,24 +32,42 @@ import com.example.myplayer.util.FileUtils
 import java.io.*
 import android.content.ContentResolver
 import android.content.pm.PackageManager
+import android.media.ThumbnailUtils
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.example.myplayer.MainApplication
 import com.example.myplayer.R
+import com.example.myplayer.viewmodels.ReleaseViewModel
 import com.example.myplayer.viewmodels.UploadViewModel
+import com.example.myplayer.widget.LoadingDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.net.Socket
+import android.R.attr.bitmap
+
+import android.graphics.drawable.BitmapDrawable
+
+import android.graphics.drawable.Drawable
+
+
+
 
 @AndroidEntryPoint
 class UploadMovie: Fragment() {
     private lateinit var uploadMovie: FragmentUploadmovieBinding
 
+    var filePath: String? = null
+    var thumbNail: Bitmap? = null
     private var uploadJob: Job? = null
-
+    private var loadingDialog: LoadingDialog? = null
     private val uploadViewModel: UploadViewModel by viewModels()
     var permissions = Manifest.permission.READ_EXTERNAL_STORAGE
     var permissionArray = arrayOf(permissions)
@@ -72,8 +90,18 @@ class UploadMovie: Fragment() {
     }
 
     private fun subscribeUi() {
+        uploadMovie.shangchuan.visibility = View.GONE
         uploadMovie.imageView2.setOnClickListener {
             openAlbum()
+        }
+        uploadMovie.shangchuan.setOnClickListener{
+            loadingDialog = loadDialog(requireActivity())
+            val file: File = File(filePath)
+            var files:MutableList<File> = mutableListOf()
+            files.add(file)
+            val thumbNailPath: String = ReleaseFragment.saveBitMapToFile(requireContext(),"thumbnail",thumbNail,true)
+            files.add(File(thumbNailPath))
+            uploadSinglePicture(files)
         }
     }
 
@@ -94,12 +122,22 @@ class UploadMovie: Fragment() {
                     if (data != null) {
                         data?.moveToFirst()
                     }
-                    val filePath:String = uploadViewModel.getLatestImage(data?.getString(2))
-                    uploadFile(filePath)
+                    uploadMovie.shangchuan.visibility = View.VISIBLE
+                    filePath = uploadViewModel.getLatestImage(data?.getString(2))
+                    thumbNail = getThumbnail(filePath!!)
+                    uploadMovie.imageView2.setImageBitmap(thumbNail!!)
+                    //uploadFile(filePath!!)
                 } catch (e: Exception) {
                 } catch (e: OutOfMemoryError) {
                 }
             }
+    }
+
+    fun getThumbnail(filePath: String):Bitmap? {
+        val file: File = File(filePath)
+        val bitmap = ThumbnailUtils.createVideoThumbnail(
+            file.getAbsolutePath(), MediaStore.Images.Thumbnails.MICRO_KIND)//创建一个视频缩略图
+        return ThumbnailUtils.extractThumbnail(bitmap, 300, 400,ThumbnailUtils.OPTIONS_RECYCLE_INPUT)
     }
 
     private fun uploadFile(filePath: String) {
@@ -110,6 +148,39 @@ class UploadMovie: Fragment() {
 
         }
     }
+
+    fun loadDialog(activity: FragmentActivity): LoadingDialog {
+        val loadDialog = LoadingDialog(activity)
+        loadDialog.show()
+        return loadDialog
+    }
+
+
+    fun uploadSinglePicture(files: List<File>) {
+        val builder = MultipartBody.Builder().setType(MultipartBody.FORM) //表单类型
+
+        for (file in files) {
+            val requestFile: RequestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+            requestFile.contentType()
+            builder.addFormDataPart("file", file.name, requestFile)
+        }
+        val part: List<MultipartBody.Part> = builder.build().parts
+        uploadJob?.cancel()
+        uploadJob = lifecycleScope.launch {
+            uploadViewModel.upload(part)
+                ?.observe(viewLifecycleOwner) {
+                    if (it.resultData != null) {
+                        loadingDialog!!.dismissDialog()
+                        Toast.makeText(requireContext(), "上传成功", Toast.LENGTH_LONG).show()
+                    } else {
+                        loadingDialog!!.dismissDialog()
+                        Toast.makeText(requireContext(), "上传失败", Toast.LENGTH_LONG).show()
+                    }
+                }
+
+        }
+    }
+
 
 //    @SuppressLint("NewApi")
 //    private fun getDataColumn(

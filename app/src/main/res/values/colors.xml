@@ -14,5 +14,8 @@
     <color name="icActive">#FFFFFFFF</color>
     <color name="icFocused">#DDFFFFFF</color>
     <color name="icPressed">#AAFFFFFF</color>
+    <color name="gloden">#B8860B</color>
+    <color name="gloden1">#5FB8860B</color>
+    <color name="gloden2">#3FB8860B</color>
 
 </resources>

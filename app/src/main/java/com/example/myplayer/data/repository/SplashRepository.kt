@@ -49,7 +49,7 @@ class SplashRepository @Inject constructor(
         val seriesDetailResponse = MutableLiveData<List<InfoResponse>>()
         return try {
             val response =
-                androidTvMdsService.infoDetail()
+                androidTvMdsService.infoDetail("test")
 
             val infos: MutableList<InfoEntity> = mutableListOf()
 

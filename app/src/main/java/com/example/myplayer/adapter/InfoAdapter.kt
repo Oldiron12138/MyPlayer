@@ -1,6 +1,7 @@
 package com.example.myplayer.adapter
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,9 +23,17 @@ class InfoAdapter(
 
     //
     private val assets: MutableList<InfoEntity> = mutableListOf()
-
+    private lateinit var itemClickListener : OnItemClickListener
     private var current: String = "乌鲁木齐"
     //
+    interface OnItemClickListener {
+        fun onItemClick(position: Int,current: String)
+    }
+    fun setItemClickListener(listener: OnItemClickListener) {
+        itemClickListener = listener
+        notifyDataSetChanged()
+    }
+
     fun updateListItem(datas: List<InfoEntity>, current: String) {
         val diffCallback = InfoDiffCallback(assets, datas)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
@@ -60,14 +69,12 @@ class InfoAdapter(
         }
 
         fun bind(item: InfoEntity, position: Int, current: String) {
-
             binding.apply {
                 info = item
                 executePendingBindings()
                 binding.setClickListener {
                     binding.info?.let {
-                            asset ->
-                        showDetailPage(it, asset, position, current)
+                        itemClickListener.onItemClick(position,current)
                     }
                 }
             }

@@ -90,16 +90,15 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/info_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="720dp"
             android:clipToPadding="false"
-            android:overScrollMode="never"
             android:scrollbars="none"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/localtion"
-            tools:itemCount="1"
             tools:listitem="@layout/list_item_info" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

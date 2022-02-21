@@ -15,7 +15,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
+import com.example.myplayer.MainActivity
 import com.example.myplayer.R
+import com.example.myplayer.adapter.ViewPagerAdapter
 import com.example.myplayer.data.db.InfoDatabase
 import com.example.myplayer.data.db.InfoEntity
 import com.example.myplayer.data.db.MoviesDatabase
@@ -33,6 +36,7 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.text.FieldPosition
 import kotlin.properties.Delegates
 
 @AndroidEntryPoint
@@ -47,6 +51,7 @@ class DetailFragment : Fragment(), ExitDialog.OnDialogButtonClickListenerForInfo
     var mPwd: String = ""
     var mCoin: Int = 0
     var mId: Int = 0
+    var position: Int = 0
     lateinit var info : InfoEntity
     private val detailViewModel: DetailViewModel by viewModels()
 
@@ -72,13 +77,27 @@ class DetailFragment : Fragment(), ExitDialog.OnDialogButtonClickListenerForInfo
         } else {
             index = 0
         }
-        subscribeUi()
         getInfoDetailData()
-    }
+        subscribeUi()
+        MainActivity.showNavigationBar()
 
+    }
+    public fun clearChildFragmentByTag(tag: String) {
+        val fragmentManager = childFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        val fragment = fragmentManager.findFragmentByTag(tag)
+        fragment?.let {
+            fragmentTransaction.remove(fragment)
+            fragmentTransaction.commitAllowingStateLoss()
+        }
+    }
     private fun subscribeUi() {
+
+
+
         detailBinding.playerBack.setOnClickListener{
-            this.findNavController().navigate(R.id.action_info_detail_to_navigation_dashboard)
+            //this.findNavController().navigate(R.id.action_info_detail_to_navigation_dashboard)
+            InfoFragment.clearChildFragmentByTag(DETAIL_TAG)
         }
         val animation: Animation = AnimationUtils.loadAnimation(requireContext(), R.anim.anim_scale_in)
         detailBinding.anim.startAnimation(animation)
@@ -104,6 +123,34 @@ class DetailFragment : Fragment(), ExitDialog.OnDialogButtonClickListenerForInfo
                     info = newInfoList.get(index)
                     detailBinding.setClickListener {
                         unLockDialog(requireActivity(),info)
+                    }
+                    val viewPager2: ViewPager2 = detailBinding.imageView
+                    val adapter = ViewPagerAdapter(info.url,requireContext(),object :ScanFragment.OnFragmentClick{
+                        override fun fragmentClick(position: Int) {
+                            detailBinding.childContainer.visibility = View.VISIBLE
+                            val fragment = ScanFragment(object: ScanFragment.OnFragmentClick{
+                                override fun fragmentClick(position: Int) {
+                                    clearChildFragmentByTag(ScanFragment.SCAN_TAG)
+                                    detailBinding.childContainer.visibility = View.GONE
+                                }
+                            })
+                            val bundle = Bundle()
+                            var photoString  = arrayListOf<String>()
+                            for (it in info.url) {
+                                photoString.add(it)
+                            }
+                            bundle.putStringArrayList("url", photoString)
+                            bundle.putInt("position", position)
+                            fragment.arguments = bundle
+                            childFragmentManager.beginTransaction()
+                                .add(R.id.child_container, fragment, ScanFragment.SCAN_TAG)
+                                .commit()
+                        }
+                    })
+                    viewPager2.adapter = adapter
+                    viewPager2.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+                    if (position != null) {
+                        viewPager2.setCurrentItem(position,false)
                     }
                 }
         }
@@ -143,6 +190,10 @@ class DetailFragment : Fragment(), ExitDialog.OnDialogButtonClickListenerForInfo
     fun unLockDialog(activity: FragmentActivity, info: InfoEntity) {
         val exitDialog = ExitDialog(activity, "消耗1金币购买此内容？", this, info)
         exitDialog.show()
+    }
+
+    interface OnBackClick {
+        fun fragmentClick(position: Int)
     }
 
     companion object {

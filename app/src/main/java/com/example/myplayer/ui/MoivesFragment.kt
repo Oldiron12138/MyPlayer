@@ -76,7 +76,7 @@ class MoivesFragment: Fragment(), ExitDialog.OnDialogButtonClickListener,
         mPwd = sharedPref.getString("PASSWORD","").toString()
         mCoin = sharedPref.getInt("COIN",0)
         mId = sharedPref.getInt("ID",0)
-        initGesture()
+        //initGesture()
         return moviesBinding.root
     }
 
@@ -134,8 +134,15 @@ class MoivesFragment: Fragment(), ExitDialog.OnDialogButtonClickListener,
             }
         })
         moviesBinding.menu.setOnClickListener{
-            if (moviesBinding.categoryList.visibility == View.VISIBLE)
-            FileUtils.collapse(moviesBinding.categoryList) else FileUtils.expand(moviesBinding.categoryList)
+            android.util.Log.d("zwj" ,"zwjclick")
+            if (moviesBinding.categoryList.visibility == View.VISIBLE){
+                moviesBinding.categoryList.visibility = View.INVISIBLE
+                android.util.Log.d("zwj" ,"zwjclick111")
+            } else {
+                moviesBinding.categoryList.visibility = View.VISIBLE
+                android.util.Log.d("zwj" ,"zwjclick222")
+            }
+            //FileUtils.collapse(moviesBinding.categoryList) else FileUtils.expand(moviesBinding.categoryList)
         }
         categoryAdapter.updateListItem()
 

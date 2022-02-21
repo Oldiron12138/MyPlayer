@@ -21,12 +21,14 @@ import javax.inject.Inject
 import android.R
 import android.system.Os
 import androidx.lifecycle.viewModelScope
+import com.example.myplayer.data.repository.ReleaseRepository
 import com.example.myplayer.data.repository.UploadRepository
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.Dispatcher
+import okhttp3.MultipartBody
 
 import java.net.InetSocketAddress
 import java.net.SocketAddress
@@ -35,10 +37,21 @@ import java.io.*
 
 @HiltViewModel
 class UploadViewModel @Inject constructor(
-    private val uploadRepository: UploadRepository
+    private val releaseRepository: ReleaseRepository
 ) : ViewModel() {
     companion object {
         const val TAG = "ScreenShotViewModel"
+    }
+
+    var loginRes: LiveData<UploadResult>? = null
+    suspend fun upload(file: List<MultipartBody.Part>): LiveData<UploadResult>? {
+        loginRes = releaseRepository.uploadPhoto(file)
+        return loginRes
+    }
+
+    suspend fun uploadJson(body: RequestBody): LiveData<UploadResult>? {
+        loginRes = releaseRepository.uploadJson(body)
+        return loginRes
     }
 
     //查询的照片类型

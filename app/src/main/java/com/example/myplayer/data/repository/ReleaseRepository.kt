@@ -16,7 +16,7 @@ class ReleaseRepository @Inject constructor(
     private val androidTvMdsService: MyPlayerService
 ) {
 
-    suspend fun uploadPhoto(file: MultipartBody.Part): LiveData<UploadResult> {
+    suspend fun uploadPhoto(file: List<MultipartBody.Part>): LiveData<UploadResult> {
         val seriesDetailResponse = MutableLiveData<UploadResult>()
         return try {
             val response =

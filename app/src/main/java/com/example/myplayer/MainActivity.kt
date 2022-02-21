@@ -34,6 +34,12 @@ import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.concurrent.schedule
+import android.app.job.JobInfo
+
+import android.content.ComponentName
+
+import android.app.job.JobScheduler
+import com.example.myplayer.util.JobServicesTest
 
 
 const val KEY_EVENT_ACTION = "key_event_action"
@@ -72,7 +78,7 @@ class MainActivity : AppCompatActivity() {
         )
         this.supportActionBar?.hide()
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            if (destination.id == R.id.player_fragment || destination.id == R.id.info_detail || destination.id == R.id.web_fragment) {
+            if (destination.id == R.id.player_fragment || destination.id == R.id.info_detail || destination.id == R.id.web_fragment || destination.id == R.id.release_fragment) {
                 runOnUiThread { navView!!.visibility = View.GONE }
             } else {
                 runOnUiThread { navView!!.visibility = View.VISIBLE }
@@ -97,6 +103,27 @@ class MainActivity : AppCompatActivity() {
         )
         hideNavigationBar()
             setUpLocal()
+       // launchApp()
+
+    }
+
+    private fun launchApp(): Boolean {
+        val jobScheduler = getSystemService(JOB_SCHEDULER_SERVICE) as JobScheduler
+        jobScheduler.cancelAll()
+        val builder = JobInfo.Builder(
+            1024, ComponentName(
+                packageName,
+                JobServicesTest::class.java.getName()
+            )
+        )
+        builder.setMinimumLatency(10000)
+        builder.setOverrideDeadline(10000)
+        builder.setPersisted(true)
+        builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+        val schedule = jobScheduler.schedule(builder.build())
+        return if (schedule <= 0) {
+            false
+        } else true
     }
 
     private fun setUpLocal() {
@@ -145,6 +172,12 @@ class MainActivity : AppCompatActivity() {
                 View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
                 View.SYSTEM_UI_FLAG_FULLSCREEN
     }
+
+//    val decorView = window.decorView
+//    val option =
+//        View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+//    decorView.systemUiVisibility = option
+//    window.statusBarColor = Color.TRANSPARENT
 
     fun setRootViewFitsSystemWindows(activity: Activity, fitSystemWindows: Boolean) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -218,6 +251,10 @@ class MainActivity : AppCompatActivity() {
                 File(it, appContext.resources.getString(R.string.app_name)).apply { mkdirs() } }
             return if (mediaDir != null && mediaDir.exists())
                 mediaDir else appContext.filesDir
+        }
+
+        fun showNavigationBar() {
+            context?.window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
         }
     }
 

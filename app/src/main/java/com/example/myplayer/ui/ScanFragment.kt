@@ -13,6 +13,7 @@ import androidx.viewpager2.widget.ViewPager2
 import android.R
 import com.example.myplayer.MainActivity
 import com.example.myplayer.adapter.ViewPagerAdapter
+import java.text.FieldPosition
 
 
 @AndroidEntryPoint
@@ -50,7 +51,7 @@ class ScanFragment(fragmentClick: OnFragmentClick): Fragment() {
     }
 
     interface OnFragmentClick {
-        fun fragmentClick()
+        fun fragmentClick(position: Int)
     }
     override fun onDestroyView() {
         MainActivity.getNav().visibility = View.VISIBLE

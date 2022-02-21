@@ -98,7 +98,11 @@
         android:id="@+id/release_fragment"
         android:name="com.example.myplayer.ui.ReleaseFragment"
         android:label="发布"
-        tools:layout="@layout/fragment_release"/>
+        tools:layout="@layout/fragment_release">
+        <action
+            android:id="@+id/action_release_fragment_to_navigation_dashboard"
+            app:destination="@id/navigation_dashboard" />
+    </fragment>
 
     <fragment
         android:id="@+id/chat_fragment"

@@ -41,17 +41,25 @@
             app:layout_constraintTop_toTopOf="parent"
             android:textSize="20dp"/>
 
-        <ImageButton
+        <com.example.myplayer.widget.LoadingPic
             android:id="@+id/info_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:background="@drawable/ic_baseline_error_outline_24"
             app:layout_constraintStart_toEndOf="@+id/title"
             app:layout_constraintTop_toTopOf="@+id/title"
             android:layout_marginLeft="20dp"
             app:layout_constraintBottom_toBottomOf="@+id/title"
             android:textSize="20dp"/>
+        <ImageButton
+            android:id="@+id/info_desc_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/info_desc"
+            app:layout_constraintEnd_toEndOf="@+id/info_desc"
+            app:layout_constraintTop_toTopOf="@+id/info_desc"
+            android:background="@drawable/ic_baseline_priority_high_24"
+            app:layout_constraintBottom_toBottomOf="@+id/info_desc"/>
 
 
         <LinearLayout

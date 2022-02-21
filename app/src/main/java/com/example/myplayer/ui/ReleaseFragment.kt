@@ -45,6 +45,8 @@ import java.lang.Exception
 import okhttp3.MultipartBody
 import android.R.attr.path
 import androidx.fragment.app.FragmentActivity
+import androidx.navigation.fragment.findNavController
+import com.example.myplayer.R
 import com.example.myplayer.databinding.FragmentReleaseBinding
 import com.example.myplayer.widget.LoadingDialog
 import okhttp3.RequestBody
@@ -79,7 +81,7 @@ class ReleaseFragment: Fragment() {
     }
 
     private fun subscribeUi() {
-        releaseBinding.imageView2.setOnClickListener {
+        releaseBinding.imageView4.setOnClickListener {
 //            if (ContextCompat.checkSelfPermission(
 //                    requireContext(),
 //                    Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -94,6 +96,12 @@ class ReleaseFragment: Fragment() {
 //            } else {
                 openAlbum()
 //            }
+        }
+        releaseBinding.playerBack.setOnClickListener{
+            this.findNavController().navigate(R.id.action_release_fragment_to_navigation_dashboard)
+        }
+        releaseBinding.imageView3.setOnClickListener{
+            openAlbum()
         }
         releaseBinding.releaseBtn.setOnClickListener {
             if (ableToUpload()) {
@@ -117,7 +125,8 @@ class ReleaseFragment: Fragment() {
             //设置参数名、文件名和文件
             .addFormDataPart("myfile","Naruto.jpg",photoRequestBody)
             .build()
-        val files: File = File(file)
+        var files: MutableList<File> = mutableListOf()
+        files.add(File(file))
         val photoPart = MultipartBody.Part.createFormData("multipartFiles", "toUpload", requestBody)
         uploadSinglePicture(files)
     }
@@ -156,12 +165,21 @@ class ReleaseFragment: Fragment() {
     }
 
 
-    fun uploadSinglePicture(file: File) {
+    fun uploadSinglePicture(files: List<File>) {
         val builder = MultipartBody.Builder().setType(MultipartBody.FORM) //表单类型
-        val requestFile: RequestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
-        requestFile.contentType()
-        builder.addFormDataPart("file", file.name, requestFile)
-        val part = builder.build().part(0)
+
+        for (file in files) {
+            val requestFile: RequestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+            requestFile.contentType()
+            builder.addFormDataPart("file", file.name, requestFile)
+        }
+        val part: List<MultipartBody.Part> = builder.build().parts
+
+
+
+//        requestFile.contentType()
+//        builder.addFormDataPart("file", file.name, requestFile)
+//        val part = builder.build().part(0)
         relseaseJob?.cancel()
         relseaseJob = lifecycleScope.launch {
             releaseViewModel.upload(part)
@@ -200,81 +218,85 @@ class ReleaseFragment: Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    private fun saveBitMapToFile(
-        context: Context?,
-        fileName: String,
-        bitmap: Bitmap?,
-        isCover: Boolean
-    ): String {
-        if (null == context || null == bitmap) {
-            return "null"
-        }
-        if (TextUtils.isEmpty(fileName)) {
-            return "null"
-        }
-        var fOut: FileOutputStream? = null
-        return try {
-            var file: File? = null
-            var fileDstPath = ""
-            if (false) {
 
-                // 保存到sd卡
-                fileDstPath = (Environment.getExternalStorageDirectory().absolutePath
-                        + File.separator + "MyFile" + File.separator + fileName)
-                val homeDir = File(
-                    Environment.getExternalStorageDirectory().absolutePath
-                            + File.separator + "MyFile" + File.separator
-                )
-                if (!homeDir.exists()) {
-                    homeDir.mkdirs()
-                }
-            } else {
-
-                // 保存到file目录
-                fileDstPath = (context.filesDir.absolutePath
-                        + File.separator + "MyFile" + File.separator + fileName)
-                val homeDir = File(
-                    context.filesDir.absolutePath
-                            + File.separator + "MyFile" + File.separator
-                )
-                if (!homeDir.exists()) {
-                    homeDir.mkdir()
-                }
-            }
-            file = File(fileDstPath)
-            if (!file.exists() || isCover) {
-
-                // 简单起见，先删除老文件，不管它是否存在。
-                file.delete()
-                fOut = FileOutputStream(file)
-                if (fileName.endsWith(".jpg")) {
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 75, fOut)
-                } else {
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut)
-                }
-                fOut.flush()
-                //bitmap.recycle()
-            }
-            Log.i(
-                "FileSave", "saveDrawableToFile " + fileName
-                        + " success, save path is " + fileDstPath
-            )
-            fileDstPath
-        } catch (e: Exception) {
-            "null"
-        } finally {
-            if (null != fOut) {
-                try {
-                    fOut.close()
-                } catch (e: Exception) {
-                }
-            }
-        }
-    }
 
     fun loadDialog(activity: FragmentActivity): LoadingDialog {
         val loadDialog = LoadingDialog(activity)
         loadDialog.show()
         return loadDialog
+    }
+
+    companion object {
+        fun saveBitMapToFile(
+            context: Context?,
+            fileName: String,
+            bitmap: Bitmap?,
+            isCover: Boolean
+        ): String {
+            if (null == context || null == bitmap) {
+                return "null"
+            }
+            if (TextUtils.isEmpty(fileName)) {
+                return "null"
+            }
+            var fOut: FileOutputStream? = null
+            return try {
+                var file: File? = null
+                var fileDstPath = ""
+                if (false) {
+
+                    // 保存到sd卡
+                    fileDstPath = (Environment.getExternalStorageDirectory().absolutePath
+                            + File.separator + "MyFile" + File.separator + fileName)
+                    val homeDir = File(
+                        Environment.getExternalStorageDirectory().absolutePath
+                                + File.separator + "MyFile" + File.separator
+                    )
+                    if (!homeDir.exists()) {
+                        homeDir.mkdirs()
+                    }
+                } else {
+
+                    // 保存到file目录
+                    fileDstPath = (context.filesDir.absolutePath
+                            + File.separator + "MyFile" + File.separator + fileName)
+                    val homeDir = File(
+                        context.filesDir.absolutePath
+                                + File.separator + "MyFile" + File.separator
+                    )
+                    if (!homeDir.exists()) {
+                        homeDir.mkdir()
+                    }
+                }
+                file = File(fileDstPath)
+                if (!file.exists() || isCover) {
+
+                    // 简单起见，先删除老文件，不管它是否存在。
+                    file.delete()
+                    fOut = FileOutputStream(file)
+                    if (fileName.endsWith(".jpg")) {
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 75, fOut)
+                    } else {
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut)
+                    }
+                    fOut.flush()
+                    //bitmap.recycle()
+                }
+                Log.i(
+                    "FileSave", "saveDrawableToFile " + fileName
+                            + " success, save path is " + fileDstPath
+                )
+                fileDstPath
+            } catch (e: Exception) {
+                "null"
+            } finally {
+                if (null != fOut) {
+                    try {
+                        fOut.close()
+                    } catch (e: Exception) {
+                    }
+                }
+            }
+        }
     }
 }

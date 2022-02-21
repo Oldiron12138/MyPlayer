@@ -18,7 +18,7 @@ class ReleaseViewModel @Inject constructor(
     private val releaseRepository: ReleaseRepository
 ) : ViewModel() {
     var loginRes: LiveData<UploadResult>? = null
-    suspend fun upload(file: MultipartBody.Part): LiveData<UploadResult>? {
+    suspend fun upload(file: List<MultipartBody.Part>): LiveData<UploadResult>? {
         loginRes = releaseRepository.uploadPhoto(file)
         return loginRes
     }

@@ -11,23 +11,32 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:background="@mipmap/camera1"
-            android:layout_marginBottom="5dp"
-            android:id="@+id/imageView2"
+        <LinearLayout
+            android:id="@+id/imageView1"
             android:layout_width="300dp"
             android:layout_height="200dp"
+            android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:background="@drawable/ic_baseline_photo_library_24"
+                android:layout_marginBottom="5dp"
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                tools:srcCompat="@tools:sample/avatars" />
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/city_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView2"
+            app:layout_constraintTop_toBottomOf="@+id/imageView1"
             app:layout_constraintEnd_toEndOf="parent"
             android:clipToPadding="false"
             android:overScrollMode="never"
@@ -35,6 +44,16 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="1"
             tools:listitem="@layout/list_item_upload" />
+
+        <Button
+            android:id="@+id/shangchuan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/city_list"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="上传"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

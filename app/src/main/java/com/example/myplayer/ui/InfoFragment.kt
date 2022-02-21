@@ -2,15 +2,19 @@ package com.example.myplayer.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.myplayer.MainActivity
 import com.example.myplayer.R
 import com.example.myplayer.adapter.InfoAdapter
 import com.example.myplayer.adapter.MoviesAdapter
@@ -27,6 +31,7 @@ import com.example.myplayer.viewmodels.MoviesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlin.concurrent.fixedRateTimer
 
 @AndroidEntryPoint
 class InfoFragment: Fragment() {
@@ -40,7 +45,6 @@ class InfoFragment: Fragment() {
 
     //
     private lateinit var assetLayoutManager: LinearLayoutManager
-
     private var current: String = "乌鲁木齐"
     private var defaultCurrent: String = "AAAA"
 
@@ -58,6 +62,8 @@ class InfoFragment: Fragment() {
             requireContext().getSharedPreferences("CURRENT_CITY", Context.MODE_PRIVATE)
         current = sharedPref.getString("CURRENT",defaultCurrent).toString()
         moviesBinding.current = current
+        fragmentManager1 = childFragmentManager
+        binding= moviesBinding
         return moviesBinding.root
     }
 
@@ -83,6 +89,21 @@ class InfoFragment: Fragment() {
         registerListener()
         subscribeUi()
         setInfoViewModel(infoViewModel)
+        moviesBinding.root.setFocusableInTouchMode(true)
+        moviesBinding.root.requestFocus()
+        moviesBinding.root.setOnKeyListener(object :View.OnKeyListener {
+            override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
+                android.util.Log.d("zwj" ,"back $keyCode")
+                when (keyCode) {
+                    KeyEvent.KEYCODE_BACK -> {
+                        android.util.Log.d("zwj" ,"back")
+                        findNavController().navigate(R.id.action_navigation_dashboard_to_movies_fragment)
+                        return true
+                    }
+                    else -> return false
+                }
+            }
+        })
     }
 
     private fun registerListener() {
@@ -105,11 +126,28 @@ class InfoFragment: Fragment() {
     private fun subscribeUi() {
 
         infoAdapter = InfoAdapter(requireContext())
+        infoAdapter.setItemClickListener(object :InfoAdapter.OnItemClickListener{
+            override fun onItemClick(postion:Int,current:String) {
+                moviesBinding.childContainer.visibility = View.VISIBLE
+                val fragment = DetailFragment()
+                val bundle = Bundle()
+
+                bundle.putInt("index", postion)
+                bundle.putString("current", current)
+
+                fragment.arguments = bundle
+                childFragmentManager.beginTransaction()
+                    .add(R.id.child_container, fragment, DetailFragment.DETAIL_TAG)
+                    .commit()
+            }
+
+        })
         assetLayoutManager = LinearLayoutManager(requireContext())
         assetLayoutManager.orientation = LinearLayoutManager.VERTICAL
         moviesBinding.infoList.layoutManager = assetLayoutManager
         moviesBinding.infoList.adapter = infoAdapter
         moviesBinding.infoList.itemAnimator = null
+
 
         //
         getInfoDetailData()
@@ -139,4 +177,19 @@ class InfoFragment: Fragment() {
         infoJob?.cancel()
         super.onDestroyView()
     }
+
+    companion object {
+        lateinit var fragmentManager1: FragmentManager
+        lateinit var binding: FragmentInfoBinding
+        public fun clearChildFragmentByTag(tag: String) {
+            binding.childContainer.visibility = View.GONE
+            val fragmentTransaction = fragmentManager1.beginTransaction()
+            val fragment = fragmentManager1.findFragmentByTag(tag)
+            fragment?.let {
+                fragmentTransaction.remove(fragment)
+                fragmentTransaction.commitAllowingStateLoss()
+            }
+        }
+    }
+
 }

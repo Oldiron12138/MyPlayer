@@ -15,11 +15,11 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
         android:layout_height="match_parent">
 
         <ImageButton
             android:id="@+id/player_back"
+            android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
@@ -27,7 +27,7 @@
             android:background="@drawable/black_back"/>
 
 
-        <ImageView
+        <androidx.viewpager2.widget.ViewPager2
             android:layout_marginBottom="5dp"
             android:id="@+id/imageView"
             android:layout_width="350dp"
@@ -35,7 +35,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:bindInfoImagePP="@{info.url}"
+
             android:transitionName="image"
             tools:srcCompat="@tools:sample/avatars" />
 
@@ -208,5 +208,11 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/head_desc" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/child_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:visibility="gone" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
