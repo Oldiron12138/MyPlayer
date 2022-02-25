@@ -14,6 +14,7 @@
         <variable
             name="current"
             type="String" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,74 +31,109 @@
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            app:layout_constraintBottom_toTopOf="@id/info_list"
+            app:layout_constraintBottom_toTopOf="@id/info_list_p"
             android:orientation="horizontal">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_marginBottom="30dp"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp">
+
                 <ImageView
-                    android:onClick="@{clickListener1}"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@drawable/ic_baseline_location_on_24"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    />
-                <TextView
                     android:onClick="@{clickListener1}"
-                    android:paddingLeft="30dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:textColor="#36AA90"
-                    android:gravity="center_vertical"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:textSize="15dp"
-                    android:text="当前城市"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:gravity="center_vertical"
+                    android:onClick="@{clickListener1}"
+                    android:paddingLeft="30dp"
+                    android:text="当前城市"
+                    android:textColor="#36AA90"
+                    android:textSize="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/title_all"
+                    android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:textSize="20dp"
+                    android:text="@{current}"
+
                     android:textColor="@color/black"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:textSize="20dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:text="@{current}"/>
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:onClick="@{clickListener}"
                     android:layout_gravity="center_vertical"
-                    android:textSize="15dp"
-                    android:textColor="#36AA90"
                     android:gravity="center_vertical"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    android:onClick="@{clickListener}"
+                    android:text="其他城市"
+                    android:textColor="#36AA90"
+                    android:textSize="15dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:text="其他城市"/>
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/info_list"
+        <FrameLayout
+            android:id="@+id/info_list_p"
             android:layout_width="match_parent"
             android:layout_height="720dp"
-            android:clipToPadding="false"
-            android:scrollbars="none"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/localtion"
-            tools:listitem="@layout/list_item_info" />
+
+            app:layout_constraintStart_toStartOf="parent">
+            <LinearLayout
+                android:id="@+id/loading_p"
+                android:layout_width="match_parent"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:visibility="invisible"
+                    android:id="@+id/loading"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/logo"/>
+
+            </LinearLayout>
+
+            <com.example.myplayer.widget.MyScrollView
+                android:id="@+id/scoller"
+                app:needLanjie="false"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/info_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="720dp"
+                    android:clipToPadding="false"
+                    android:scrollbars="none"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/localtion"
+                    tools:listitem="@layout/list_item_info" />
+
+            </com.example.myplayer.widget.MyScrollView>
+
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

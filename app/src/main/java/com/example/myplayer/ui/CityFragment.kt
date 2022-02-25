@@ -54,7 +54,6 @@ class CityFragment : Fragment() {
         max = FileUtils.getPingMuSize(requireContext()) / 50
         val size = FileUtils.getPingMuSize(requireContext())
 
-        android.util.Log.d("zwj" ,"current Click $size")
         infoAdapter = CityAdapter(requireContext())
         assetLayoutManager = LinearLayoutManager(requireContext())
         assetLayoutManager.orientation = LinearLayoutManager.VERTICAL
@@ -79,9 +78,6 @@ class CityFragment : Fragment() {
                 } else {
                     assetLayoutManager.scrollToPosition(index)
                 }
-
-                android.util.Log.d("zwj" ,"current Click $zimu $index $max")
-                //assetLayoutManager.scrollToPosition(index+max)
             }
 
         })

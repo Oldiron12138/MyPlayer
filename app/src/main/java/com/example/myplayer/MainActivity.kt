@@ -138,12 +138,15 @@ class MainActivity : AppCompatActivity() {
         //声明LocationClient类
         mLocationClient!!.setLocationListener(object: AMapLocationListener {
             override fun onLocationChanged(amapLocation: AMapLocation?) {
+                android.util.Log.d("zwj" ,"local test $amapLocation")
                 if (amapLocation != null) {
                     if (amapLocation.getErrorCode() == 0) {
+                        android.util.Log.d("zwj" ,"local test $amapLocation")
                         val sharedPref =
                             mainActivity.getSharedPreferences("CITY_CACHE", Context.MODE_PRIVATE)
                         sharedPref.edit().putString("CITY", cutString(amapLocation.city)).apply()
                     }else {
+                        android.util.Log.d("zwj" ,"local test error")
                         Log.e("AmapError","location Error, ErrCode:"
                                 + amapLocation.getErrorCode() + ", errInfo:"
                                 + amapLocation.getErrorInfo());

@@ -35,9 +35,8 @@ class ViewPagerAdapter internal constructor(private val colors: List<String>? , 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val i = position % itemCount
         colors?.get(position)?.let {
-            android.util.Log.d("zwj1111","1111")
             holder.bind(it, mListerner)
-                android.util.Log.d("zwj1111","2222")}
+        }
     }
 
     override fun getItemCount(): Int {

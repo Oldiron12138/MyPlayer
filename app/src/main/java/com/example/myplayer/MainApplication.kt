@@ -25,6 +25,7 @@ class MainApplication: Application() {
         super.onCreate()
         NIMClient.init(this, loginInfo(), options());
 
+
         MainApplication.applicationContext = this
     }
 

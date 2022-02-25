@@ -3,6 +3,7 @@ package com.example.myplayer.data.reponse
 import com.google.gson.annotations.SerializedName
 
 data class InfoResponse(
+    @field:SerializedName("num") val num: Int,
     @field:SerializedName("title") val title: String,
     @field:SerializedName("city") val city: String,
     @field:SerializedName("desc") val desc: String,

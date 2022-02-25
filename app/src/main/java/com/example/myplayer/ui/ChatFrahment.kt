@@ -147,7 +147,6 @@ class ChatFrahment : Fragment() {
         val personChat:ChatEntity = ChatEntity("null", true,true,url)
         assetAdapter.addOneItem(personChat)
         msgList.add(personChat)
-        android.util.Log.d("zwjscorll" ,"size ${msgList.size}")
         assetLayoutManager.scrollToPosition(msgList.size-1)
         //  updateDao(msgList)
         assetAdapter.notifyDataSetChanged()

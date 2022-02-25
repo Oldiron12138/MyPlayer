@@ -55,9 +55,8 @@
         android:name=".MainApplication"
         android:allowBackup="true"
         android:requestLegacyExternalStorage="true"
-        android:icon="@drawable/jinx"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
 
         android:networkSecurityConfig="@xml/network_security_config"
@@ -145,7 +144,7 @@
             android:value="37e03c9b288eff731388d655b2284f0e" />
 
 
-        <meta-data android:name="com.amap.api.v2.apikey" android:value="4385199f431fc6639c27fd854229b7e0">
+        <meta-data android:name="com.amap.api.v2.apikey" android:value="f70989e1dc4c2be2e6252b9c452f2fd2">
         </meta-data>
 
 

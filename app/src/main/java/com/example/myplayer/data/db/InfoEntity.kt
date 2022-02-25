@@ -9,7 +9,8 @@ import com.google.gson.annotations.SerializedName
 @TypeConverters(StringTypeConverter::class)
 @Entity(tableName = "info")
 data class InfoEntity(
-    @PrimaryKey @ColumnInfo(name = "title") val title: String,
+    @PrimaryKey @ColumnInfo(name = "num") val num: Int,
+    val title: String,
     val city: String,
     val desc: String,
     val street: String,

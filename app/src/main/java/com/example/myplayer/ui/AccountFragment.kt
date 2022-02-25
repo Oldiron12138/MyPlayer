@@ -77,7 +77,6 @@ class AccountFragment: Fragment(), PopDialog.OnDialogButtonClickListener {
     fun bitMapScale(bitmap: Bitmap, scale: Float): Bitmap? {
         val matrix = Matrix()
         matrix.postScale(scale, scale) //长和宽放大缩小的比例
-        android.util.Log.d("zwj" ,"width $scale ${bitmap.width} ${bitmap.height}")
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
     }
 

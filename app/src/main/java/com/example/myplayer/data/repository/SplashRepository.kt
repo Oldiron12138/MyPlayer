@@ -3,6 +3,8 @@ package com.example.myplayer.data.repository
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.myplayer.MainActivity
+import com.example.myplayer.MainApplication
 import com.example.myplayer.api.MyPlayerService
 import com.example.myplayer.data.db.*
 import com.example.myplayer.data.reponse.*
@@ -52,12 +54,38 @@ class SplashRepository @Inject constructor(
                 androidTvMdsService.infoDetail("test")
 
             val infos: MutableList<InfoEntity> = mutableListOf()
+            val sharedPref =
+                MainApplication.applicationContext?.getSharedPreferences("UNLOCK", Context.MODE_PRIVATE)
+            var unLock: MutableSet<String>? = mutableSetOf()
+            unLock = sharedPref?.getStringSet("UNLOCK_INFO",null)
 
-
-            repeat(response.size) { i ->
-                infos.add(InfoEntity(response[i].title, response[i].city, response[i].desc, response[i].street, response[i].phone, response[i].price,response[i].url, true))
+            var unLock1: MutableSet<String>? = mutableSetOf()
+            if (unLock1 != null) {
+                unLock1.clear()
+            }
+            if (unLock != null) {
+                unLock!!.forEach {
+                    unLock1!!.add(it)
+                }
             }
 
+            var Lock: Boolean
+            if (unLock == null) {
+                repeat(response.size) { i ->
+                    infos.add(InfoEntity(response[i].num,response[i].title, response[i].city, response[i].desc, response[i].street, response[i].phone, response[i].price,response[i].url, true))
+                    //infos.add(InfoEntity(response[i].title, response[i].city, response[i].desc, response[i].street, response[i].phone, response[i].price,response[i].url, true))
+                }
+            } else {
+                repeat(response.size) { i ->
+                    //android.util.Log.d("zwj" ,"sharepComp10 $i ${unLock.add(i.toString())}")
+                    var flag: Boolean = unLock.add(i.toString())
+                    if (flag) {
+                        unLock.remove(i.toString())
+                    }
+                    infos.add(InfoEntity(response[i].num,response[i].title, response[i].city, response[i].desc, response[i].street, response[i].phone, response[i].price,response[i].url, flag))
+                    //infos.add(InfoEntity(response[i].title, response[i].city, response[i].desc, response[i].street, response[i].phone, response[i].price,response[i].url, true))
+                }
+            }
             val database = InfoDatabase.getInstance(context)
 
             database.infoDao().deleteInfos()

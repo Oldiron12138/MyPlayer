@@ -47,10 +47,11 @@ class ExitDialog(private val activity: FragmentActivity) :
         index = mIndex
     }
 
-    constructor(activity: FragmentActivity, string: String, mListener: OnDialogButtonClickListenerForInfo, mInfo: InfoEntity) : this(activity) {
+    constructor(activity: FragmentActivity, string: String, mListener: OnDialogButtonClickListenerForInfo, mInfo: InfoEntity,mIndex: Int) : this(activity) {
         content = string
         this.listener2 = mListener
         info = mInfo
+        index = mIndex
     }
     interface OnDialogButtonClickListenerForWeb {
         fun onDialogButtonClick(isPositive: Boolean, index:Int)
@@ -61,7 +62,7 @@ class ExitDialog(private val activity: FragmentActivity) :
     }
 
     interface OnDialogButtonClickListenerForInfo {
-        fun onDialogButtonClickForInfo(isPositive: Boolean, info: InfoEntity)
+        fun onDialogButtonClickForInfo(isPositive: Boolean, info: InfoEntity, index: Int?)
     }
 
     private var currentPosition = 0
@@ -90,10 +91,10 @@ class ExitDialog(private val activity: FragmentActivity) :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        this.window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-                View.SYSTEM_UI_FLAG_FULLSCREEN
-        this.window?.setWindowAnimations(R.style.DialogOutAndInStyle)
+//        this.window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+//                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+//                View.SYSTEM_UI_FLAG_FULLSCREEN
+        //this.window?.setWindowAnimations(R.style.DialogOutAndInStyle)
         setContentView(R.layout.dialog_exit)
 
 
@@ -101,7 +102,14 @@ class ExitDialog(private val activity: FragmentActivity) :
 
         //
         initView()
+        this.setOnDismissListener {
+            this.window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
+                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                    View.SYSTEM_UI_FLAG_FULLSCREEN
+           // this.window?.setWindowAnimations(R.style.DialogOutAndInStyle)
+        }
     }
+
 
     private fun initView() {
         centerText = findViewById(R.id.main_content)!!
@@ -113,7 +121,7 @@ class ExitDialog(private val activity: FragmentActivity) :
                 if (asset == null && info!=null) {
                     when (it.id) {
                         R.id.exit_dialog_cancel ->
-                            info?.let { listener2!!.onDialogButtonClickForInfo(true, it) }
+                            info?.let { listener2!!.onDialogButtonClickForInfo(true, it,index) }
                     }
                 } else if(asset != null && info==null){
                     when (it.id) {
@@ -130,7 +138,7 @@ class ExitDialog(private val activity: FragmentActivity) :
                 if (asset == null && info!=null) {
                     when (it.id) {
                         R.id.exit_dialog_exit ->
-                            info?.let { listener2!!.onDialogButtonClickForInfo(false, it) }
+                            info?.let { listener2!!.onDialogButtonClickForInfo(false, it,index) }
                     }
                 } else if(asset != null && info==null){
                     when (it.id) {

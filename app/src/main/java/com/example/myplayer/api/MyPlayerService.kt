@@ -23,7 +23,7 @@ interface MyPlayerService {
 
     /**
      */
-    @GET("{test}/test4.json")
+    @GET("{test}/test5.json")
     suspend fun infoDetail(
         @Path("test") test:String
     ): List<InfoResponse>

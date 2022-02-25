@@ -44,13 +44,9 @@ class RegRepository @Inject constructor(
         var curTime: String = java.lang.String.valueOf(Date().getTime() / 1000L)
         var checkSum: String = CheckSumBuilder.getCheckSum(appSecret, nonce, curTime)
         val body1: String = "zwj"
-        android.util.Log.d("zwj " ,"checkSum $curTime")
-        android.util.Log.d("zwj " ,"checkSum $checkSum")
         return try {
-            android.util.Log.d("zwj", "5555")
             val response =
                 imService.register(appKey, nonce, curTime, checkSum,body)
-            android.util.Log.d("zwj", "5555 $response")
 
             // Post value to LiveData.
             seriesDetailResponse.postValue(response)

@@ -134,13 +134,10 @@ class MoivesFragment: Fragment(), ExitDialog.OnDialogButtonClickListener,
             }
         })
         moviesBinding.menu.setOnClickListener{
-            android.util.Log.d("zwj" ,"zwjclick")
             if (moviesBinding.categoryList.visibility == View.VISIBLE){
                 moviesBinding.categoryList.visibility = View.INVISIBLE
-                android.util.Log.d("zwj" ,"zwjclick111")
             } else {
                 moviesBinding.categoryList.visibility = View.VISIBLE
-                android.util.Log.d("zwj" ,"zwjclick222")
             }
             //FileUtils.collapse(moviesBinding.categoryList) else FileUtils.expand(moviesBinding.categoryList)
         }
@@ -158,12 +155,10 @@ class MoivesFragment: Fragment(), ExitDialog.OnDialogButtonClickListener,
     }
 
     private fun getSeriesDetailData() {
-        android.util.Log.d("zwj " ,"getSeriesDetailData")
         moviesJob?.cancel()
         moviesJob = lifecycleScope.launch {
             seriesDetailViewModel.seriesDetail
                 ?.observe(viewLifecycleOwner) { seriesDetailData ->
-                    android.util.Log.d("zwj " ,"getSeriesDetailData ${seriesDetailData.size}")
                     assetAdapter.updateListItem(seriesDetailData)
                 }
             //seriesDetailViewModel.devices()

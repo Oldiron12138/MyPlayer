@@ -2,10 +2,7 @@ package com.example.myplayer.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.view.KeyEvent
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
@@ -17,6 +14,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.myplayer.MainActivity
+import com.example.myplayer.MainApplication
 import com.example.myplayer.R
 import com.example.myplayer.adapter.ViewPagerAdapter
 import com.example.myplayer.data.db.InfoDatabase
@@ -71,6 +69,7 @@ class DetailFragment : Fragment(), ExitDialog.OnDialogButtonClickListenerForInfo
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        view.setClickable(true)
         if (arguments?.getInt("index") != null){
             index = arguments?.getInt("index")!!
             current = arguments?.getString("current")!!
@@ -79,7 +78,6 @@ class DetailFragment : Fragment(), ExitDialog.OnDialogButtonClickListenerForInfo
         }
         getInfoDetailData()
         subscribeUi()
-        MainActivity.showNavigationBar()
 
     }
     public fun clearChildFragmentByTag(tag: String) {
@@ -116,13 +114,14 @@ class DetailFragment : Fragment(), ExitDialog.OnDialogButtonClickListenerForInfo
                     val newInfoList: MutableList<InfoEntity> = mutableListOf()
                     repeat(seriesDetailData.size) { i ->
                         if (seriesDetailData[i].city == current) {
-                            newInfoList.add(InfoEntity(seriesDetailData[i].title, seriesDetailData[i].city, seriesDetailData[i].desc, seriesDetailData[i].street, seriesDetailData[i].phone, seriesDetailData[i].price,seriesDetailData[i].url,seriesDetailData[i].lock))
+                            newInfoList.add(InfoEntity(seriesDetailData[i].num,seriesDetailData[i].title, seriesDetailData[i].city, seriesDetailData[i].desc, seriesDetailData[i].street, seriesDetailData[i].phone, seriesDetailData[i].price,seriesDetailData[i].url,seriesDetailData[i].lock))
                         }
                     }
                     detailBinding.info = newInfoList.get(index)
                     info = newInfoList.get(index)
+                    android.util.Log.d("zwj" ,"detail ${info.lock}")
                     detailBinding.setClickListener {
-                        unLockDialog(requireActivity(),info)
+                        unLockDialog(requireActivity(),info,index)
                     }
                     val viewPager2: ViewPager2 = detailBinding.imageView
                     val adapter = ViewPagerAdapter(info.url,requireContext(),object :ScanFragment.OnFragmentClick{
@@ -156,7 +155,7 @@ class DetailFragment : Fragment(), ExitDialog.OnDialogButtonClickListenerForInfo
         }
     }
 
-    private fun buyContent(info: InfoEntity) {
+    private fun buyContent(info: InfoEntity, index: Int?) {
         if (mCoin < 1) {
             popDialog(requireActivity(), "金币不足,请充值")
             return
@@ -167,28 +166,41 @@ class DetailFragment : Fragment(), ExitDialog.OnDialogButtonClickListenerForInfo
             detailViewModel.buy(mId, mNum, mPwd, mCoin)
                 ?.observe(viewLifecycleOwner) { it ->
                     if (it.resultData) {
-                        info.title.let { it1 -> updateMovies(it1) }
-
+                        info.title.let { it1 -> updateMovies(it1, info.num) }
                     }
                 }
         }
     }
 
-    private fun updateMovies(title: String) {
+    private fun updateMovies(title: String,index: Int?) {
         detailJob?.cancel()
         detailJob = lifecycleScope.launch {
             // Init DB.
             val database = InfoDatabase.getInstance(requireContext())
             database.infoDao().updateTour(title, false)
         }
+        val sharedPref =
+            MainApplication.applicationContext?.getSharedPreferences("UNLOCK", Context.MODE_PRIVATE)
+        val unLock: MutableSet<String>? = sharedPref?.getStringSet("UNLOCK_INFO", mutableSetOf("unlock"))
+        //sharedPref?.edit()?.clear()?.commit()
+
+        var unLock1: MutableSet<String>? = mutableSetOf()
+        if (unLock1 != null) {
+            unLock1.clear()
+        }
+        unLock!!.forEach {
+            unLock1!!.add(it)
+        }
+        unLock1!!.add(index.toString())
+        sharedPref.edit().putStringSet("UNLOCK_INFO", unLock1).apply()
     }
     fun popDialog(activity: FragmentActivity, string: String) {
         val popDialog = PopDialog(activity, string)
         popDialog.show()
     }
 
-    fun unLockDialog(activity: FragmentActivity, info: InfoEntity) {
-        val exitDialog = ExitDialog(activity, "消耗1金币购买此内容？", this, info)
+    fun unLockDialog(activity: FragmentActivity, info: InfoEntity, index: Int) {
+        val exitDialog = ExitDialog(activity, "消耗1金币购买此内容？", this, info,index)
         exitDialog.show()
     }
 
@@ -204,9 +216,9 @@ class DetailFragment : Fragment(), ExitDialog.OnDialogButtonClickListenerForInfo
         const val DETAIL_TAG = "DETAIL_TAG"
     }
 
-    override fun onDialogButtonClickForInfo(isPositive: Boolean, info: InfoEntity) {
+    override fun onDialogButtonClickForInfo(isPositive: Boolean, info: InfoEntity ,index: Int?) {
         if (isPositive) {
-            buyContent(info)
+            buyContent(info, index)
         } else {
 
         }

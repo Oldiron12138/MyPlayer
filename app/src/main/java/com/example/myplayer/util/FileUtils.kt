@@ -27,6 +27,10 @@ import android.view.animation.Transformation
 import android.animation.ValueAnimator
 import android.animation.ValueAnimator.AnimatorUpdateListener
 import androidx.core.animation.addListener
+import com.google.common.base.Splitter
+
+
+
 
 
 /**
@@ -50,6 +54,11 @@ object FileUtils {
         return (pxValue / scale + 0.5f).toInt()
     }
 
+
+    fun dp2px(context: Context, dpValue: Int): Int {
+        val scale = context.resources.displayMetrics.density
+        return (dpValue * scale + 0.5f).toInt()
+    }
 
 
     fun toBlur(originBitmap: Bitmap, scaleRatio: Int): Bitmap? {
@@ -106,6 +115,38 @@ object FileUtils {
             }
         }
         valueAnimator.start()
+    }
+    private const val SEP1 = "#"
+    private const val SEP2 = "|"
+    private const val SEP3 = "="
+    fun list2string(list: MutableList<String>):String {
+        val sb = StringBuffer()
+        if (list != null && list.size > 0) {
+            for (i in 0 until list.size) {
+                if (list.get(i) == null || list.get(i) === "") {
+                    continue
+                }
+                // 如果值是list类型则调用自己
+                sb.append(list.get(i))
+                sb.append(SEP1)
+            }
+        }
+        return sb.toString()
+    }
+
+    fun StringToList(listText: String?): MutableList<String>? {
+        var listText = listText
+        if (listText == null || listText == "") {
+            return null
+        }
+        listText = listText.substring(1)
+        listText = listText
+        val list: MutableList<String> = ArrayList()
+        val text = listText.split(SEP1).toTypedArray()
+        for (str in text) {
+            list.add(str)
+        }
+        return list
     }
 
 
